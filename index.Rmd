@@ -13,7 +13,7 @@ documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
-github-repo: 'BioDataScience-Course/sdd-umons2-2022'
+github-repo: 'BioDataScience-Course/sdd-umons2-2023'
 url: 'https\://wp.sciviews.org/sdd-umons2/'
 description: "Tutoriel interactif pour la science des données avec R & SciViews-R II."
 cover-image: "images/front-cover.png"
@@ -49,9 +49,7 @@ sessioninfo::session_info()
 
 ## Vue générale du cours {.unnumbered}
 
-Cet ouvrage interactif est le second volume d'une série de trois ouvrages traitant de la science des données biologiques. L'écriture de cette suite de livres a débuté au cours de l'année académique 2018-2019. Pour l'année académique 2022-2023, ceci est le support du cours de [Science des données II : analyse et modélisation](http://applications.umons.ac.be/web/fr/pde/2022-2023/ue/US-B3-SCBIOL-006-M.htm) au troisième Bachelier en Biologie en Faculté des Sciences de l'Université de Mons, et dont le responsable est Philippe Grosjean
-
-<!-- [Bio-informatique et science des données II](http://applications.umons.ac.be/web/fr/pde/2021-2022/ue/US-B3-SCBIOC-940-C.htm) au troisième bachelier en Biologie en Faculté des Sciences à Charleroi en co-diplomation entre l'Université de Mons (UMONS) et l'Université Libre de Bruxelles (ULB), et dont le responsable est Raphaël Conotte -->
+Cet ouvrage interactif est le second volume d'une série de trois ouvrages traitant de la science des données biologiques. L'écriture de cette suite de livres a débuté au cours de l'année académique 2018-2019. Pour l'année académique 2023-2024, ceci est le support du cours de [Science des données II : analyse et modélisation](http://applications.umons.ac.be/web/fr/pde/2023-2024/ue/US-B3-SCBIOL-006-M.htm) au troisième Bachelier en Biologie en Faculté des Sciences de l'Université de Mons, et dont le responsable est Philippe Grosjean
 
 La matière est divisée en dix modules de 6h chacun en présentiel. Il nécessitera environ 8h (variable, en fonction de votre rythme et de votre technique d'apprentissage) en travail à domicile. **Cette matière fait suite au premier cours dont le contenu est considéré comme assimilé (voir [cours SDD I](https://wp.sciviews.org/sdd-umons){target="top"}).**
 
@@ -75,7 +73,7 @@ Le matériel pédagogique, rassemblé dans ce syllabus interactif est aussi vari
 
 -   des renvois vers des documents externes en ligne, types vidéos [Youtube](https://www.youtube.com/) ou [Vimeo](https://vimeo.com/), des ouvrages en ligne en anglais ou en français, des blogs, des tutoriels, des questions sur des sites comme [Stackoverflow](https://stackoverflow.com/) ou issues des [mailing lists R](https://www.r-project.org/mail.html), de [twitter](https://twitter.com/), ...
 
--   des diapositives de présentations distribuées via le dépôt [sdd_lessons sur BioDataScience-Course](https://github.com/BioDataScience-Course/sdd_lessons) viennent compléter le tout.
+-   des diapositives de présentations distribuées via le dépôt [sdd_lessons sur BioDataScience-Course](https://github.com/BioDataScience-Course/sdd_lessonstree/2023-2024) viennent compléter le tout.
 
 ```{block, type='info'}
 
@@ -84,7 +82,9 @@ Tout ce matériel est accessible à partir du [site Web du cours](https://wp.sci
 :::
 
 ::: {.S-BIOG-015 .S-BIOG-937-958-959}
-Tout ce matériel est accessible à partir du [site Web du cours](https://wp.sciviews.org){target='top'}, du présent syllabus interactif et de Moodle pour les étudiants de l'UMONS. Ces derniers ont aussi accès au dossier ` SDD` sur `StudentTemp` en Intranet à l'UMONS. Les aspects pratiques seront à réaliser en utilisant la **'SciViews Box'**, une machine virtuelle préconfigurée que nous installerons ensemble lors du premier cours. Il est très important que vous soyez présent à ce cours, et vous pouvez venir aussi si vous le souhaitez avec votre propre ordinateur portable (sous Windows, MacOS, ou Linux peu importe, suffisamment puissant et connecté à Internet ou à l'Intranet UMONS). Enfin, vous pourrez poser vos questions par mail à l'adresse [sdd@sciviews.org](mailto:sdd@sciviews.org) ou sur [Discord](https://discord.com/invite/CuKdwzA).
+Tout ce matériel est accessible à partir du [site Web du cours](https://wp.sciviews.org){target='top'}, du présent syllabus interactif et de Moodle pour les étudiants de l'UMONS. Les aspects pratiques seront à réaliser en utilisant la **'SciViews Box'**, une machine virtuelle préconfigurée que nous installerons ensemble lors du premier cours. Il est très important que vous soyez présent à ce cours, et vous pouvez venir aussi si vous le souhaitez avec votre propre ordinateur portable (sous Windows, MacOS, ou Linux peu importe, suffisamment puissant et connecté à Internet ou à l'Intranet UMONS).
+
+Vous pourrez poser vos questions par mail à l'adresse [sdd@sciviews.org](mailto:sdd@sciviews.org)  ou dans les issues du dépôt Github de ce cours. L'accès à se dépôt vous sera donné lors du premier module du cours.
 
 Un **outil d'annotation** et de surlignage est intégré dans le cours en ligne. Il vous permet\ :
 
@@ -115,7 +115,7 @@ Les cours de science des données utilisent une autre approche et se donnent en 
 
 ![](images/sdd2_00/organisation2.png)
 
-Une présentation des changements introduits par rapport à l'année précédente vous est faite en première séance. La présentation est disponible au format PDF [ici](https://github.com/BioDataScience-Course/sdd_lessons/raw/2022-2023/B00/presentations/B00Pa_intro.pdf).
+Une présentation des changements introduits par rapport à l'année précédente vous est faite en première séance. La présentation est disponible au format PDF [ici](https://github.com/BioDataScience-Course/sdd_lessons/raw/2023-2024/B00/presentations/B00Pa_intro.pdf).
 
 ### Quatre niveaux d'exercices {.unnumbered}
 
@@ -130,10 +130,12 @@ Chaque type d'exercice est associé à un outil présenté dans la matériel pé
 
 ![](images/sdd2_00/apprendre2.png)
 
-Toutes vos réponses sont collectées et utilisées afin de construire la note finale. Il n'est donc plus nécessaire de passer une examen classique en session d'examen. Tous ces exercices permettent de déterminer si vous maîtrisez les acquis d'apprentissage de ce cours. Un rapport de progression dans les exercices est mis à votre disposition à la fin de chaque module. En oute, un rapport de progression global est accessible depuis Moodle.
+Toutes vos réponses sont collectées et utilisées afin de construire la note finale. Il n'est donc plus nécessaire de passer une examen classique en session d'examen. Tous ces exercices permettent de déterminer si vous maîtrisez les acquis d'apprentissage de ce cours. Cependant, vous aurez des **interrogrations** classiques régulières sur la matière vue jusque là.
+
+Un rapport de progression dans les exercices est mis à votre disposition à la fin de chaque module. En outre, un rapport de progression global est accessible depuis Moodle.
 
 ```{block, type='warning'}
-Les notes des exercices plus faciles de niveau 1 et 2 sont comptabilisées séparément des exercices plus difficiles. Il faut obtenir au moins 50% des points dans les exercices de niveau 3 et 4 pour bénéficier également de la note des exercices faciles de niveau 1 et 2. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles que vous réalisez chez vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
+Les notes des exercices plus faciles de niveau 1, 2 et 3 sont comptabilisées séparément des exercices plus difficiles de niveau 4 et des interrogations, avec une pondération également en faveur de ces derniers. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles que vous réalisez chez vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
 
 L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen en fin d'année et il n'y a pas moyen non plus de repasser un examen en seconde session. La présence aux séances est **obligatoire** pour cette raison et toute absence injustifiée sera sanctionnée par un zéro pour la matière concernée.
 ```
@@ -142,7 +144,7 @@ L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen e
 
 Le plan du cours est une forme de contrat entre les étudiants et les enseignants. Ce document structure les attentes de vos encadrants. Veuillez lire ce document attentivement.
 
--   [Plan du cours de Science des données biologiques II : années 2022-2023](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2022-2023/docs/plan_de_cours/sdd2_plan_cours_2022-2023.md)
+-   [Plan du cours de Science des données biologiques II : années 2023-2024](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2023-2024/docs/plan_de_cours/sdd2_plan_cours_2023-2024.md)
 
 ## Issues {#issues .unnumbered}
 
@@ -156,7 +158,7 @@ if (exists("assignment2"))
       'S-BIOG-015'         = !"B00Ga_{YY}M_issues",
       'S-BIOG-937-958-959' = !"B00Ga_{YY}C_issues"),
     course.urls = c(
-      'S-BIOG-015'         = "https://classroom.github.com/a/GEz48C57",
+      'S-BIOG-015'         = "https://classroom.github.com/a/...",
       'S-BIOG-937-958-959' = "https://classroom.github.com/a/..."),
     course.ends = c(
       'S-BIOG-015'         = !"{W[53]+5} 23:59:59",

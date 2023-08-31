@@ -16,7 +16,7 @@ La section relative aux bases de données fait suite aux notions vues dans le ca
 
 Les techniques MDS étudiées à la fin de ce module étant basées sur des matrices de distances et complémentaires à la classification ascendante hiérarchique, le module \@ref(cah-kmeans-div) doit être assimilé avant de s'attaquer au présent module.
 
-**Le script R relatif à cette section est disponible [ici](https://raw.githubusercontent.com/BioDataScience-Course/sdd_lessons/2022-2023/B09/R/B09Ra_db_mds.R).** Il peut être copié et collé dans un document `.R` dans RStudio sous SaturnCloud pour l'exécuter et l'explorer par vous-même.
+**Le script R relatif à cette section est disponible [ici](https://raw.githubusercontent.com/BioDataScience-Course/sdd_lessons/2023-2024/B09/R/B09Ra_db_mds.R).** Il peut être copié et collé dans un document `.R` dans RStudio sous SaturnCloud pour l'exécuter et l'explorer par vous-même.
 
 ## Accès aux bases de données
 
@@ -738,7 +738,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B09Ia_{YY}M_portalr"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/XjUT5Glx"),
+      'S-BIOG-061' = "https://classroom.github.com/a/..."),
     course.starts = c(
       'S-BIOG-061' = !"{W[28]+1} 13:00:00"),
     course.ends = c(

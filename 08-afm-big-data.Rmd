@@ -270,7 +270,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B08Ia_{YY}M_mfa"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/fl52JwlX"),
+      'S-BIOG-061' = "https://classroom.github.com/a/..."),
     course.starts = c(
       'S-BIOG-061' = !"{W[26]+1} 13:00:00"),
     course.ends = c(
@@ -288,7 +288,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-061' = !"B07Ga_{YY}M_doubs"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/3vrzCqEZ"),
+      'S-BIOG-061' = "https://classroom.github.com/a/..."),
     course.starts = c(
       'S-BIOG-061' = !"{W[26]+1} 13:00:00"),
     course.ends = c(
@@ -690,7 +690,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B08Ib_{YY}M_zooscannet"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/PuSfcu6H"),
+      'S-BIOG-061' = "https://classroom.github.com/a/..."),
     course.starts = c(
       'S-BIOG-061' = !"{W[26]+1} 13:00:00"),
     course.ends = c(
