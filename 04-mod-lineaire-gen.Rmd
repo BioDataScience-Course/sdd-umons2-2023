@@ -1,0 +1,470 @@
+# Modèle linéaire généralisé {#mod-lineaire-gen}
+
+```{r setup, include=FALSE, echo=FALSE, message=FALSE, results='hide'}
+SciViews::R
+```
+
+##### Objectifs {.unnumbered}
+
+-   Découvrir le modèle linéaire généralisé
+
+-   Être capable d'utiliser la régression logistique
+
+-   S'initier aux modèles mixtes
+
+##### Prérequis {.unnumbered}
+
+Les trois premiers modules du présent cours permettent progressivement de comprendre et de maîtriser la régression linéaire et le modèle linéaire dans R. Assurez-vous de bien avoir assimilé leur contenu avant d'attaquer ce quatrième module.
+
+## Modèle linéaire généralisé
+
+Le modèle linéaire nous a permis de combiner différent types de **variables indépendantes ou explicatives** dans un même modèle. Cependant la **variable dépendante ou réponse** à la gauche de l'équation doit *absolument* être numérique et une distribution Normale est exigée pour la composante statistique du modèle exprimée dans les résidus $\epsilon$. Donc, si nous voulons modéliser une variable dépendante qui ne répond pas à ces caractéristiques, nous sommes dans l'impasse avec la fonction `lm()`. Dans certains cas, une transformation des données peut résoudre le problème. Par exemple, prendre le logarithme d'une variable qui a une distribution log-Normale au départ la normalise. Dans d'autres cas, il semble qu'il n'y ait pas de solution... C'est ici que le **modèle linéaire *généralisé*** vient nous sauver la mise.
+
+Le modèle linéaire généralisé se représente comme suit :
+
+$$
+f(y) = \beta_1 + \beta_2 I_2 + \beta_3 I_3 + ... + \beta_k I_k + \beta_l x_1 + \beta_m x_2 + ... + \epsilon
+$$
+
+La différence par rapport au modèle linéaire, c'est que notre variable dépendante $y$ est **transformée** à l'aide d'une fonction $f(y)$ que l'on appelle **fonction de lien**. Cette fonction de lien est choisie soigneusement pour transformer une variable qui a une distribution non-Normale vers une distribution Normale ou quasi-Normale. Du coup, il ne faut rien changer à la droite du signe égal dans l'équation par rapport au modèle linéaire, et les outils existants peuvent être réemployés, une fois la transformation réalisée.
+
+```{=html}
+<!-- H5P en cours de validation
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(214, height = 270, toc = NULL)`
+-->
+```
+Toute la difficulté ici tient donc à la définition des fonctions de liens pertinentes par rapport à la distribution de $y$. Le tableau suivant reprend les principales situations prises en compte par la fonction `glm()` dans R qui calcule le modèle linéaire généralisé.
+
+| Distribution de Y    | Fonction de lien           | Code R                                         |
+|:---------------------|:---------------------------|:-----------------------------------------------|
+| Gaussienne (Normale) | identité (pas de transfo.) | `glm(..., family = gaussian(link = identity))` |
+| Log-Normale          | log                        | `glm(..., family = gaussian(link = log))`      |
+| Binomiale            | logit                      | `glm(..., family = binomial(link = logit))`    |
+| Binomiale            | probit (alternative)       | `glm(..., family = binomial(link = probit))`   |
+| Poisson              | log                        | `glm(..., family = poisson(link = log))`       |
+
+Il en existe bien d'autres. Voyez l'aide de `?family` pour plus de détails. Par exemple, pour une variable réponse binaire acceptant seulement deux valeurs possibles et ayant une distribution binomiale, avec une réponse de type logistique (une variation croissante d'une ou plusieurs variables indépendantes fait passer la proportion des individus appartenant au second état selon une courbe logistique en S), une fonction de type **logit** est à utiliser.
+
+$$
+y = 1/(1 + e^{- \beta x})
+$$
+
+La transformation **logit** calcule alors : $\ln(y / (1 - y)) = \beta x$. Les situations correspondant à ce cas de figure concernent par exemple des variables de type (vivant *versus* mort) par rapport à une situation potentiellement létale, ou alors, le développement d'une maladie lors d'une épidémie (sain *versus* malade).
+
+```{=html}
+<!-- H5P en cours de validation
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(216, height = 270, toc = NULL)`
+
+`r h5p(215, height = 270, toc = NULL)`
+-->
+```
+### Exemple
+
+Continuons à analyser nos données concernant les bébés à la naissance. Un bébé prématuré est un bébé qui naît avant 37 semaines de grossesse. Dans notre jeu de données `Babies`, nous pouvons déterminer si un enfant est prématuré ou non (variable binaire) à partir de la variable `gestation` (en jours). Transformons nos données pour obtenir les variables d'intérêt.
+
+```{r}
+SciViews::R("model")
+babies <- read("babies", package = "UsingR")
+babies %>.%
+  select(., gestation, smoke, wt1, ht, race, age) %>.%
+  # Éliminer les valeurs manquantes
+  filter(., gestation < 999, smoke < 9, wt1 < 999, ht < 999, race < 99, age < 99) %>.%
+  # Transformer wt1 en kg et ht en cm
+  mutate(., wt1 = wt1 * 0.4536) %>.%
+  mutate(., ht = ht / 39.37) %>.%
+  # Transformer smoke en variable facteur
+  mutate(., smoke = as.factor(smoke)) %>.%
+  # Idem pour race
+  mutate(., race = as.factor(race)) %>.%
+  # Déterminer si un bébé est prématuré ou non (en variable facteur)
+  mutate(., premat = as.factor(as.numeric(gestation < 7 * 37))) %>.%
+  # Calculer le BMI comme meilleur index d'embonpoint des mères que leur masse
+  mutate(., bmi = wt1 / ht^2) %->% # Collecter les résultats avec %->%
+  babies_prem
+```
+
+Comment se répartissent les enfants entre prématurés et nés à terme ?
+
+```{r}
+table(babies_prem$premat)
+```
+
+Nous avons un nombre relativement faible de prématurés dans l'ensemble. C'était à prévoir. Attention à un plan très mal balancé ici : c'est défavorable à une bonne analyse, mais pas rédhibitoire. Décrivons ces données.
+
+```{r}
+babies_table <- table(babies_prem$premat, babies_prem$smoke)
+knitr::kable(addmargins(babies_table))
+```
+
+Ce tableau de contingence ne nous donne pas encore l'idée de la répartition de prématurés en fonction du statut de fumeuse de la mère, mais le graphique suivant nous le montre.
+
+```{r}
+chart(data = babies_prem, ~smoke %fill=% premat) +
+  geom_bar(position = "fill") +
+  labs(x = "Mère qui fume", y = "Effectif")
+```
+
+Il ne semble pas y avoir un effet flagrant, même si le niveau `smoke == 2` semble contenir une plus forte proportion de prématurés. Qu'en est-il en fonction de l'ethnie (voir `help(babies, package = "UsingR")` pour le détail sur les variétés ethniques considérées) de la mère (variable `race`) ?
+
+```{r}
+babies_table <- table(babies_prem$premat, babies_prem$race)
+knitr::kable(addmargins(babies_table))
+```
+
+```{r}
+chart(data = babies_prem, ~race %fill=% premat) +
+  geom_bar(position = "fill") +
+  labs(x = "Ethnie de la mère", y = "Effectif")
+```
+
+Ici, nous voyons déjà un effet semble-t-il plus marqué. Qu'en est-il de l'effet de l'IMC de la mère ?
+
+```{r}
+chart(data = babies_prem, bmi ~ premat) +
+  geom_boxplot() +
+  labs(x = "Prématuré", y = "IMC de la mère")
+```
+
+Sur ce graphique, il ne semble pas y avoir d'influence de l'IMC sur le fait d'avoir un enfant prématuré ou non. Enfin, l'âge de la mère influence-t-il également ?
+
+```{r}
+chart(data = babies_prem, age ~ premat) +
+  geom_boxplot() +
+  labs(x = "Enfant prématuré", y = "Âge de la mère (an)")
+```
+
+Il ne semble pas y avoir un effet flagrant. Voyons ce que donne le modèle (nous ne considérons pas les interactions possibles ici, mais cela doit être fait dans le cas de plusieurs effets significatifs au moins). Avec quatre variables explicatives, le modèle est déjà très complexe sans interactions. Nous serions trop ambitieux de vouloir ici ajuster un modèle complet ! Avec une variable réponse facteur à deux niveaux qui suit une distribution binomiale, nous pouvons indiquer la variable directement à la gauche de la formule comme d'habitude (nous verrons plus loin une notation alternative qui utilise deux variables : le nombre de cas positifs et nombre de cas négatifs).
+
+```{r}
+# Modèle linéaire généralisé avec fonction de lien de type logit
+babies_glm <- glm(data = babies_prem, premat ~ smoke + race + bmi + age,
+  family = binomial(link = logit))
+summary(babies_glm)
+```
+
+Nous voyons que le résumé de l'objet `glm` est très similaire à celui d'un objet `lm`, notamment avec un tableau des `Coefficients` identique et qui s'interprète de la même manière. Ici, nous pouvons confirmer que ni le fait de fumer, ni l'âge, ni l'IMC de la mère n'a d'incidence sur les bébés prématurés au seuil $\alpha$ de 5%. En revanche, certaines ethnies sont significativement plus susceptibles d'accoucher avant terme. Cela suggère soit un facteur génétique, soit un facteur environnemental/culturel lié à ces ethnies. Naturellement, il faudrait ici simplifier le modèle qui se ramène en fin de compte à l'équivalent d'une ANOVA à un facteur, mais en version `glm()` une fois que les variables non significatives sont éliminées. De même, on pourrait légitimement se demander si la variable `premat` ne pourrait pas aussi être modélisée avec une autre fonction de lien en considérant une distribution de Poisson par exemple. À vous de voir...
+
+## Modèle linéaire généralisé mixte
+
+Dans le cours [SDD I module 11](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2022/effet-al%25C3%25A9atoire.html) nous avons découvert les **effets aléatoires** dans les modèles comme étant une variable ayant une distribution statistique connue (souvent Normale) dont on tire un échantillon aléatoire dans notre jeu de données. Cela se produit lorsque les modalités de la variable facteur utilisée sont très nombreuses et que seulement un petit nombre tiré au hasard est étudié. L'exemple que nous avions donné était le cas de différentes variétés de céréales cultivées dans différentes fermes. Nous avons un nombre **restreint et fixe** de variétés de céréales, mais les fermes sont tirées au hasard parmi toutes celles qui sont possibles, de plus, leur effet n'est pas le sujet principal de l'étude. Comme nous suspectons que la ferme peut aussi avoir un impact sur le résultat (orientation, type de sol, exposition des parcelles, ...) nous incluerons cet effet dans notre modèle, mais comme **effet aléatoire**. Lorsque nous mélangeons un ou plusieurs effets aléatoires avec des effets fixes, nous obtenons alors un **modèle linéaire mixte** (LMM) ou un **modèle linéaire généralisé mixte** (GLMM) en fonction de la variable réponse *Y* utilisée.
+
+Prenons un exemple concret. Des scientifiques veulent mesurer l'effet d'une concentration croissante en éthanol dans le liquide séminal de l'homme sur la mobilité des spermatozoïdes. La question est évidemment en relation avec la consommation d'alcool et la fertilité, mais aussi avec des protocoles expérimentaux qui utilisent des molécules dissoutes dans l'éthanol. Des spermatozoîdes de huit patients différents sont soumis à des concentrations de 0, 0,1, 0,5, 1 et 2% d'éthanol pendant 4h. Ensuite, le nombre de spermatozoîdes mobiles est décompté sous microscope. Plutôt que d'encoder une variable binaire qui prend 1 si un spermatozoïde est mobile et 0 dans le cas contraire, un tableau plus compact qui reprend le nombre de spéermatozoïdes mobiles et le total des spermatozoïdes compté pour chaque échantillon des huit donneurs à chaque concentration d'éthanol. Voici les résultats obtenus :
+
+```{r}
+spe <- dtbl_rows(
+ ~donor, ~conc, ~mobile, ~total,
+      1,   0.0,     236,    301,
+      1,   0.1,     238,    301,
+      1,   0.5,     115,    154,
+      1,   1.0,     105,    196,
+      1,   2.0,     182,    269,
+      2,   0.0,      92,    150,
+      2,   0.1,      60,    111,
+      2,   0.5,      63,    131,
+      2,   1.0,      46,     95,
+      2,   2.0,      50,    125,
+      3,   0.0,     100,    123,
+      3,   0.1,      91,    117,
+      3,   0.5,     132,    162,
+      3,   1.0,     145,    187,
+      3,   2.0,      52,     92,
+      4,   0.0,      83,    113,
+      4,   0.1,     104,    123,
+      4,   0.5,      65,     87,
+      4,   1.0,      93,    136,
+      4,   2.0,      78,    117,
+      5,   0.0,     127,    152,
+      5,   0.1,      82,    114,
+      5,   0.5,      55,     84,
+      5,   1.0,      80,    103,
+      5,   2.0,      98,    120,
+      6,   0.0,      62,     77,
+      6,   0.1,      65,     79,
+      6,   0.5,      63,     72,
+      6,   1.0,      57,     67,
+      6,   2.0,      39,     66,
+      7,   0.0,      91,    116,
+      7,   0.1,      51,     71,
+      7,   0.5,      70,     87,
+      7,   1.0,      53,     72,
+      7,   2.0,      59,     82,
+      8,   0.0,     121,    137,
+      8,   0.1,      80,     98,
+      8,   0.5,     100,    122,
+      8,   1.0,     126,    157,
+      8,   2.0,      98,    122
+)
+```
+
+Nous verrons une autre forme pour la formule que dans l'exemple `Babies` et qui tient compte de ce type d'encodage. Il nous faut calculer la fraction des spermatozoïdes mobiles, et aussi nous assurer que la variable `donor` soit bien **factor** et la variable `conc` soit **numeric** (nous voulons faire une régression de la fraction mobile en fonction de la concentration en éthanol) :
+
+```{r}
+spe <- smutate(spe, mob_frac = mobile / total, donor = as.factor(donor), conc = as.numeric(conc))
+head(spe)
+```
+
+La variable réponse est ici, en réalité, une variable binaire même si elle est encodée autrement. Pour chaque spermatozoïde observé, on peut avoir un résultat 0 (immobile) ou 1 (mobile), et la distribution peut être considérée comme une binomiale avec le nombre d'essais égal *n* égal à 1 (voir cours [SDD I module 7](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2022/distribution-binomiale.html)). On parle aussi de distribution de Bernouilli dans le cas particulier d'un binomiale à un seul essai. La mesure est **répétée** un nombre de fois spécifié dans notre tableau dans la colonne `total` pour chaque échantillon traité (8 donneurs x 5 concentration d'éthanol = 40 échantillons). Donc, nous sommes dans une situation différente du jeu de données `Babies` parce qu'il **n'y a pas indépendance entre les observations pour chaque spermatozoïde**. Plusieurs dizaines à centaines d'entre eux sont dénombrés à chaque fois dans le **même échantillon**. Les mesures répétées pour un même sujet d'expérience et lorsque le sujet de l'expérience est lui-même un facteur aléatoire sont automatiquement prises en compte correctement dans un modèle mixte.
+
+### Ajustement et analyse d'un GLMM
+
+Nous ne pouvons pas ajuster un modèle mixte avec la fonction `glm()`. Nous devons faire appel à une autre fonction : `lme4::glmer()`. Par contre, la syntaxe est la même: `data =`, une formule qui spécifie le modèle à ajuster, et `family =` qui indique la distribution de la variable réponse et aussi éventuellement la fonction de lien à utiliser. La formule encode un terme aléatoire entre parenthèse avec les facteurs fixes covariables suivis d'une barre verticale et le facteur aléatoire. Donc, par exemple, si nous considérons que la pente et l'ordonnée à l'origine des droites peuvent varier librement d'un donneur à l'autre, nous écrirons `(conc | donor)` pour le terme aléatoire. Si nous considérons que seule l'ordonnée à l'origine peut varier, mais pas la pente, nous écrirons `(1 | donor)`, et enfin, si nous considérons que seule la pente, mais pas l'ordonnée à l'origine peut varier d'un donneur à l'autre, alors nous écrirons `(0 + conc | donor)`. Ceci correspond aux différentes formes entre deux variables facteur dans le modèle classique (modèle complet `f1 * f2` fixes -\> `f1 + (f1 | f2)` en f2 aléatoire, modèle sans interactions `f1 + f2` fixes -\> `f1 + (1 | f2)`, et modèle avec seulement les interactions pour le second facteur `f1 + f1:f2` -\> `f1 + (0 + f1 | f2)`, respectivement).
+
+Nous devons encore comprendre comment indiquer dans la formule que nous n'avons pas une variable réponse binaire dans notre tableau, mais un contingentement des spermatozoïdes mobiles et du total. Cela s'indique par `cbind(mobile, total - mobile)`, c'est-à-dire, un tableau à deux colonnes avec la première, le nombre observé de niveaux 1, et la seconde, le nombre observé de niveau 0 de la variable binaire. Avec ceci, nous pouvons à présent écrire la formule de notre modèle complet, le calculer et imprimer le résumé des résultats :
+
+```{r}
+spe_m1 <- lme4::glmer(data = spe, cbind(mobile, total - mobile) ~ conc + (conc | donor),
+  family = binomial(link = "logit"))
+summary(spe_m1)
+```
+
+La première ligne nous indique que le modèle n'est pas ajusté par régression par les moindres carrés des résidus, mais par une autre approche (maximum de vraisemblance, *maximum likelihood* en anglais). Un peu plus bas, nous observons un tableau qui donne le coefficient d'Akaike AIC, et d'autres statistiques générales sur le modèle ajusté. Ceci remplace le R^2^ d'une régression linéaire qui n'a pas de sens ici. Ensuite, nous avons une idée de la distribution des résidus, et puis deux tableaux distincts nommés **Random effects** et **Fixed effects**. En effet, les deux types d'effets doivent être traités différemment.
+
+Pour les effets aléatoires, nous avons des distributions Normales et les paramètres sont les variances liées à ces distributions. Pour l'ordonnée à l'origine, l'effet donneur se marque par une variance de 0.17, et pour la pente, la variance est de 0.02. Il n'y a pas de test de significativité de ces paramètres dans le résumé. Par contre, la corrélation entre ces paramètres est calculée et indiquée également.
+
+Pour les effets fixes, nous retrouvons un tableau similaire à celui des coefficients dans le modèle linéaire classique, à ceci près que les tests *t* de Students pour la significativité des paramètres *p* (H~0~: *p* = 0 et H~1~: *p* ≠ 0) est remplacé par un test *z* considérant une distribution Normale. **Ce test est une approximation et n'est pas aussi fiable dans le modèle mixte que dans le modèle classique**. Nous voyons néanmoins voir que l'ordonnée à l'origine ainsi que la pente en fonction de la concentration en éthanol sont tous deux significatifs au seuil $\alpha$ = 5%. Comme la pente relative à `conc` est négative, nous pourrons considérer que l'effet moyen d'une augmentation d'éthanol dans le liquide séminal diminue la mobilité des spermatozoïdes.
+
+L'avantage d'utiliser une formulation des variables avec le nombre de cas positifs, le total, et la fraction positive dans `mob_frac` est que nous pouvons ici réaliser une représentation graphique du modèle qui n'était pas possible avec les bébés prématurés du jeu `Babies` (ou en tous cas, pas sans des transformations des données). Voici comment faire :
+
+```{r}
+chart(data = spe, mob_frac ~ conc %col=% donor) +
+  geom_point() +
+  geom_line(f_aes(fitted(spe_m1) ~ conc %col=% donor)) +
+  labs(x = "Ethanol [%]", y = "Mobilité des spermatozoïdes [%]")
+```
+
+Nous observons effectivement des droites ajustées par le modèle qui ont toutes de pentes négatives, mais ces pentes sont modulées d'un donneur à l'autre, de même que leurs ordonnées à l'origine. Toutefois, la plupart de ces droites semblent avoir des pentes relativement parallèles. Nous pourrions nous demander si nous ne pouvons pas simplifier notre modèle à ce niveau.
+
+### Simplification du modèle
+
+Pour déterminer si nous pouvons simplifier un (G)LMM, nous pouvons utiliser `anova()` en comparant deux modèles imbriqués, `spe_m1` notre modèle complet avec `(conc | donor)` et `spe_m2` simplifié avec `(1 | donor)`. La subtilité, c'est que comme ces modèles sont ajustés via le maximum de vraisemblance, ce n'est pas un test *F* de l'ANOVA qui est réalisé, mais un test de *rapport de maximum de vraisemblance* qui suit asymptotiquement une distribution du Chi^2^. Pour le reste, l'interprétation reste la même. On a H~0~: les deux modèles s'ajustent de manière identique, et H~1~: le modèle plus complexe s'ajuste mieux que le plus simple. Donc, si on ne rejette pas H~0~, nous concluons que le modèle le plus simple est aussi bon que le plus complexe et nous avons un argument fort en faveur de la simplification. Appliquons ceci directement :
+
+```{r}
+spe_m2 <- lme4::glmer(data = spe, cbind(mobile, total - mobile) ~ conc + (1 | donor),
+  family = binomial(link = "logit"))
+anova(spe_m1, spe_m2)
+```
+
+Nous ne rejetons pas H~0~au seuil $\alpha$ de 5%. Nous pouvons donc considérer les deux modèles comme expliquant de manière similaire les données et décider d'utiliser le modèle plus simple `spe_m2`. En voici le résumé :
+
+```{r}
+summary(spe_m2)
+```
+
+Dans le tableau à effets fixes, nous n'avons plus qu'une seule variance estimée, celle correspondant à un décalage de l'ordonnée à l'origine par donneur et qui vaut 0.18. Ce modèle signifie que nous considérons que la variation d'un donneur à l'autre se manifeste sous la forme d'un taux de mobilité spermatique initial (à concentration 0 en éthanol) différent d'une personne à l'autre. Par contre, le modèle considère aussi que l'effet de l'augmentation en éthanol se marque de manière identique quel que soit le donneur. Le graphique correspondant est le suivant :
+
+```{r}
+chart(data = spe, mob_frac ~ conc %col=% donor) +
+  geom_point() +
+  geom_line(f_aes(fitted(spe_m2) ~ conc %col=% donor)) +
+  labs(x = "Ethanol [%]", y = "Mobilité des spermatozoïdes [%]")
+```
+
+Les pentes sont donc bien ici toutes identiques cette fois, et nous avons montré que ce dernier modèle explique tout aussi bien les données obtenues que le précédent. Les tests *z* pour les paramètres fixes (ordonnée à l'origine et effet `conc`) indiquent que les deux paramètres sont significativement différents de zéro. Cependant, nous avons vu que ces tests étant approximatifs, nous devons plutôt recourir à d'autres mesures pour en estimer la significativité.
+
+### Intervalles de confiance des paramètres
+
+Nous pouvons aussi calculer l'intervalle de confiance sur ces paramètres avec la fonction `confint()`.
+
+```{r}
+confint(spe_m2)
+```
+
+L'intervalle de confiance (à 95% par défaut) nous donne une information complémentaire sur l'estimation des paramètres. Ainsi la pente `conc` qui caractérise la diminution de mobilité spermatique en fonction de la concentration en éthanol a été estimée dans `spe_m2` (voir résumé plus haut) à -0.30. Son intervalle de confiance à 95% indique que la vraie valeur se trouve en réalité entre - 0.39 et -0.22 avec un degré de significativité de 5%. Nous pouvons aussi utiliser cette information pour déterminer si le paramètre est significativement différent de zéro. Il le sera, en effet, lorsque l'IC ne contiendra pas zéro, ce qui est le cas ici. Nous pouvons donc en conclure que l'éthanol a un effet négatif sur la mobilité spermatique chez l'homme.
+
+Dans le tableau des intervalles de confiance, `.sig01` correspond à la première variance (et seule ici) estimée pour le facteur aléatoire `donor` dont la valeur était estimée à 0,17, et donc, l'écart type est de 0,41 (racine carrée de la variance). L'IC 95% sur cet écart type est calculé comme compris entre 0.27 et 0.77. Il est donc lui-même également significatif puisqu'il ne comprend pas zéro.
+
+```{block2, type='warning'}
+Deux pièges ici :
+
+1. Si le terme relatif à `donor` n'était pas significatif, nous pourrions être tentés de simplifier le modèle en l'éliminant et en effectuant alors une modèle linéaire généralisé classique entre `cbind(mobile; total - mobile)` et `conc`. Mais nous ne pouvons pas faire une telle simplification car le facteur fixe permet aussi de prendre en compte la **répétition** des mesures dans les mêmes échantillons. Si nous simplifians le modèle, nous considèrerions alors que cheque mesure est indépendante des autres, sans prendre en compte que nous n'avons que huit donneurs en réalité. Ce serait faire de la **pseudoréplication !**
+
+2. D'un autre côté, les modèles mixtes n'aiment pas les paramètres (en particulier ceux des effets aléatoires) qui sont proches de la marge, c'est-à-dire, proches des valeurs limites. Ainsi, si une variance tend vers zéro, l'ajustement du modèle pourra produire des messages d'avis indiquant la présence de **singularités**, il ne pourra pas converger, ou il tombera sur d'autres erreurs encore. Les modèles mixtes sont effectivement plus difficiles à ajustés que leur homologues classiques. Dans ce cas, tentez un modèle plus simple, si vous le pouvez, ou jonglez avec les paramètres d'ajustement expliqués dans la page d'aide de `?lme4::glmer`.
+```
+
+### Difficultés d'ajustement
+
+En cas de problème d'ajustement, nous pouvons vérifier si le modèle est singulier avec `lme4::isSingular()` et tester d'autres algorithmes d'optimisation avec `lme4::allFit()`. Ici, il n'y a pas de problèmes, mais nous pouvons quand même voir ce que cela donne :
+
+```{r}
+lme4::isSingular(spe_m2)
+lme4::allFit(spe_m2)
+```
+
+La fonction `lme4::allFit()` utilise tous les optimiseurs qu'elles connait pour ajuster le modèle et en indique le résultat. Ici, tous ont pu ajuster correctement notre modèle.
+
+L'équation du modèle qui est ajusté ici est assez complexe. Le package {equatiomatic} offre une fonction `extract_eq` qui génère l'équation LaTeX relative au modèle. Voici ce que cela donne dans le cas de `spe_m2` :
+
+`r equatiomatic::extract_eq(spe_m2)`
+
+Le modèle est décrit en trois lignes. La première indique que la variable réponse `mobile` suit une distribution binomiale avec un nombre d'essais *n* = 1 et une probabilité de succès (spermatozoïde mobile) estimée à $\hat P$. Dans la seconde ligne, nous avons la transformation probit de notre variable réponse ($log[\hat P / (1 - \hat P)]$, notre fameuse fonction de lien) qui est modélisée comme une droite $\alpha + \beta (conc)$. La troisième ligne indique enfin que $\alpha$ suit une distribution Normale de moyenne $\mu_\alpha$ qui est notre ordonnée à l'origine moyenne, et d'écart type $\sigma^2_\alpha$ qui est l'écart type calculé pour notre facteur aléatoire avec un indice *j* qui varie de donneur en donneur.
+
+### Analyse des résidus
+
+Pour les modèles linéaires généralisés, l'analyse des résidus ne se fait pas comme pour les modèles linéaires classiques, ou en tous cas pas pour tous les modèles. C'est pour cette raison que nous ne l'avions pas faite avec l'étude des prématurés dans le jeu de données `Babies`. D'ailleurs, il y a plusieurs types de résidus. En plus des résidus classiques $y_i - \hat y_i$ que vous connaissez bien, il y a aussi les résidus de Pearson qui vont divisés les résidus classiques par la variance du modèle en ce point (selon la distribution de la variable réponse, cette variance peut, en effet changer). Nous obtenons ces résidus en indiquant `resid(mod, type = "pearson")`. Nous pouvons tracer les graphiques des résidus en fonction des valeurs ajustées comme ceci :
+
+```{r}
+chart(data = spe, resid(spe_m2, type = "pearson") ~ fitted(spe_m2) %col=% donor) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(x = "Valeurs ajustées", y = "Résidus de Pearson")
+```
+
+Nous observons ici une distribution relativement correcte de ces résidus, à part un point extrême peut-être dans le bas du graphique. Attention ici que les valeurs ajustées dépendent du facteur aléatoire `donor`, et notamment, les points pour le donneur 2 en jaune sont toutes très faibles puisque cela correspond à la droite la plus basse sur le graphique du modèle. Ceci fait partie du modèle lui-même et ne doit donc pas être interprété comme une anomalie ici.
+
+Nous pouvons réaliser un autre graphique de la racine carré de la valeur absolue de ces résidus pour vérifier l'homoscédasticité (sachant qu'elle n'est pas rencontrée dans les résidus classiques, mais que les résidus de Pearson devraient, eux, voire leur variance stabilisée) :
+
+```{r}
+chart(data = spe, sqrt(abs(resid(spe_m2, type = "pearson"))) ~ fitted(spe_m2) %col=% donor) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(x = "Valeurs ajustées", y = "|Résidus de Pearson|^.5")
+```
+
+Nous ne voyons pas non plus d'anomalie particulière ici, à part toujours cette valeur extrême. Il est aussi possible d'étudier les résidus en fonction des variables explicatives à effet fixe, ici, `conc` :
+
+```{r}
+chart(data = spe, resid(spe_m2, type = "pearson") ~ conc %col=% donor) +
+  geom_point() +
+  geom_hline(yintercept = 0) +
+  labs(x = " Ethanol [%]", y = "Résidus de Pearson")
+```
+
+Même conclusion que pour les autres graphiques : pas de difficultés particulières à part une valeur extrême. Nous pourrions être tentés de vérifier la Normalité des résidus. C'est facile à faire :
+
+```{r}
+chart(data = spe, aes(sample = resid(spe_m2, type = "pearson"))) +
+  geom_qq() +
+  geom_qq_line()
+```
+
+La Normalité apparaît ici douteuse... **et ce n'est pas grave, car pour les modèles linéaires généralisés l'hypothèse de Normalité des résidus n'est pas nécessaire !** Seule l'homoscédasticité joue un rôle dans une certaine mesure, mais cela dépend des tests que vous utilisez. Si vous ne vous fiez pas aux tests *z* mais travaillez avec les intervalles de confiance, il existe une version bootstrapée qui calcule les intervalles de confiance de manière fiable même dans les cas limites. On utilisera `confint(mod, level = 0.95, method = "boot", nsim = 500)` où `nsim =` indique le nombre de fois que l'on va bootstraper les données. Attention que ce calcul peut être très long ! \`\`
+
+### Prédictions à l'aide d'un GLMM
+
+Les prédictions sont rendues difficiles à cause de deux modifications que nous avons introduites par rapport au modèle linéaire classique :
+
+1.  La fonction de lien qui transforme la variable réponse. Nous devons penser à appliquer la **fonction inverse** pour obtenir les estimations dans l'échelle d'origine de cette variable.
+
+2.  Les facteurs aléatoires ne permettent pas d'estimer précisément la variable réponse car, par définition, il y a une part de hasard introduite dans le modèle à travers la ou les distributions Normales liées à ces facteurs aléatoires.
+
+Il en résulte que les modèles (G)LMM sont beaucoup moins faciles à manipuler de ce point de vue. Voici quelques outils pour vous y aider. La fonction de lien et son inverse sont disponibles via `make.link()` qui renvoie une liste qui contient entre autre `$linkfun` et `$linkinv`. Ces dernières fonctions sont utilisables pour transformer dans un sens ou dans un autre les calculs. Pour notre fonction de lien probit, cela donne :
+
+```{r}
+probit <- make.link("probit")
+# Transforme quelques valeurs de Y (comprises entre 0 et 1, proportions)
+y <- c(0.8, 0.85, 0.9, 0.95)
+(y_probit <- probit$linkfun(y))
+# Retransforme en y à l'aide de la fonction inverse
+(y2 <- probit$linkinv(y_probit))
+all.equal(y, y2)
+```
+
+Nous pouvons maintenant tracer les graphique qui montre comment probit transforme nos valeurs Y :
+
+```{r}
+dtbl(y = seq(0, 1, by = 0.001)) %>.%
+  smutate(., y_probit = probit$linkfun(y)) %>.%
+  chart(., y_probit ~ y) +
+    geom_line()
+```
+
+La transformation est d'autant plus forte que nous nous rapprochons des extrêmes, 0 ou 1. Effectuons un calcul à la main sur base de notre modèle `spe_m2` dont les coefficients sont :
+
+```{r}
+coef(spe_m2)
+```
+
+Nous pourrions recalculer pour un donneur en particulier, mais si nous voulons un effet moyen, en faisant abstraction du donneur, nous devons nous concentrer sur les effets fixes uniquement, la fonction `lme4::fixef()` nous donne cette information (par opposition à `lme4::ranef()` qui nous renvoie uniquement les effets aléatoires) :
+
+```{r}
+(spe_m2_fixef <- lme4::fixef(spe_m2))
+```
+
+Comme nous avons une droite, calculer une prédiction manuellement semble simple. Il suffit de multiplier les concentrations en éthanol par la pente (-0.30) et lui ajouter l'ordonnée à l'origine (1.27).
+
+```{r}
+intercept <- spe_m2_fixef[1]
+slope <- spe_m2_fixef[2]
+conc <- c(0, 0.25, 0.5, 1, 2)
+slope * conc + intercept
+```
+
+Nous obtenons des estimations de probabilité de mobilité de spermatozoïdes **mais dans l'échelle transformée logit**. Nous ne devons donc pas oublier d'appliquer la transformée inverse pour obtenir ces probabilités, soit :
+
+```{r}
+(mobi <- probit$linkinv(slope * conc + intercept))
+```
+
+Donc, si nous voulons déterminer de combien la mobilité des spermatozoïdes diminue avec, disons une concentration en éthanol de 1% selon notre modèle, nous pouvons soustraire de la première valeur de `mobi` (pour une concentration de 0, la valeur prédite pour 1%, soit la 4ème valeur de `mobi`).
+
+```{r}
+mobi[1] - mobi[4]
+```
+
+La diminution estimée est de 6,5%.
+
+```{=html}
+<!--
+PhG: il y a un problème avec predict() que je n'arrive pas à résoudre -> cette section est mise en commentaire!
+Avec le modèle linéaire, nous avions l'habitude d'utiliser `predict()` pour prédire des nouvelles valeurs. Dans le cas des GLM ou GLMM, nous ne devons pas oublier que le résultat est dans l'échelle transformée et donc, nous devons appliquer la fonction de lien inverse. Le plus simple étant encore d'utiliser l'argument `link = "response"` dans `predict()` qui le calcule pour nous. De plus, nous devons indiquer ce que nous souhaitons pour les effets aléatoires dans `re.form =`, mais le plus courant est de n'inclure que les effets fixes, ce qui se note `re.form = NA`.
+
+{r}
+# Valeurs prédites
+predict(spe_m2, newdata = list(conc = conc), re.form = NA, times = 100)
+# Idem, mais en fraction de mobilité (transfo manuelle)
+probit$linkinv(predict(spe_m2, newdata = conc, re.form = NA))
+# Idem, mais transformé directement dans predict()
+predict(spe_m2, newdata = conc, re.form = NA, type = "response")
+
+
+Par contre, `fitted()` nous fait ce calcul pour nous.
+
+{r}
+# Idem, directement avec fitted()
+fitted(spe_m2)[1:40]
+
+-->
+```
+#### Pour en savoir plus... {.unnumbered}
+
+De manière générale, les modèles linéaires, GLM, GLMM sont compliqués et il y a beaucoup de pièges. Plus tard, nous vous conseillons de toujours faire vérifier vos modèles par un statisticien chevronné. Les documents ci-dessous peuvent vous aider toutefois si vous travaillez seul.
+
+-   [Un document ultra complet](https://www.cellulestat.cra.wallonie.be/wp-content/uploads/2016/12/Formation_Stats_3_1_GLM.pdf) en français sur les GLM.
+
+-   Les modèles linéaires mixtes (LMM) se traitent de la même façon, mais avec la fonction `lme4::lmer()`. Voyez par exemple [ici](http://regnault.perso.math.cnrs.fr/R_tuto/Intro_modeles_lineaires_mixtes.html) en français.
+
+-   Une [FAQ sur les GLMM](http://bbolker.github.io/mixedmodels-misc/glmmFAQ.html) en anglais. **Ce document est une mine d'or avec énormément de bons conseils !**
+
+-   [Résidus d'une GLM](https://rpubs.com/benhorvath/glm_diagnostics) en anglais. Explique les différents types de résidus d'un modèle GLM.
+
+##### À vous de jouer ! {.unnumbered}
+
+```{r assign_B04Ia_ovocyte, echo=FALSE, results='asis'}
+if (exists("assignment"))
+  assignment("B04Ia_ovocyte", part = NULL,
+    url = "https://github.com/BioDataScience-Course/B04Ia_ovocyte",
+    course.ids = c(
+      'S-BIOG-015' = !"B04Ia_{YY}M_ovocyte"),
+    course.urls = c(
+      'S-BIOG-015' = "https://classroom.github.com/a/udes2R14"),
+    course.starts = c(
+      'S-BIOG-015' = !"{W[11]+4} 08:00:00"),
+    course.ends = c(
+      'S-BIOG-015' = !"{W[11]+4} 12:30:00"),
+    term = "Q1", level = 3,
+    toc = "Modèle linéaire généralisé (ovocyte)")
+```
+
+## Récapitulatif des exercices
+
+Ce quatrième module vous a permis de comprendre le modèle linéaire généralisé. Pour évaluer votre compréhension de cette matière vous aviez les exercices suivants à réaliser :
+
+`r show_ex_toc()`
+
+##### Progression {.unnumbered}
+
+`r launch_report("03", height = 800)`
