@@ -158,7 +158,7 @@ if (exists("assignment2"))
       'S-BIOG-015'         = !"B00Ga_{YY}M_issues",
       'S-BIOG-937-958-959' = !"B00Ga_{YY}C_issues"),
     course.urls = c(
-      'S-BIOG-015'         = "https://classroom.github.com/a/...",
+      'S-BIOG-015'         = "https://classroom.github.com/a/k5SmIfit",
       'S-BIOG-937-958-959' = "https://classroom.github.com/a/..."),
     course.ends = c(
       'S-BIOG-015'         = !"{W[53]+5} 23:59:59",
@@ -176,3 +176,19 @@ if (exists("assignment2"))
 Une fois que vous avez rejoint le groupe **`r !"B{YY}"`**, il n'est plus nécessaire d'utiliser le lien GitHub Classroom vers ces issues. Vous pouvez retrouver directement les issues liées à ce dépôt depuis la bannière du site.
 
 ![](images/sdd2_00/issues.png)
+
+## Déroulement du cours {.unnumbered}
+
+Le cours est divisé en 10 modules. Comme expliqué précédemment, les exercices et les projets de niveau 1 à 3 ont pour objectif de vous préparer aux exercices plus complexes. Vous réaliserez ces exercices dans chaque module de ce cours.
+
+Les projets de niveau 4, les challenges et les interrogations sont les activités qui contribuent le plus à votre note finale. Vous trouverez ci-dessous les modules qui comprennent ces activités.
+
+Pour le premier quadrimestre
+
+![](images/sdd2_00/sdd2_q1_orga.drawio.png)
+
+Pour le second quadrimestre
+
+![](images/sdd2_00/sdd2_q2_orga.drawio.png)
+
+Les informations données ci-dessus sont données à titre indicatif. Elles sont susceptibles d'évoluer au cours de l'année académique.
