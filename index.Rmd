@@ -135,7 +135,7 @@ Toutes vos réponses sont collectées et utilisées afin de construire la note f
 Un rapport de progression dans les exercices est mis à votre disposition à la fin de chaque module. En outre, un rapport de progression global est accessible depuis Moodle.
 
 ```{block, type='warning'}
-Les notes des exercices plus faciles de niveau 1, 2 et 3 sont comptabilisées séparément des exercices plus difficiles de niveau 4 et des interrogations, avec une pondération également en faveur de ces derniers. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles que vous réalisez chez vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
+Les notes des exercices plus faciles de niveau 1, 2 et 3 sont comptabilisées séparément des exercices plus difficiles de niveau 4, des challenges et des interrogations, avec une pondération également en faveur de ces derniers. **Votre objectif est donc de bien vous préparer et de réussir vos projets, challenges et interrogations en présentiel.** Les exercices faciles que vous réalisez chez vous aident à bien vous préparer. **Faites les sérieusement, c'est dans votre intérêt.**
 
 L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen en fin d'année et il n'y a pas moyen non plus de repasser un examen en seconde session. La présence aux séances est **obligatoire** pour cette raison et toute absence injustifiée sera sanctionnée par un zéro pour la matière concernée.
 ```
@@ -144,7 +144,7 @@ L'évaluation est **continue** tout au long de l'année. Il n'y a pas d'examen e
 
 Le plan du cours est une forme de contrat entre les étudiants et les enseignants. Ce document structure les attentes de vos encadrants. Veuillez lire ce document attentivement.
 
--   [Plan du cours de Science des données biologiques II : années 2023-2024](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2023-2024/docs/plan_de_cours/sdd2_plan_cours_2023-2024.md)
+-   [Plan du cours de Science des données biologiques II : années 2023-2024](https://github.com/BioDataScience-Course/BioDataScience-Common/tree/2023-2024/docs/plan_de_cours/sdd2_plan_cours_2023-2024.pdf)
 
 ## Issues {#issues .unnumbered}
 
@@ -176,6 +176,8 @@ if (exists("assignment2"))
 Une fois que vous avez rejoint le groupe **`r !"B{YY}"`**, il n'est plus nécessaire d'utiliser le lien GitHub Classroom vers ces issues. Vous pouvez retrouver directement les issues liées à ce dépôt depuis la bannière du site.
 
 ![](images/sdd2_00/issues.png)
+
+Vous pouvez aussi directement créer une issue depuis RStudio. Voyez le fichier README.md dans le dépôt des issues pour les explications.
 
 ## Planning des séances {.unnumbered}
 
