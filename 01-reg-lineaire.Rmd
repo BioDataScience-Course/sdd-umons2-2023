@@ -10,7 +10,7 @@ SciViews::R("model", lang = "fr")
 
 -   Retrouver ses marques avec R, RStudio et la SciViews Box et découvrir les fonctions supplémentaires de la nouvelle version
 
--   Découvrir la régression linaire de manière intuitive
+-   Découvrir la régression linéaire de manière intuitive
 
 -   Découvrir les outils de diagnostic de la régression linéaire, en particulier l'analyse des résidus
 
@@ -38,7 +38,7 @@ Outre les outils, ce cours s'appuie sur des notions que nous avons déjà abord�
 
 `r h5p(192, height = 270, toc = NULL)`
 
-Les tutoriels `learnr` auxquels vous êtes maintenant habitués seront là pour vous aider à auto-évaluer votre progression. Pour le cours 2, ces tutoriels sont dans le package {BioDataScience2} qui est installé dans votre machine virtuelle.
+Les tutoriels `learnr` auxquels vous êtes maintenant habitués seront là pour vous aider à autoévaluer votre progression. Pour le cours 2, ces tutoriels sont dans le package {BioDataScience2} qui est installé dans votre machine virtuelle.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -102,23 +102,23 @@ Attention ! Le modèle *n'est pas* le mécanisme sous-jacent de génération de
 
 -   **Comparer différents modèles**. En présence de plusieurs populations, nous pourrons ajuster un modèle linéaire pour chacune d'elles et comparer ensuite les pentes des droites pour déterminer quelle population grandit plus vite.
 
--   **Explorer les relations** entre variables. Sans aucunes connaissances sur le contexte qui a permis d'obtenir nos données, un modèle peut fournir des informations utiles pour orienter les recherches futures.
+-   **Explorer les relations** entre variables. Sans aucune connaissance sur le contexte qui a permis d'obtenir nos données, un modèle peut fournir des informations utiles pour orienter les recherches futures.
 
-Idéalement, un modèle devrait pouvoir servir à ces différentes applications. En pratique, comme le modèle est forcément une simplification de la réalité, des compromis doivent être faits pour arriver à cette simplification. En fonction de son usage, les compromis possibles vont différer. Il s'en suit une *spécialisation* en modèles **mécanistiques** qui décrivent particulièrement bien le mécanisme sous-jacent (fréquents en physique, par exemple), les modèles **prédictifs** conçus pour calculer des nouvelles valeurs (que l'intelligence artificielle affectionne particulièrement), les modèles **comparatifs**, et enfin, les modèles **exploratoires** (utilisés dans la phase initiale de découverte et de description des données). Retenez simplement qu'un même modèle est rarement efficace sur les quatre tableaux simultanément.
+Idéalement, un modèle devrait pouvoir servir à ces différentes applications. En pratique, comme le modèle est forcément une simplification de la réalité, des compromis doivent être faits pour arriver à cette simplification. En fonction de son usage, les compromis possibles vont différer. Il s'en suit une *spécialisation* en modèles **mécanistiques** qui décrivent particulièrement bien le mécanisme sous-jacent (fréquents en physique, par exemple), les modèles **prédictifs** conçus pour calculer de nouvelles valeurs (que l'intelligence artificielle affectionne particulièrement), les modèles **comparatifs**, et enfin, les modèles **exploratoires** (utilisés dans la phase initiale de découverte et de description des données). Retenez simplement qu'un même modèle est rarement efficace sur les quatre tableaux simultanément.
 
 ### Quand modéliser ?
 
-A chaque fois que deux ou plusieurs variables (quantitatives dans le cas de la régression) forment un nuage de points qui présente une forme particulière non sphérique, autrement dit, qu'une **corrélation significative** existe dans les données, un modèle peut être utile.
+À chaque fois que deux ou plusieurs variables (quantitatives dans le cas de la régression) forment un nuage de points qui présente une forme particulière non sphérique, autrement dit, qu'une **corrélation significative** existe dans les données, un modèle peut être utile.
 
-Étant donné deux variables quantitatives, trois niveaux d'association de force croissante peuvent être définies entre ces deux variables :
+Étant donné deux variables quantitatives, trois niveaux d'association de force croissante peuvent être définis entre ces deux variables :
 
--   La **corrélation** quantifie l'allongement dans une direction préférentielle du nuage de points à l'aide des coefficients de corrélation linéaire de **Pearson** ou non linéaire de **Spearman**. Ce niveau d'association a été traité dans le [module 12 du cours 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/correlation.html). Il est purement descriptif et n'implique aucunes autres hypothèses sur les données observées.
+-   La **corrélation** quantifie l'allongement dans une direction préférentielle du nuage de points à l'aide des coefficients de corrélation linéaire de **Pearson** ou non linéaire de **Spearman**. Ce niveau d'association a été traité dans le [module 12 du cours 1](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/correlation.html). Il est purement descriptif et n'implique aucune autre hypothèse sur les données observées.
 
--   La **relation** considère que la corrélation observée entre les deux variables est issue d'un mécanisme sous-jacent qui nous intéresse. Un **modèle mathématique** de l'association entre les deux variables matérialise de manière éventuellement simplifiée, ce mécanisme. Il permet de réaliser ensuite des calculs utiles. Nous verrons plus loin que des contraintes plus fortes doivent être supposées concernant le distribution des deux variables.
+-   La **relation** considère que la corrélation observée entre les deux variables est issue d'un mécanisme sous-jacent qui nous intéresse. Un **modèle mathématique** de l'association entre les deux variables matérialise de manière éventuellement simplifiée, ce mécanisme. Il permet de réaliser ensuite des calculs utiles. Nous verrons plus loin que des contraintes plus fortes doivent être supposées concernant la distribution des deux variables.
 
 -   La **causalité** précise encore le mécanisme sous-jacent dans le sens qu'elle exprime le fait que c'est la variation de l'une de ces variables qui est directement ou indirectement la **cause** de la variation de la seconde variable. Bien que des outils statistiques existent pour inférer une causalité (nous ne les aborderons pas dans ce cours), la causalité est plutôt étudiée via l'**expérimentation** : le biologiste *contrôle* et *fait varier* la variable supposée causale, toutes autres conditions par ailleurs invariables dans l'expérience. Il mesure alors et constate si la seconde variable répond ou non à ces variations[^01-reg-lineaire-1] et en déduit une causalité éventuelle.
 
-[^01-reg-lineaire-1]: En biologie, le vivant peut être étudié essentiellement de deux manières complémentaires : par l'**observation** du monde qui nous entoure sans interférer, ou le moins possible, et par l'**expérimentation** où le biologiste fixe alors très précisément les conditions dans lesquelles il étudie ses organismes cibles. Les deux approches se prêtent à la modélisation *mais seule l'expérimentation permet d'inférer avec certitude la causalité*.
+[^01-reg-lineaire-1]: En biologie, le vivant peut être étudié essentiellement de deux manières complémentaires : par l'**observation** du monde qui nous entoure sans interférer, ou le moins possible, et par l'**expérimentation** où le biologiste fixe alors très précisément les conditions dans lesquelles il étudie ses organismes cibles. Les deux approches se prêtent à la modélisation, *mais seule l'expérimentation permet d'inférer avec certitude la causalité*.
 
 La distinction entre ces trois degrés d'association de deux variables est cruciale. Il est fréquent d'observer une confusion entre corrélation (ou relation) et causalité chez ceux qui ne comprennent pas bien la différence. Cela peut mener à des **interprétations complètement erronées !** Comme ceci est à la fois crucial mais subtil, voici une vidéo issue de la série "les statistiques expliquées à mon chat" qui explique clairement le problème. Une troisième **variable confondante** peut en effet expliquer une corrélation, rendant alors la relation et/ou la causalité entre les deux variables fallacieuse...
 
@@ -132,7 +132,7 @@ vembedr::embed_youtube("aOX0pIwBCvw", width = 770, height = 433)
 
 ### Entraînement et confirmation
 
-En statistique, une règle universelle veut qu'une observation ne peut servir qu'une seule fois. Ainsi, toutes les données utilisées pour calculer le modèle ne *peuvent pas servir simultanément* à le confirmer. Il faut échantillonner d'autres valeurs pour effectuer cette confirmation. Il s'en suit une spécialisation des jeux de données en :
+En statistique, une règle universelle veut qu'une observation ne puisse servir qu'une seule fois. Ainsi, toutes les données utilisées pour calculer le modèle ne *peuvent pas servir simultanément* à le confirmer. Il faut échantillonner d'autres valeurs pour effectuer cette confirmation. Il s'en suit une spécialisation des jeux de données en :
 
 -   jeu ou set d'**entraînement** qui sert à établir le modèle (nous parlons aussi de **set d'apprentissage**, et en anglais, *training set* ou *learning set*),
 
@@ -146,7 +146,7 @@ C'est une pratique cruciale de toujours confirmer son modèle, et donc, de prend
 
 Nous allons découvrir les bases de la régression linéaire de façon intuitive. Nous utilisons le jeu de données `trees` qui rassemble la mesure du diamètre, de la hauteur et du volume de bois de cerisiers noirs *Prunus serotina* Ehrh.
 
-L'objectif ici est de pouvoir **prédire le volume de bois** que ces arbres pourront produire si on les abattaient (mais avant de le faire). Le jeu de donnée correspond à 31 arbres de différentes tailles abattus et dont il est donc possible de mesurer le volume de bois.
+L'objectif ici est de pouvoir **prédire le volume de bois** que ces arbres pourront produire si on les abattait (mais avant de le faire). Le jeu de donnée correspond à 31 arbres de différentes tailles abattus et dont il est donc possible de mesurer le volume de bois.
 
 ![Cerisier noir dans le Tennessee, par Patrick Phoebus, voir <http://bioimages.vanderbilt.edu/phoebusp/rse02.htm>.](http://bioimages.vanderbilt.edu/gq/phoebusp/gprse02.JPG)
 
@@ -194,7 +194,7 @@ chart(data = trees, volume ~ diameter) +
   geom_point()
 ```
 
-Si vous deviez ajouter une droite permettant de représenter au mieux les données, où est ce que vous la placeriez ? Pour rappel, une droite respecte l'équation mathématique suivante :
+Si vous deviez ajouter une droite permettant de représenter au mieux les données, où est-ce que vous la placeriez ? Pour rappel, une droite respecte l'équation mathématique suivante :
 
 $$y = a + b \ x$$
 
@@ -216,6 +216,8 @@ chart(data = trees, volume ~ diameter) +
 ```
 
 ### Quantifier l'ajustement d'un modèle
+
+**Note : Cette partie est assez longue. Elle est utile car elle vous permet de bien comprendre le mécanisme et la logique de la régression linéaire. Par contre, c'est la suite (à partir de "La fonction `lm()`") qui est véritablement importante pour bien être capable de réaliser une régression linéaire simple dans R et la diagnostiquer. Par conséquent, ne perdez pas trop de temps dans la présente partie, lisez-là attentivement et effectuez les exercices, mais conservez votre énergie mentale pour la suite !**
 
 Nous voulons identifier la meilleure *droite de régression*, c'est-à-dire la droite le plus proche de nos données. Nous avons besoin d'une règle qui va nous permettre de quantifier la distance de nos observations à notre modèle. La "valeur" qui quantifie cela s'appelle une **métrique**. La meilleure droite sera alors celle qui minimise cette métrique.
 
@@ -273,7 +275,7 @@ names(dist_calc) <- models$model
 tabularise(as_dtf(dist_calc))
 ```
 
-Selon notre méthode, le modèle 4 est considéré comme le plus approprié parce que la valeur de notre métrique est la plus faible en valeur absolue. Qu'en pensez vous ?
+Selon notre méthode, le modèle 4 est considéré comme le plus approprié parce que la valeur de notre métrique est la plus faible en valeur absolue. Qu'en pensez-vous ?
 
 ```{r, echo=FALSE}
 chart(data = trees, volume ~ diameter) +
@@ -303,9 +305,9 @@ chart(data = trees, volume ~ diameter) +
 
 Ainsi avec notre première méthode naïve de somme des résidus, il suffit d'avoir autant de résidus positifs que négatifs pour avoir un résultat proche de zéro pour la métrique. Mais cela n'implique pas que les observations soient proches de la droite pour autant. Avez-vous une autre idée que de sommer les résidus ?
 
--   **Sommer le carré des résidus** aurait des propriétés intéressantes car d'une part les carrés de nombres positifs et négatifs sont tous positifs, et d'autre part, plus une observation est éloignée plus sa distance au carré pèse fortement dans la somme[^01-reg-lineaire-2].
+-   **Sommer le carré des résidus** aurait des propriétés intéressantes, car d'une part les carrés de nombres positifs et négatifs sont tous positifs, et d'autre part, plus une observation est éloignée plus sa distance au carré pèse fortement dans la somme[^01-reg-lineaire-2].
 
-[^01-reg-lineaire-2]: Utiliser le carré des résidus a aussi d'autres propriétés statistiques intéressantes qui rapprochent ce calcul de la variance (somme de la distance au carré à la moyenne pour une seule variables numérique).
+[^01-reg-lineaire-2]: Utiliser le carré des résidus a aussi d'autres propriétés statistiques intéressantes qui rapprochent ce calcul de la variance (somme de la distance au carré à la moyenne pour une seule variable numérique).
 
 Nous obtenons les résultats suivants :
 
@@ -359,7 +361,7 @@ $$f_{obj}(x_i, y_i, a, b) = \sum_{i = 1}^n |\epsilon_i| = \sum_{i = 1}^n |y_i - 
 Nous pouvons nous demander si notre modèle 2 qui est la meilleure droite parmi nos quatre modèles est le **meilleur modèle possible dans l'absolu**. En réalité, le meilleur modèle est celui qui minimise la fonction objective, donc pour la régression par les moindres carrés (par la suite, nous ne traiterons plus que de ce cas) :
 
 $$\min f_{obj}(x_i, y_i, a, b) = \min \sum_{i = 1}^n [y_i - (a + b \ x_i)]^2$$
-Pour ce faire, nous allons devoir définir une technique d'optimisation qui nous permette de déterminer quelle est la droite qui minimise notre fonction objective. Imaginons que nous n'avons pas quatre mais 5000 modèles linéaires avec des pentes et des ordonnées à l'origine différentes. Quelle est la meilleure droite ?
+Pour ce faire, nous allons devoir définir une technique d'optimisation qui nous permette de déterminer quelle est la droite qui minimise notre fonction objective. Imaginons que nous n'avons pas quatre, mais 5000 modèles linéaires avec des pentes et des ordonnées à l'origine différentes. Quelle est la meilleure droite ?
 
 ```{r}
 set.seed(34643)
@@ -373,7 +375,7 @@ chart(data = trees, volume ~ diameter) +
     data = models1, alpha = 1/6) 
 ```
 
-Nous voyons sur le graphique qu'un grand nombre de droites différentes sont testées et qu'elles couvrent toute la surface du graphique explorant ainsi un grand nombre de possibilités, mais nous ne distinguons pas grand chose de plus. Cependant, sur ces `r nrow(models1)` modèles, nous pouvons maintenant calculer la valeur de notre fonction objective et ensuite déterminer quel est le meilleur d'entre eux en retenant celui qui la minimise (ici une fois de plus, il n'est pas indispensable de comprendre le détail du code utilisé pour pouvoir suivre le raisonnement).
+Nous voyons sur le graphique qu'un grand nombre de droites différentes sont testées et qu'elles couvrent toute la surface du graphique explorant ainsi un grand nombre de possibilités, mais nous ne distinguons pas grand-chose de plus. Cependant, sur ces `r nrow(models1)` modèles, nous pouvons maintenant calculer la valeur de notre fonction objective et ensuite déterminer quel est le meilleur d'entre eux en retenant celui qui la minimise (ici une fois de plus, il n'est pas indispensable de comprendre le détail du code utilisé pour pouvoir suivre le raisonnement).
 
 ```{r}
 # Fonction de calcul de la somme des carrés des résidus (fonction objective)
@@ -464,7 +466,7 @@ Suite à notre découverte de manière intuitive de la régression linéaire sim
 
 $$y = a + b \ x$$
 
-dont $a$ est l'ordonnée à l'origine (*intercept* en anglais) et $b$ est la pente (*slope* en anglais), tous deux les **paramètres** du modèle, alors que $x$ et $y$ en sont les **variables**. En statistique, on a l'habitude de représenter les paramètres généraux avec des lettres grecque pour réserver les lettres latines aux valeurs de l'échantillon observé. Nous utiliserons donc plutôt l'équation :
+dont $a$ est l'ordonnée à l'origine (*intercept* en anglais) et $b$ est la pente (*slope* en anglais), tous deux les **paramètres** du modèle, alors que $x$ et $y$ en sont les **variables**. En statistique, on a l'habitude de représenter les paramètres généraux avec des lettres grecques pour réserver les lettres latines aux valeurs de l'échantillon observé. Nous utiliserons donc plutôt l'équation :
 
 $$y = \alpha + \beta \ x$$
 
@@ -474,7 +476,7 @@ où $\alpha$ et $\beta$ correspondent respectivement aux paramètres $a$ et $b$ 
 
 $$y_i = \alpha + \beta \ x_i + \epsilon_i$$
 
-avec $y_i$ qui sont les valeurs mesurées pour le point *i* sur l'axe *y*, $\alpha$ est l'ordonnée à l'origine, $x_i$ sont les valeurs mesurées pour le point *i* sur l'axe *x*, $\beta$ est la pente et $\epsilon_i$ sont les résidus (partie non expliquée par le modèle). L'équation s'écrit aussi souvent de manière simplifiée en se débarassant des indices *i* et en considérant $Y = y_i$ et $X = x_i$ :
+avec $y_i$ qui sont les valeurs mesurées pour le point *i* sur l'axe *y*, $\alpha$ est l'ordonnée à l'origine, $x_i$ sont les valeurs mesurées pour le point *i* sur l'axe *x*, $\beta$ est la pente et $\epsilon_i$ sont les résidus (partie non expliquée par le modèle). L'équation s'écrit aussi souvent de manière simplifiée en se débarrassant des indices *i* et en considérant $Y = y_i$ et $X = x_i$ :
 
 $$Y = \alpha + \beta \ X + \epsilon$$
 
@@ -497,7 +499,7 @@ chart(trees_lm)
 
 Le graphique `chart()` par défaut d'un objet **lm** est le nuage de points auquel la droite de régression est ajoutée ainsi qu'une zone grisée représentant l'**enveloppe de confiance à 95%**, c'est-à-dire que selon le modèle et si la distribution des résidus est **Normale** et de variance constante (= **homoscédasticité**), la droite de régression de la population statistique a 95% de chances de se trouver à l'intérieur de cette enveloppe. Cela permet de visualiser tout de suite la précision avec laquelle l'échantillon permet d'estimer la droite que l'on cherche (sachant que la droite bleue est celle relative à notre échantillon, mais pas celle de la population statistique étudiée, on dit que c'est l'**estimateur** de la droite de la population). Nous reviendrons à cette représentation et à l'enveloppe de confiance à la fin de ce module.
 
-La fonction `lm()` crée un objet spécifique qui contient de nombreuses informations pour pouvoir ensuite analyser plus en détails notre modèle linéaire. Afin de déterminer de quel objet il s'agit, vous pouvez utiliser `class()`. Ainsi, nous voyons que `trees_lm` est un objet de classe **lm** :
+La fonction `lm()` crée un objet spécifique qui contient de nombreuses informations pour pouvoir ensuite analyser plus en détail notre modèle linéaire. Afin de déterminer de quel objet il s'agit, vous pouvez utiliser `class()`. Ainsi, nous voyons que `trees_lm` est un objet de classe **lm** :
 
 ```{r}
 class(trees_lm)
@@ -531,7 +533,7 @@ summary(trees_lm)
 
 -   Call :
 
-Il s'agit de la formule employée dans la fonction `lm()`. C'est à dire le volume en fonction du diamètre du jeu de données `trees`.
+Il s'agit de la formule employée dans la fonction `lm()`. C'est-à-dire le volume en fonction du diamètre du jeu de données `trees`.
 
 -   Residuals :
 
@@ -543,13 +545,13 @@ fivenum(residuals(trees_lm))
 
 -   Coefficients :
 
-Il s'agit des résultats associés à la pente et à l'ordonnée à l'origine dont les valeurs estimées des paramètres *(Estimate*). Les mêmes valeurs peuvent être obtenues à partir de `coef(trees_lm)` :
+Il s'agit des résultats associés à la pente et à l'ordonnée à l'origine, dont les valeurs estimées des paramètres *(Estimate*). Les mêmes valeurs peuvent être obtenues à partir de `coef(trees_lm)` :
 
 ```{r}
 coef(trees_lm)
 ```
 
-Nous retrouvons également les écart-types calculés sur ces valeurs (*Std. Error*) qui donnent une indication de la précision de leur estimation, les valeurs des distributions *t* de Student sur ces estimations (*t value*) et enfin les valeurs *p* (*PR(\>\|t\|)*) liées à un test *t* de Student pour déterminer si le paramètre correspondant est significativement différent de zéro (avec $H_0: p = 0$ et $H_a: p \neq 0$).
+Nous retrouvons également les écarts-types calculés sur ces valeurs (*Std. Error*) qui donnent une indication de la précision de leur estimation, les valeurs des distributions *t* de Student sur ces estimations (*t value*) et enfin les valeurs *p* (*PR(\>\|t\|)*) liées à un test *t* de Student pour déterminer si le paramètre correspondant est significativement différent de zéro (avec $H_0: p = 0$ et $H_a: p \neq 0$).
 
 *Pour l'instant, nous nous contenterons d'interpréter et d'utiliser les informations issues de `summary()` dans sa partie supérieure. Le contenu des trois dernières lignes sera détaillé dans le module suivant.*
 
@@ -568,7 +570,7 @@ En prime, on a l'équation du modèle (que l'on peut ne pas indiquer avec l'argu
 
 ### Paramétrisation du modèle
 
-A partir des données de ce résumé, nous pouvons maintenant **paramétrer** l'équation de notre modèle :
+À partir des données de ce résumé, nous pouvons maintenant **paramétrer** l'équation de notre modèle :
 
 $$`r eq__(trees_lm)`$$
 
@@ -585,17 +587,17 @@ Notez que nous avons laissé tombé $\epsilon$ ici, ce qui nous oblige à écrir
 
 ## Outils de diagnostic
 
-Une fois la meilleure droite de régression obtenue, le travail est loin d'être terminé. Il se peut que le nuage de point ne soit pas tout-à-fait linéaire, que sa dispersion ne soit pas homogène, que les résidus n'aient pas une distribution Normale, qu'il existe des valeurs extrêmes aberrantes, ou qui "tirent la droite vers elle" de manière excessive (points trop influents).
+Une fois la meilleure droite de régression obtenue, le travail est loin d'être terminé. Il se peut que le nuage de point ne soit pas tout à fait linéaire, que sa dispersion ne soit pas homogène, que les résidus n'aient pas une distribution Normale, qu'il existe des valeurs extrêmes aberrantes, ou qui "tirent la droite vers elle" de manière excessive (points trop influents).
 
-Nous allons maintenant devoir diagnostiquer ces possibles problèmes. L'**analyse des résidus** permet de le faire. Ensuite, si deux ou plusieurs modèles sont utilisable, il nous faut décider lequel conserver. Enfin, nous pouvons extraire de l'information liée à notre modèle de manière réutilisable dans R ou faire de la prédiction pour des nouvelles observations.
+Nous allons maintenant devoir diagnostiquer ces possibles problèmes. L'**analyse des résidus** permet de le faire. Ensuite, si deux ou plusieurs modèles sont utilisables, il nous faut décider lequel conserver. Enfin, nous pouvons extraire de l'information liée à notre modèle de manière réutilisable dans R ou faire de la prédiction pour de nouvelles observations.
 
 ### Analyse des résidus
 
-Le tableau numérique obtenu à l'aide de `summary()` peut faire penser que l'étude d'une régression linéaire se limite à examiner quelques valeurs numériques et divers tests d'hypothèses associés. Ce sont effectivement des indicateurs utiles, mais c'est oublier que la technique est **essentiellement visuelle**. Le graphique du nuage de points avec la droite superposée est un premier outil diagnostic visuel indispensable, mais il n'est pas le seul ! Plusieurs graphiques spécifiques existent pour mettre en évidence diverses propriétés des résidus qui peuvent révéler des problèmes. Leur inspection est indispensable et s'appelle l'**analyse des résidus**.
+Le tableau numérique obtenu à l'aide de `summary()` peut faire penser que l'étude d'une régression linéaire se limite à examiner quelques valeurs numériques et divers tests d'hypothèses associés. Ce sont effectivement des indicateurs utiles, mais c'est oublier que la technique est **essentiellement visuelle**. Le graphique du nuage de points avec la droite superposée est un premier outil diagnostique visuel indispensable, mais il n'est pas le seul ! Plusieurs graphiques spécifiques existent pour mettre en évidence diverses propriétés des résidus qui peuvent révéler des problèmes. Leur inspection est indispensable et s'appelle l'**analyse des résidus**.
 
 #### Graphique résidus *versus* valeurs prédites
 
-Avant de se lancer dans l'analyse des résidus on vérifie le nombre d'observations qui se trouvent dans le set d'apprentissage utilisé. Si ce nombre est trop faible, nous ne pourrons pas faire grand chose (pour fixer les idées, moins d'une dizaine de points). S'il est moyennement bas, nous n'aurons qu'une analyse approchante (entre une dizaine et une trentaine observations). Entre une trentaine et quelques centaines de points, nous sommes dans une zone idéale. Mais si nous avons un très gros jeu de données avec plusieurs milliers de points, alors les graphiques seront très lents à se construire et seront peu lisibles. Avec un très grand nombre d'observations, on peut facilement séparer un set d'apprentissage et un set de test et plutôt travailler sur base du set de test avec des métriques adaptées. Nous ferons cela dans le cours de science des données III. Naturellement, si le jeu de données est très volumineux, on peut aussi commencer par en échantillonner quelques centaines de points au hasard pour le ramener à un tableau plus raisonnable pour les graphiques d'analyse des résidus. **Ici, avec 31 points on est dans la plage inférieure, mais utilisable.**
+Avant de se lancer dans l'analyse des résidus, on vérifie le nombre d'observations qui se trouvent dans le set d'apprentissage utilisé. Si ce nombre est trop faible, nous ne pourrons pas faire grand-chose (pour fixer les idées, moins d'une dizaine de points). S'il est moyennement bas, nous n'aurons qu'une analyse approchante (entre une dizaine et une trentaine d'observations). Entre une trentaine et quelques centaines de points, nous sommes dans une zone idéale. Mais si nous avons un très gros jeu de données avec plusieurs milliers de points, alors les graphiques seront très lents à se construire et seront peu lisibles. Avec un très grand nombre d'observations, on peut facilement séparer un set d'apprentissage et un set de test et plutôt travailler sur base du set de test avec des métriques adaptées. Nous ferons cela dans le cours de science des données III. Naturellement, si le jeu de données est très volumineux, on peut aussi commencer par en échantillonner quelques centaines de points au hasard pour le ramener à un tableau plus raisonnable pour les graphiques d'analyse des résidus. **Ici, avec 31 observations, on est dans la plage inférieure, mais utilisable.**
 
 Le premier des graphiques d'analyse des résidus, que l'on obtient en indiquant un **type** différent soit par `chart(objet_lm, type = "mon_type")`, soit en abrégé via `chart$mon_type(objet_lm)` permet de vérifier visuellement la distribution des résidus (valeurs prédites sur l'axe *X* et résidus sur l'axe *Y*). C'est le type **resfitted**.
 
@@ -623,7 +625,7 @@ chart$qqplot(trees_lm)
 **Attention !** Le graphique quantile-quantile a été abordé au premier cours de Science des Données Biologiques, mais il apparaît que de nombreux étudiants ne comprennent pas bien ce qu'il représente, ni ne savent comment l'utiliser dans le présent contexte. Assurez-vous d'avoir bien compris son mécanisme et retournez voir [l'explication dans le cours précédent](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/graphique-quantile-quantile.html).
 ```
 
-Le graphique quantile-quantile s'interprète en regardant si les points s'alignent plus ou moins bien le long de la droite, en particulier aux extrémités. Des petits écarts sont d'autant plus acceptables que l'échantillon est de petite taille. Ils sont aussi tolérables parce que la régression linéaire est relativement robuste par rapport à ces écarts, surtout si la distribution reste symétrique. **Ici nous ne notons pas de difficultés particulières : les points sont assez proches de la droite.** Pour être bien clair, le graphique quantile-quantile ne prouve *jamais* que les résidus suivent effectivement une distribution Normale. mais il indique seulement si leur distribution *ressemble* à la distribution théorique Normale. En fait, dans le cas de notre régression linéaire, ceci est suffisant.
+Le graphique quantile-quantile s'interprète en regardant si les points s'alignent plus ou moins bien le long de la droite, en particulier aux extrémités. Des petits écarts sont d'autant plus acceptables que l'échantillon est de petite taille. Ils sont aussi tolérables parce que la régression linéaire est relativement robuste par rapport à ces écarts, surtout si la distribution reste symétrique. **Ici nous ne notons pas de difficultés particulières : les points sont assez proches de la droite.** Pour être bien clair, le graphique quantile-quantile ne prouve *jamais* que les résidus suivent effectivement une distribution Normale. Il indique seulement si leur distribution *ressemble* à la distribution théorique Normale. En fait, dans le cas de notre régression linéaire, ceci est suffisant.
 
 #### Graphique position et échelle
 
@@ -637,7 +639,7 @@ Pour l'interprétation, un graphique correct montrera des points qui se distribu
 
 #### Graphique de la distance de Cook
 
-Le quatrième graphique d'analyse des résidus (type **cooksd**) met en évidence l'influence des individus sur la régression linéaire, les observations étant rangée dans l'ordre avec le numéro de l'observation qui est la ligne du jeu de données où elle se trouve. Effectivement, la régression linéaire par les moindres carrés est sensible aux valeurs extrêmes dont les résidus déjà importants au départ sont élevés au carré. La [*distance de Cook*](https://www.frwiki.net/wiki/Distance_de_Cook) mesure l'effet de la suppression du point sur la droite de régression. Plus l'effet est important, plus le point a d'influence.
+Le quatrième graphique d'analyse des résidus (type **cooksd**) met en évidence l'influence des individus sur la régression linéaire, les observations étant rangées dans l'ordre avec le numéro de l'observation qui est la ligne du jeu de données où elle se trouve. Effectivement, la régression linéaire par les moindres carrés est sensible aux valeurs extrêmes dont les résidus déjà importants au départ sont élevés au carré. La [*distance de Cook*](https://www.frwiki.net/wiki/Distance_de_Cook) mesure l'effet de la suppression du point sur la droite de régression. Plus l'effet est important, plus le point a d'influence.
 
 ```{r}
 chart$cooksd(trees_lm)
@@ -653,7 +655,7 @@ Le cinquième graphique utilise l'effet de levier (*leverage* en anglais, d'où 
 chart$resleverage(trees_lm)
 ```
 
-**Ici, nous notons que le point qui a la distance de Cook la plus élevée a aussi l'effet de levier le plus fort. Et par la même occasion, c'est le point qui a un résidus le plus grand.**
+**Ici, nous notons que le point qui a la distance de Cook la plus élevée a aussi l'effet de levier le plus fort. Et par la même occasion, c'est le point qui a un résidu le plus grand.**
 
 #### Effet de levier *versus* distance de Cook
 
@@ -665,13 +667,13 @@ chart$cookleverage(trees_lm)
 
 L'analyse de ce graphique consiste à rechercher un ou plusieurs points influents soit horizontalement (levier), soit verticalement (distance de Cook), soit les deux. **Ici nous voyons clairement que le point extrême l'est pour les deux critères simultanément.**
 
-Vous noterez que les trois derniers graphiques visent un objectif identique : celui de rechercher des points anormalement influents sur la droite. Il n'est pas utile de les représenter tous les trois. Choisissez celui que vous préférez. Sachant que le second reprend le plus d'information car il présente les résidus, l'effet de levier et la distance de Cook sur un même graphique, nous conseillons de garder celui-là préférentiellement.
+Vous noterez que les trois derniers graphiques visent un objectif identique : celui de rechercher des points anormalement influents sur la droite. Il n'est pas utile de les représenter tous les trois. Choisissez celui que vous préférez. Sachant que le second reprend le plus d'information, car il présente les résidus, l'effet de levier et la distance de Cook sur un même graphique, nous conseillons de garder celui-là préférentiellement.
 
-#### Autres graphiques des residus
+#### Autres graphiques des résidus
 
-Nous avons encore deux autres types que nous ne détaillerons pas ici. Le type **reshist** représente un histogramme des résidus et le type **resautocor** étudie l'**autocorrélation** des résidus par rapport à eux-mêmes, mais décalés d'une observations. Ce dernier graphique est plutôt réservé à des mesures répétées sur le même individu et successives dans le temps, lorsque nous suspectons que la valeur à un temps *t* peut avoir une influence considérable sur la valeur que l'on observera au temps *t* + 1 au niveau des résidus. Dans le cours 3, nous étudierons plusieurs techniques relatives à l'analyse de séries chronologiques qui ont cette particularité d'avoir une sorte d'"effet mémoire" au cours du temps.
+Nous avons encore deux autres types que nous ne détaillerons pas ici. Le type **reshist** représente un histogramme des résidus et le type **resautocor** étudie l'**autocorrélation** des résidus par rapport à eux-mêmes, mais décalés d'une observation. Ce dernier graphique est plutôt réservé à des mesures répétées sur le même individu et successives dans le temps, lorsque nous suspectons que la valeur à un temps *t* peut avoir une influence considérable sur la valeur que l'on observera au temps *t* + 1 au niveau des résidus. Dans le cours 3, nous étudierons plusieurs techniques relatives à l'analyse de séries chronologiques qui ont cette particularité d'avoir une sorte d'"effet mémoire" au cours du temps.
 
-**Ces deux graphiques sont d'un moindre intérêt dans notre exemple. Avec 31 observations, nous sommes un peut court pour observer des effets subtils sur un histogramme. D'autre part, les observations correspondent à des arbres différents et sont donc indépendantes les unes des autres. Nous n'avons pas de raisons de suspecter qu'il puisse y avoir une quelconque autocorrélation.**
+**Ces deux graphiques sont d'un moindre intérêt dans notre exemple. Avec 31 observations, nous sommes un peu court pour observer des effets subtils sur un histogramme. D'autre part, les observations correspondent à des arbres différents et sont donc indépendantes les unes des autres. Nous n'avons pas de raisons de suspecter qu'il puisse y avoir une quelconque autocorrélation.**
 
 #### Graphique composite des résidus
 
@@ -681,9 +683,9 @@ Un dernier type, **residuals**, offre la possibilité de créer directement une 
 chart$residuals(trees_lm)
 ```
 
-Cette composition offre une vision d'ensemble synthétique. Pour une inspection rapide, c'est le meilleur candidat. À l'issue de l'analyse des résidus de **trees_lm**, nous observons donc différents problèmes qui suggèrent que le modèle choisi n'est peut être pas le plus adapté. Nous expliquerons pourquoi plus loin, mais à ce stade si vous avez compris le principe et le type d'anomalies que l'on recherche à l'aide de ces différents graphiques de diagnostic, c'est suffisant. Bien analyser les résidus d'une régression n'est pas une tâche facile et on n'y arrive qu'après avoir observé un certain nombre de situations différentes. Vous vous y exercerez avec les différents exercices qui vous seront proposés en présentiel.
+Cette composition offre une vision d'ensemble synthétique. Pour une inspection rapide, c'est le meilleur candidat. À l'issue de l'analyse des résidus de **trees_lm**, nous observons donc différents problèmes qui suggèrent que le modèle choisi n'est peut-être pas le plus adapté. Nous expliquerons pourquoi plus loin, mais à ce stade si vous avez compris le principe et le type d'anomalies que l'on recherche à l'aide de ces différents graphiques de diagnostic, c'est suffisant. Bien analyser les résidus d'une régression n'est pas une tâche facile et on n'y arrive qu'après avoir observé un certain nombre de situations différentes. Vous vous y exercerez avec les différents exercices qui vous seront proposés en présentiel.
 
-<!-- TODO: ajouter quelques cas fictifs de bonnes et mauvaises régressions et commenter les 4 graphiques que l'on obtient à chaque fois pour que l'étudiant commence à "sentir" ce qui fonction ou pas.-->
+<!-- TODO: ajouter quelques cas fictifs de bonnes et mauvaises régressions et commenter les 4 graphiques que l'on obtient à chaque fois pour que l'étudiant commence à "sentir" ce qui fonctionne ou pas.-->
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -720,7 +722,7 @@ chart(data = trees, volume ~ diameter) +
   geom_point(data = new_trees, f_aes(pred~diameter), color = "red") 
 ```
 
-Le volume de bois prédit est même négatif pour des arbres encore plus petits ! Notre modèle est-il alors complètement faux ? Rappelons-nous qu'un modèle est nécessairement une vision simplifiée de la réalité. En particulier, notre modèle a été entraîné avec des données comprises dans un intervalle. Il est alors valable pour effectuer des **interpolations** à l'intérieur de cet intervalle mais **ne peut pas être utilisé pour effectuer des extrapolations** en dehors, comme nous venons de le faire, ou alors avec énormément de précautions (pour un phénomène qui varie dans le temps, une extrapolation dans un futur proche est, par exemple, parfois raisonnable).
+Le volume de bois prédit est même négatif pour des arbres encore plus petits ! Notre modèle est-il alors complètement faux ? Rappelons-nous qu'un modèle est nécessairement une vision simplifiée de la réalité. En particulier, notre modèle a été entraîné avec des données comprises dans un intervalle. Il est alors valable pour effectuer des **interpolations** à l'intérieur de cet intervalle, mais **ne peut pas être utilisé pour effectuer des extrapolations** en dehors, comme nous venons de le faire, ou alors avec énormément de précautions (pour un phénomène qui varie dans le temps, une extrapolation dans un futur proche est, par exemple, parfois raisonnable).
 
 ```{r}
 trees <- add_predictions(trees, trees_lm)
@@ -773,7 +775,7 @@ Cette enveloppe de confiance est en réalité basée sur l'écart type *conditio
 
 $$s_{y|x}\ =\ \sqrt{ \frac{\sum_{i = 0}^n\left(y_i - \hat y_i\right)^2}{n-2}}$$
 
-A partir de là, il est possible de définir également un intervalle de confiance conditionnel à $x_i$ :
+À partir de là, il est possible de définir également un intervalle de confiance conditionnel à $x_i$ :
 
 $$\operatorname{CI}_{1-\alpha}\ =\ \hat y_i\ \ \pm \  t_{\frac{\alpha}{2}}^{n-2}  \frac{s_{y|x}\ }{\sqrt{n}}$$
 C'est cet intervalle de confiance conditionnel qui est matérialisé par l'enveloppe de confiance autour de la droite de régression représentée sur le graphique précédent.
@@ -786,7 +788,7 @@ La fonction `tidy()` extrait facilement et rapidement sous la forme d'un tableau
 (trees_tidy <- tidy(trees_lm))
 ```
 
-On obtient l'équivalent sous forme d'un tableau bien formaté pour un rapprot à l'aide de `tabularise$tidy()`(ici on utilise `header = FALSE` pour ne pas rajouter d'information supplémentaire au dessus du tableau comme le type de modèle et son équation) :
+On obtient l'équivalent sous forme d'un tableau bien formaté pour un rapport à l'aide de `tabularise$tidy()`(ici on utilise `header = FALSE` pour ne pas rajouter d'information supplémentaire au-dessus du tableau comme le type de modèle et son équation) :
 
 ```{r}
 tabularise$tidy(trees_lm, header = FALSE)
@@ -799,7 +801,7 @@ Pour extraire facilement et rapidement sous la forme d'un tableau des valeurs nu
 (trees_glance <- glance(trees_lm))
 ```
 
-Nous aborderons certaines de ces métriques dans le prochain module. Icic aussi, `tabularise$glance()` permet d'obtenir un tableau formaté :
+Nous aborderons certaines de ces métriques dans le prochain module. Ici aussi, `tabularise$glance()` permets d'obtenir un tableau formaté :
 
 ```{r}
 tabularise$glance(trees_lm, header = FALSE)
@@ -830,7 +832,7 @@ if (exists("assignment"))
 
 ## Récapitulatif des exercices
 
-Ce premier module vous a permis de prendre connaissance des principes de bases de la modélisation et plus particulièrement de la régression linéaire simple par les moindres carrés. Pour évaluer votre compréhension de cette matière vous aviez les exercices suivants à réaliser :
+Ce premier module vous a permis de prendre connaissance des principes de bases de la modélisation et plus particulièrement de la régression linéaire simple par les moindres carrés. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
 
 `r show_ex_toc()`
 
