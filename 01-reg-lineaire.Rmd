@@ -430,9 +430,9 @@ chart(data = trees, volume ~ diameter) +
 
 Dans le cas particulier de la régression linéaire par les moindres carrés, les mathématiciens nous expliquent que la solution à notre problème s'obtient très facilement par calcul. En effet, les paramètres $a$ et $b$ de la droite que nous recherchons sont directement calculables comme suit :
 
-$$b = \frac{cov_{x, y}}{var_x} \ \ \ \textrm{et} \ \ \ a = \bar y - b \ \bar x$$
+$$b = \frac{\operatorname{cov}_{x, y}}{\operatorname{var}_x} \ \ \ \textrm{et} \ \ \ a = \bar y - b \ \bar x$$
 
-où $\bar x$ et $\bar y$ sont les moyennes pour les deux variables $x$ et $y$, $cov$ est la covariance et $var$ est la variance.
+où $\bar x$ et $\bar y$ sont les moyennes pour les deux variables $x$ et $y$, $\operatorname{cov}$ est la covariance et $\operatorname{var}$ est la variance.
 
 Dans R, vous vous doutez bien que nous n'allons pas refaire tous ces calculs à chaque fois que nous voulons ajuster une droite dans un nuage de points. La fonction `lm()` réalise, en effet, ce calcul pour nous :
 
@@ -484,7 +484,7 @@ On peut montrer --nous ne le ferons pas ici pour limiter les développements mat
 
 $$\epsilon_i \approx N(0, \sigma^2)$$
 
--   Dans le cas de la régression linéaire simple, la meilleure droite s'obtient très facilement. En effet, l'estimateur de la pente, noté $\hat\beta$ est $\hat \beta = \frac{cov_{x_i, y_i}}{var_x_i}$ et l'estimateur de l'ordonnée à l'origine noté $\hat \alpha$ est $\hat \alpha = \bar y - \hat \beta \ \bar x$.
+-   Dans le cas de la régression linéaire simple, la meilleure droite s'obtient très facilement. En effet, l'estimateur de la pente, noté $\hat\beta$ est $\hat \beta = \operatorname{cov}_{x, y}/\operatorname{var}_x$ et l'estimateur de l'ordonnée à l'origine noté $\hat \alpha$ est $\hat \alpha = \bar y - \hat \beta \ \bar x$.
 
 -   La fonction `lm()` permet de faire ce calcul rapidement dans R.
 
