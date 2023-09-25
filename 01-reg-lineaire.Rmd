@@ -749,12 +749,12 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015'         = !"B01Ia_{YY}M_debug"),
     course.urls = c(
-      'S-BIOG-015'         = "https://classroom.github.com/a/..."),
+      'S-BIOG-015'         = "https://classroom.github.com/a/zxNvCxc0"),
     course.starts = c(
       'S-BIOG-015'         = !"{W[3]+1} 11:15:00"),
     course.ends = c(
       'S-BIOG-015'         = !"{W[3]+1} 12:45:00"),
-    term = "Q1", level = 2,
+    term = "Q1", level = 3,
     toc = "Débogage de script R")
 ```
 
@@ -823,11 +823,11 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-015'         = !"B01Ib_{YY}M_abalone"),
     course.urls = c(
-      'S-BIOG-015'         = "https://classroom.github.com/a/..."),
+      'S-BIOG-015'         = "https://classroom.github.com/a/GGYtAgvZ"),
     course.starts = c(
       'S-BIOG-015'         = !"{W[3]+4} 08:00:00"),
     course.ends = c(
-      'S-BIOG-015'         = !"{W[3]+4} 13:00:00"),
+      'S-BIOG-015'         = !"{W[4]+1} 23:59:59"),
     term = "Q1", level = 3,
     toc = "Régression linéaire simple (ormeaux)")
 ```
