@@ -90,7 +90,7 @@ Ensuite, $log(e^x) = x$, donc nous pouvons simplifier :
 
 $$log(M) = log(a) +  b \ t$$
 
-Pour finir, $log(a)$ n'est rien d'autre qu'une constante. En d'autres termes, nous obtenons une droite dont la pente est $b$ et l'ordonnée à l'origine est $log(a)$, une constante. On peut écrire, en remplaçant $log(a)$  par $a'$ :
+Pour finir, $log(a)$ n'est rien d'autre qu'une constante. En d'autres termes, nous obtenons une droite dont la pente est $b$ et l'ordonnée à l'origine est $log(a)$, une constante. On peut écrire, en remplaçant $log(a)$ par $a'$ :
 
 $$log(M) = a' + b \ t$$
 
@@ -223,7 +223,7 @@ Nous voulons identifier la meilleure *droite de régression*, c'est-à-dire la d
 
 Décomposons le problème étape par étape et intéressons nous au `modèle-1` (droite en rouge sur le graphique précédent).
 
--   Nous allons calculer les valeurs de $y_i$ **prédites par le modèle** que nous noterons par convention $\hat y_i$ (prononcez "y chapeau" ou *"y hat"* en anglais) pour chaque observation $i$, avec $i$ allant de 1 à $N$, la taille de l'échantillon. Nous allons utiliser un petit bout de code R pour faire ce calcul. Il n'est pas indispensable de le comprendre pour pouvoir suivre la suite du raisonnement. Considérez seulement que nous définissons une *fonction personnalisée** `model_predict()` qui effectue ce calcul pour nous. Nous l'utilisons ensuite pour calculer les $\hat{y_i}$ du modèle 1 rouge qui a une ordonnée à l'origine de -0.5 et une pente de 5.
+-   Nous allons calculer les valeurs de $y_i$ **prédites par le modèle** que nous noterons par convention $\hat y_i$ (prononcez "y chapeau" ou *"y hat"* en anglais) pour chaque observation $i$, avec $i$ allant de 1 à $N$, la taille de l'échantillon. Nous allons utiliser un petit bout de code R pour faire ce calcul. Il n'est pas indispensable de le comprendre pour pouvoir suivre la suite du raisonnement. Considérez seulement que nous définissons une \*fonction personnalisée\*\* `model_predict()` qui effectue ce calcul pour nous. Nous l'utilisons ensuite pour calculer les $\hat{y_i}$ du modèle 1 rouge qui a une ordonnée à l'origine de -0.5 et une pente de 5.
 
 ```{r}
 # Calculer la valeur de y pour chaque valeur de x suivant le modèle souhaité
@@ -349,21 +349,19 @@ La méthode utilisant la somme de la valeur absolue des résidus est également 
 
 La fonction qui sert à calculer notre métrique dépend des variables $x$ et $y$ et des paramètres du modèle $a$ et $b$. On l'appelle la **fonction objective**. Pour la régression par les moindres carrés, la fonction objective est :
 
-$$f_{obj}(x_i, y_i, a, b) = \sum_{i = 1}^n \epsilon_i^2 = \sum_{i = 1}^n (y_i - \hat y_i)^2 = \sum_{i = 1}^n [y_i - (a + b \ x_i)]^2$$
-Pour la régression par les médianes, elle est :
+$$f_{obj}(x_i, y_i, a, b) = \sum_{i = 1}^n \epsilon_i^2 = \sum_{i = 1}^n (y_i - \hat y_i)^2 = \sum_{i = 1}^n [y_i - (a + b \ x_i)]^2$$ Pour la régression par les médianes, elle est :
 
 $$f_{obj}(x_i, y_i, a, b) = \sum_{i = 1}^n |\epsilon_i| = \sum_{i = 1}^n |y_i - \hat y_i| = \sum_{i = 1}^n |y_i - (a + b \ x_i)|$$
 
 ##### À vous de jouer ! {.unnumbered}
 
-**Attention : dans l'application ci-dessous, le nom des paramètres est inversé par rapport au texte. La pente est _a_ et l'ordonnée à l'origine est _b_. Ce sera corrigé dans la prochaine version de l'app.** 
+**Attention : dans l'application ci-dessous, le nom des paramètres est inversé par rapport au texte. La pente est *a* et l'ordonnée à l'origine est *b*. Ce sera corrigé dans la prochaine version de l'app.**
 
 `r launch_shiny("https://sdd.umons.ac.be/B01Sa_reglin/", height = 600, delay = 20, toc = "Ajuster la meilleure droite")`
 
 Nous pouvons nous demander si notre modèle 2 qui est la meilleure droite parmi nos quatre modèles est le **meilleur modèle possible dans l'absolu**. En réalité, le meilleur modèle est celui qui minimise la fonction objective, donc pour la régression par les moindres carrés (par la suite, nous ne traiterons plus que de ce cas) :
 
-$$\min f_{obj}(x_i, y_i, a, b) = \min \sum_{i = 1}^n [y_i - (a + b \ x_i)]^2$$
-Pour ce faire, nous allons devoir définir une technique d'optimisation qui nous permette de déterminer quelle est la droite qui minimise notre fonction objective. Imaginons que nous n'avons pas quatre, mais 5000 modèles linéaires avec des pentes et des ordonnées à l'origine différentes. Quelle est la meilleure droite ?
+$$\min f_{obj}(x_i, y_i, a, b) = \min \sum_{i = 1}^n [y_i - (a + b \ x_i)]^2$$ Pour ce faire, nous allons devoir définir une technique d'optimisation qui nous permette de déterminer quelle est la droite qui minimise notre fonction objective. Imaginons que nous n'avons pas quatre, mais 5000 modèles linéaires avec des pentes et des ordonnées à l'origine différentes. Quelle est la meilleure droite ?
 
 ```{r}
 set.seed(34643)
@@ -564,7 +562,7 @@ summary(trees_lm) |>
   tabularise(warn = FALSE)
 ```
 
-En prime, on a l'équation du modèle (que l'on peut ne pas indiquer avec l'argument `equation = FALSE` si on préfère). Les variables génériques *X* et *Y* dans l'équation sont remplacées par celles du modèle. La notation $\alpha$ et $\beta$ pour les paramètres est également respectée. Cela rend le tableau plus lisible. 
+En prime, on a l'équation du modèle (que l'on peut ne pas indiquer avec l'argument `equation = FALSE` si on préfère). Les variables génériques *X* et *Y* dans l'équation sont remplacées par celles du modèle. La notation $\alpha$ et $\beta$ pour les paramètres est également respectée. Cela rend le tableau plus lisible.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -580,8 +578,7 @@ devient[^01-reg-lineaire-3] :
 
 [^01-reg-lineaire-3]: Lors de la paramétrisation du modèle, pensez à arrondir la valeur des paramètres à un nombre de chiffres significatifs raisonnables. Inutile de garder cinq, ou même trois chiffres derrière la virgule si vous n'avez que quelques dizaines d'observations pour ajuster votre modèle et que les mesures ont été faites avec une précision moyenne, elle-même à deux chiffres, par exemple.
 
-$$`r eq__(trees_lm, use_coefs = TRUE)`$$
-Notez que nous avons laissé tombé $\epsilon$ ici, ce qui nous oblige à écrire $\widehat{\mathrm{Volume\ de\ bois\ [m^3]}}$ car $\widehat{\mathrm{Volume\ de\ bois\ [m^3]}} = \mathrm{Volume\ de\ bois\ [m^3]} - \epsilon$. Vous apprendrez à extraire les équations du modèle de manière automatisée avec `SciViews::R` dans le learnr ci-dessous.
+$$`r eq__(trees_lm, use_coefs = TRUE)`$$ Notez que nous avons laissé tombé $\epsilon$ ici, ce qui nous oblige à écrire $\widehat{\mathrm{Volume\ de\ bois\ [m^3]}}$ car $\widehat{\mathrm{Volume\ de\ bois\ [m^3]}} = \mathrm{Volume\ de\ bois\ [m^3]} - \epsilon$. Vous apprendrez à extraire les équations du modèle de manière automatisée avec `SciViews::R` dans le learnr ci-dessous.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -687,7 +684,7 @@ chart$residuals(trees_lm)
 
 Cette composition offre une vision d'ensemble synthétique. Pour une inspection rapide, c'est le meilleur candidat. À l'issue de l'analyse des résidus de **trees_lm**, nous observons donc différents problèmes qui suggèrent que le modèle choisi n'est peut-être pas le plus adapté. Nous expliquerons pourquoi plus loin, mais à ce stade si vous avez compris le principe et le type d'anomalies que l'on recherche à l'aide de ces différents graphiques de diagnostic, c'est suffisant. Bien analyser les résidus d'une régression n'est pas une tâche facile et on n'y arrive qu'après avoir observé un certain nombre de situations différentes. Vous vous y exercerez avec les différents exercices qui vous seront proposés en présentiel.
 
-<!-- TODO: ajouter quelques cas fictifs de bonnes et mauvaises régressions et commenter les 4 graphiques que l'on obtient à chaque fois pour que l'étudiant commence à "sentir" ce qui fonctionne ou pas.-->
+<!--# TODO: ajouter quelques cas fictifs de bonnes et mauvaises régressions et commenter les 4 graphiques que l'on obtient à chaque fois pour que l'étudiant commence à "sentir" ce qui fonctionne ou pas. Par exemple avec une présentation H5P. Expliquer que l'homoscédasticité se lit verticalement avec un schéma ou une app Shiny. Faire la distinction entre densité des points dans une région et hétéroscédasticité. Expliquer comment on décide si une valeur est extrême. Insister sur quoi faire avec les valeurs extrêmes (on ne vire pas sans raison, et si pas, régrzession robuste -> section pour en savoir plus ?). -->
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -779,8 +776,7 @@ $$s_{y|x}\ =\ \sqrt{ \frac{\sum_{i = 0}^n\left(y_i - \hat y_i\right)^2}{n-2}}$$
 
 À partir de là, il est possible de définir également un intervalle de confiance conditionnel à $x_i$ :
 
-$$\operatorname{CI}_{1-\alpha}\ =\ \hat y_i\ \ \pm \  t_{\frac{\alpha}{2}}^{n-2}  \frac{s_{y|x}\ }{\sqrt{n}}$$
-C'est cet intervalle de confiance conditionnel qui est matérialisé par l'enveloppe de confiance autour de la droite de régression représentée sur le graphique précédent.
+$$\operatorname{CI}_{1-\alpha}\ =\ \hat y_i\ \ \pm \  t_{\frac{\alpha}{2}}^{n-2}  \frac{s_{y|x}\ }{\sqrt{n}}$$ C'est cet intervalle de confiance conditionnel qui est matérialisé par l'enveloppe de confiance autour de la droite de régression représentée sur le graphique précédent.
 
 ### Extraire les données d'un modèle
 
@@ -796,7 +792,6 @@ On obtient l'équivalent sous forme d'un tableau bien formaté pour un rapport �
 tabularise$tidy(trees_lm, header = FALSE)
 ```
 
-
 Pour extraire facilement et rapidement sous la forme d'un tableau des valeurs numériques servant au diagnostic de la qualité d'ajustement d'un modèle, nous pouvons aussi utiliser la fonction `glance()`.
 
 ```{r}
@@ -808,7 +803,6 @@ Nous aborderons certaines de ces métriques dans le prochain module. Ici aussi, 
 ```{r}
 tabularise$glance(trees_lm, header = FALSE)
 ```
-
 
 ##### À vous de jouer ! {.unnumbered}
 
