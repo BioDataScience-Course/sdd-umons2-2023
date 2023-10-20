@@ -18,7 +18,7 @@ Les trois premiers modules du présent cours permettent progressivement de compr
 
 ## Modèle linéaire généralisé
 
-Le modèle linéaire nous a permis de combiner différent types de **variables indépendantes ou explicatives** dans un même modèle. Cependant la **variable dépendante ou réponse** à la gauche de l'équation doit *absolument* être numérique et une distribution Normale est exigée pour la composante statistique du modèle exprimée dans les résidus $\epsilon$. Donc, si nous voulons modéliser une variable dépendante qui ne répond pas à ces caractéristiques, nous sommes dans l'impasse avec la fonction `lm()`. Dans certains cas, une transformation des données peut résoudre le problème. Par exemple, prendre le logarithme d'une variable qui a une distribution log-Normale au départ la normalise. Dans d'autres cas, il semble qu'il n'y ait pas de solution... C'est ici que le **modèle linéaire *généralisé*** vient nous sauver la mise.
+Le modèle linéaire nous a permis de combiner différents types de **variables indépendantes ou explicatives** dans un même modèle. Cependant, la **variable dépendante ou réponse** à la gauche de l'équation doit *absolument* être numérique et une distribution Normale est exigée pour la composante statistique du modèle exprimée dans les résidus $\epsilon$. Donc, si nous voulons modéliser une variable dépendante qui ne répond pas à ces caractéristiques, nous sommes dans l'impasse avec la fonction `lm()`. Dans certains cas, une transformation des données peut résoudre le problème. Par exemple, prendre le logarithme d'une variable qui a une distribution log-Normale au départ la normalise. Dans d'autres cas, il semble qu'il n'y ait pas de solution... C'est ici que le **modèle linéaire *généralisé*** vient nous sauver la mise.
 
 Le modèle linéaire généralisé se représente comme suit :
 
@@ -32,7 +32,7 @@ La différence par rapport au modèle linéaire, c'est que notre variable dépen
 <!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(214, height = 270, toc = NULL)`
+`r h5p(234, height = 270, toc = NULL)`
 -->
 ```
 Toute la difficulté ici tient donc à la définition des fonctions de liens pertinentes par rapport à la distribution de $y$. Le tableau suivant reprend les principales situations prises en compte par la fonction `glm()` dans R qui calcule le modèle linéaire généralisé.
@@ -57,9 +57,8 @@ La transformation **logit** calcule alors : $\ln(y / (1 - y)) = \beta x$. Les s
 <!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(216, height = 270, toc = NULL)`
+`r h5p(235, height = 270, toc = NULL)`
 
-`r h5p(215, height = 270, toc = NULL)`
 -->
 ```
 ### Exemple
@@ -150,9 +149,9 @@ Nous voyons que le résumé de l'objet `glm` est très similaire à celui d'un o
 
 ## Modèle linéaire généralisé mixte
 
-Dans le cours [SDD I module 11](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/effet-al%25C3%25A9atoire.html) nous avons découvert les **effets aléatoires** dans les modèles comme étant une variable ayant une distribution statistique connue (souvent Normale) dont on tire un échantillon aléatoire dans notre jeu de données. Cela se produit lorsque les modalités de la variable facteur utilisée sont très nombreuses et que seulement un petit nombre tiré au hasard est étudié. L'exemple que nous avions donné était le cas de différentes variétés de céréales cultivées dans différentes fermes. Nous avons un nombre **restreint et fixe** de variétés de céréales, mais les fermes sont tirées au hasard parmi toutes celles qui sont possibles, de plus, leur effet n'est pas le sujet principal de l'étude. Comme nous suspectons que la ferme peut aussi avoir un impact sur le résultat (orientation, type de sol, exposition des parcelles, ...) nous incluerons cet effet dans notre modèle, mais comme **effet aléatoire**. Lorsque nous mélangeons un ou plusieurs effets aléatoires avec des effets fixes, nous obtenons alors un **modèle linéaire mixte** (LMM) ou un **modèle linéaire généralisé mixte** (GLMM) en fonction de la variable réponse *Y* utilisée.
+Dans le cours [SDD I module 11](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/effet-al%25C3%25A9atoire.html) nous avons découvert les **effets aléatoires** dans les modèles comme étant une variable ayant une distribution statistique connue (souvent Normale) dont on tire un échantillon aléatoire dans notre jeu de données. Cela se produit lorsque les modalités de la variable facteur utilisée sont très nombreuses et que seulement un petit nombre tiré au hasard est étudié. L'exemple que nous avions donné était le cas de différentes variétés de céréales cultivées dans différentes fermes. Nous avons un nombre **restreint et fixe** de variétés de céréales, mais les fermes sont tirées au hasard parmi toutes celles qui sont possibles, de plus, leur effet n'est pas le sujet principal de l'étude. Comme nous suspectons que la ferme peut aussi avoir un impact sur le résultat (orientation, type de sol, exposition des parcelles, ...), nous inclurons cet effet dans notre modèle, mais comme **effet aléatoire**. Lorsque nous mélangeons un ou plusieurs effets aléatoires avec des effets fixes, nous obtenons alors un **modèle linéaire mixte** (LMM) ou un **modèle linéaire généralisé mixte** (GLMM) en fonction de la variable réponse *Y* utilisée.
 
-Prenons un exemple concret. Des scientifiques veulent mesurer l'effet d'une concentration croissante en éthanol dans le liquide séminal de l'homme sur la mobilité des spermatozoïdes. La question est évidemment en relation avec la consommation d'alcool et la fertilité, mais aussi avec des protocoles expérimentaux qui utilisent des molécules dissoutes dans l'éthanol. Des spermatozoîdes de huit patients différents sont soumis à des concentrations de 0, 0,1, 0,5, 1 et 2% d'éthanol pendant 4h. Ensuite, le nombre de spermatozoîdes mobiles est décompté sous microscope. Plutôt que d'encoder une variable binaire qui prend 1 si un spermatozoïde est mobile et 0 dans le cas contraire, un tableau plus compact qui reprend le nombre de spéermatozoïdes mobiles et le total des spermatozoïdes compté pour chaque échantillon des huit donneurs à chaque concentration d'éthanol. Voici les résultats obtenus :
+Prenons un exemple concret. Des scientifiques veulent mesurer l'effet d'une concentration croissante en éthanol dans le liquide séminal de l'homme sur la mobilité des spermatozoïdes. La question est évidemment en relation avec la consommation d'alcool et la fertilité, mais aussi avec des protocoles expérimentaux qui utilisent des molécules dissoutes dans l'éthanol. Des spermatozoïdes de huit patients différents sont soumis à des concentrations de 0, 0,1, 0,5, 1 et 2% d'éthanol pendant 4h. Ensuite, le nombre de spermatozoïdes mobiles est décompté sous microscope. Plutôt que d'encoder une variable binaire qui prend 1 si un spermatozoïde est mobile et 0 dans le cas contraire, un tableau plus compact qui reprend le nombre de spermatozoïdes mobiles et le total des spermatozoïdes compté pour chaque échantillon des huit donneurs à chaque concentration d'éthanol. Voici les résultats obtenus :
 
 ```{r}
 spe <- dtbl_rows(
@@ -200,19 +199,33 @@ spe <- dtbl_rows(
 )
 ```
 
-Nous verrons une autre forme pour la formule que dans l'exemple `Babies` et qui tient compte de ce type d'encodage. Il nous faut calculer la fraction des spermatozoïdes mobiles, et aussi nous assurer que la variable `donor` soit bien **factor** et la variable `conc` soit **numeric** (nous voulons faire une régression de la fraction mobile en fonction de la concentration en éthanol) :
+Nous verrons une autre forme pour la formule que dans l'exemple `Babies` et qui tient compte de ce type d'encodage. Il nous faut calculer la fraction des spermatozoïdes mobiles, et aussi nous assurer que la variable `donor` soit bien **factor** et que la variable `conc` soit **numeric** (nous voulons faire une régression de la fraction mobile en fonction de la concentration en éthanol) :
 
 ```{r}
 spe <- smutate(spe, mob_frac = mobile / total, donor = as.factor(donor), conc = as.numeric(conc))
 head(spe)
 ```
 
-La variable réponse est ici, en réalité, une variable binaire même si elle est encodée autrement. Pour chaque spermatozoïde observé, on peut avoir un résultat 0 (immobile) ou 1 (mobile), et la distribution peut être considérée comme une binomiale avec le nombre d'essais égal *n* égal à 1 (voir cours [SDD I module 7](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/distribution-binomiale.html)). On parle aussi de distribution de Bernouilli dans le cas particulier d'un binomiale à un seul essai. La mesure est **répétée** un nombre de fois spécifié dans notre tableau dans la colonne `total` pour chaque échantillon traité (8 donneurs x 5 concentration d'éthanol = 40 échantillons). Donc, nous sommes dans une situation différente du jeu de données `Babies` parce qu'il **n'y a pas indépendance entre les observations pour chaque spermatozoïde**. Plusieurs dizaines à centaines d'entre eux sont dénombrés à chaque fois dans le **même échantillon**. Les mesures répétées pour un même sujet d'expérience et lorsque le sujet de l'expérience est lui-même un facteur aléatoire sont automatiquement prises en compte correctement dans un modèle mixte.
+La variable réponse est ici, en réalité, une variable binaire même si elle est encodée autrement. Pour chaque spermatozoïde observé, on peut avoir un résultat 0 (immobile) ou 1 (mobile), et la distribution peut être considérée comme une binomiale avec le nombre d'essais égal *n* égal à 1 (voir cours [SDD I module 7](https://wp.sciviews.org/sdd-umons/?iframe=wp.sciviews.org/sdd-umons-2023/distribution-binomiale.html)). On parle aussi de distribution de Bernouilli dans le cas particulier d'une distribution binomiale à un seul essai. La mesure est **répétée** un nombre de fois spécifié dans notre tableau dans la colonne `total` pour chaque échantillon traité (8 donneurs x 5 concentrations d'éthanol = 40 échantillons). Donc, nous sommes dans une situation différente du jeu de données `Babies` parce qu'il **n'y a pas indépendance entre les observations pour chaque spermatozoïde**. Plusieurs dizaines à centaines d'entre eux sont dénombrés à chaque fois dans le **même échantillon**. Les mesures répétées pour un même sujet d'expérience et lorsque le sujet de l'expérience est lui-même un facteur aléatoire sont automatiquement prises en compte correctement dans un modèle mixte.
 
+```{=html}
+<!-- H5P en cours de validation
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(236, height = 270, toc = NULL)`
+-->
+```
 ### Ajustement et analyse d'un GLMM
 
 Nous ne pouvons pas ajuster un modèle mixte avec la fonction `glm()`. Nous devons faire appel à une autre fonction : `lme4::glmer()`. Par contre, la syntaxe est la même: `data =`, une formule qui spécifie le modèle à ajuster, et `family =` qui indique la distribution de la variable réponse et aussi éventuellement la fonction de lien à utiliser. La formule encode un terme aléatoire entre parenthèse avec les facteurs fixes covariables suivis d'une barre verticale et le facteur aléatoire. Donc, par exemple, si nous considérons que la pente et l'ordonnée à l'origine des droites peuvent varier librement d'un donneur à l'autre, nous écrirons `(conc | donor)` pour le terme aléatoire. Si nous considérons que seule l'ordonnée à l'origine peut varier, mais pas la pente, nous écrirons `(1 | donor)`, et enfin, si nous considérons que seule la pente, mais pas l'ordonnée à l'origine peut varier d'un donneur à l'autre, alors nous écrirons `(0 + conc | donor)`. Ceci correspond aux différentes formes entre deux variables facteur dans le modèle classique (modèle complet `f1 * f2` fixes -\> `f1 + (f1 | f2)` en f2 aléatoire, modèle sans interactions `f1 + f2` fixes -\> `f1 + (1 | f2)`, et modèle avec seulement les interactions pour le second facteur `f1 + f1:f2` -\> `f1 + (0 + f1 | f2)`, respectivement).
 
+```{=html}
+<!-- H5P en cours de validation
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(237, height = 270, toc = NULL)`
+-->
+```
 Nous devons encore comprendre comment indiquer dans la formule que nous n'avons pas une variable réponse binaire dans notre tableau, mais un contingentement des spermatozoïdes mobiles et du total. Cela s'indique par `cbind(mobile, total - mobile)`, c'est-à-dire, un tableau à deux colonnes avec la première, le nombre observé de niveaux 1, et la seconde, le nombre observé de niveau 0 de la variable binaire. Avec ceci, nous pouvons à présent écrire la formule de notre modèle complet, le calculer et imprimer le résumé des résultats :
 
 ```{r}
@@ -225,7 +238,7 @@ La première ligne nous indique que le modèle n'est pas ajusté par régression
 
 Pour les effets aléatoires, nous avons des distributions Normales et les paramètres sont les variances liées à ces distributions. Pour l'ordonnée à l'origine, l'effet donneur se marque par une variance de 0.17, et pour la pente, la variance est de 0.02. Il n'y a pas de test de significativité de ces paramètres dans le résumé. Par contre, la corrélation entre ces paramètres est calculée et indiquée également.
 
-Pour les effets fixes, nous retrouvons un tableau similaire à celui des coefficients dans le modèle linéaire classique, à ceci près que les tests *t* de Students pour la significativité des paramètres *p* (H~0~: *p* = 0 et H~1~: *p* ≠ 0) est remplacé par un test *z* considérant une distribution Normale. **Ce test est une approximation et n'est pas aussi fiable dans le modèle mixte que dans le modèle classique**. Nous voyons néanmoins voir que l'ordonnée à l'origine ainsi que la pente en fonction de la concentration en éthanol sont tous deux significatifs au seuil $\alpha$ = 5%. Comme la pente relative à `conc` est négative, nous pourrons considérer que l'effet moyen d'une augmentation d'éthanol dans le liquide séminal diminue la mobilité des spermatozoïdes.
+Pour les effets fixes, nous retrouvons un tableau similaire à celui des coefficients dans le modèle linéaire classique, à ceci près que les tests *t* de Students pour la significativité des paramètres *p* (H~0~: *p* = 0 et H~1~: *p* ≠ 0) est remplacé par un test *z* considérant une distribution Normale. **Ce test est une approximation et n'est pas aussi fiable dans le modèle mixte que dans le modèle classique**. Nous voyons néanmoins voir que l'ordonnée à l'origine ainsi que la pente en fonction de la concentration en éthanol sont tous deux significatives au seuil $\alpha$ = 5%. Comme la pente relative à `conc` est négative, nous pourrons considérer que l'effet moyen d'une augmentation d'éthanol dans le liquide séminal diminue la mobilité des spermatozoïdes.
 
 L'avantage d'utiliser une formulation des variables avec le nombre de cas positifs, le total, et la fraction positive dans `mob_frac` est que nous pouvons ici réaliser une représentation graphique du modèle qui n'était pas possible avec les bébés prématurés du jeu `Babies` (ou en tous cas, pas sans des transformations des données). Voici comment faire :
 
@@ -254,7 +267,7 @@ Nous ne rejetons pas H~0~au seuil $\alpha$ de 5%. Nous pouvons donc considérer 
 summary(spe_m2)
 ```
 
-Dans le tableau à effets fixes, nous n'avons plus qu'une seule variance estimée, celle correspondant à un décalage de l'ordonnée à l'origine par donneur et qui vaut 0.18. Ce modèle signifie que nous considérons que la variation d'un donneur à l'autre se manifeste sous la forme d'un taux de mobilité spermatique initial (à concentration 0 en éthanol) différent d'une personne à l'autre. Par contre, le modèle considère aussi que l'effet de l'augmentation en éthanol se marque de manière identique quel que soit le donneur. Le graphique correspondant est le suivant :
+Dans le tableau à effets fixes, nous n'avons plus qu'une seule variance estimée, celle correspondant à un décalage de l'ordonnée à l'origine par donneur et qui vaut 0.18. Ce modèle signifie que nous considérons que la variation d'un donneur à l'autre se manifeste sous la forme d'un taux de mobilité spermatique initial (à concentration 0 en éthanol) différent d'une personne à l'autre. Par contre, le modèle considère aussi que l'effet de l'augmentation en éthanol se marque de manière identique, quel que soit le donneur. Le graphique correspondant est le suivant :
 
 ```{r}
 chart(data = spe, mob_frac ~ conc %col=% donor) +
@@ -273,7 +286,7 @@ Nous pouvons aussi calculer l'intervalle de confiance sur ces paramètres avec l
 confint(spe_m2)
 ```
 
-L'intervalle de confiance (à 95% par défaut) nous donne une information complémentaire sur l'estimation des paramètres. Ainsi la pente `conc` qui caractérise la diminution de mobilité spermatique en fonction de la concentration en éthanol a été estimée dans `spe_m2` (voir résumé plus haut) à -0.30. Son intervalle de confiance à 95% indique que la vraie valeur se trouve en réalité entre - 0.39 et -0.22 avec un degré de significativité de 5%. Nous pouvons aussi utiliser cette information pour déterminer si le paramètre est significativement différent de zéro. Il le sera, en effet, lorsque l'IC ne contiendra pas zéro, ce qui est le cas ici. Nous pouvons donc en conclure que l'éthanol a un effet négatif sur la mobilité spermatique chez l'homme.
+L'intervalle de confiance (à 95% par défaut) nous donne une information complémentaire sur l'estimation des paramètres. Ainsi la pente `conc` qui caractérise la diminution de mobilité spermatique en fonction de la concentration en éthanol a été estimée dans `spe_m2` (voir le résumé plus haut) à -0.30. Son intervalle de confiance à 95% indique que la vraie valeur se trouve en réalité entre - 0.39 et -0.22 avec un degré de significativité de 5%. Nous pouvons aussi utiliser cette information pour déterminer si le paramètre est significativement différent de zéro. Il le sera, en effet, lorsque l'IC ne contiendra pas zéro, ce qui est le cas ici. Nous pouvons donc en conclure que l'éthanol a un effet négatif sur la mobilité spermatique chez l'homme.
 
 Dans le tableau des intervalles de confiance, `.sig01` correspond à la première variance (et seule ici) estimée pour le facteur aléatoire `donor` dont la valeur était estimée à 0,17, et donc, l'écart type est de 0,41 (racine carrée de la variance). L'IC 95% sur cet écart type est calculé comme compris entre 0.27 et 0.77. Il est donc lui-même également significatif puisqu'il ne comprend pas zéro.
 
@@ -294,7 +307,7 @@ lme4::isSingular(spe_m2)
 lme4::allFit(spe_m2)
 ```
 
-La fonction `lme4::allFit()` utilise tous les optimiseurs qu'elles connait pour ajuster le modèle et en indique le résultat. Ici, tous ont pu ajuster correctement notre modèle.
+La fonction `lme4::allFit()` utilise tous les optimiseurs qu'elle connait pour ajuster le modèle et en indique le résultat. Ici, tous ont pu ajuster correctement notre modèle.
 
 L'équation du modèle qui est ajusté ici est assez complexe. Le package {equatiomatic} offre une fonction `extract_eq` qui génère l'équation LaTeX relative au modèle. Voici ce que cela donne dans le cas de `spe_m2` :
 
@@ -315,7 +328,7 @@ chart(data = spe, resid(spe_m2, type = "pearson") ~ fitted(spe_m2) %col=% donor)
 
 Nous observons ici une distribution relativement correcte de ces résidus, à part un point extrême peut-être dans le bas du graphique. Attention ici que les valeurs ajustées dépendent du facteur aléatoire `donor`, et notamment, les points pour le donneur 2 en jaune sont toutes très faibles puisque cela correspond à la droite la plus basse sur le graphique du modèle. Ceci fait partie du modèle lui-même et ne doit donc pas être interprété comme une anomalie ici.
 
-Nous pouvons réaliser un autre graphique de la racine carré de la valeur absolue de ces résidus pour vérifier l'homoscédasticité (sachant qu'elle n'est pas rencontrée dans les résidus classiques, mais que les résidus de Pearson devraient, eux, voire leur variance stabilisée) :
+Nous pouvons réaliser un autre graphique de la racine carrée de la valeur absolue de ces résidus pour vérifier l'homoscédasticité (sachant qu'elle n'est pas rencontrée dans les résidus classiques, mais que les résidus de Pearson devraient, eux, voire leur variance stabilisée) :
 
 ```{r}
 chart(data = spe, sqrt(abs(resid(spe_m2, type = "pearson"))) ~ fitted(spe_m2) %col=% donor) +
@@ -343,6 +356,13 @@ chart(data = spe, aes(sample = resid(spe_m2, type = "pearson"))) +
 
 La Normalité apparaît ici douteuse... **et ce n'est pas grave, car pour les modèles linéaires généralisés l'hypothèse de Normalité des résidus n'est pas nécessaire !** Seule l'homoscédasticité joue un rôle dans une certaine mesure, mais cela dépend des tests que vous utilisez. Si vous ne vous fiez pas aux tests *z* mais travaillez avec les intervalles de confiance, il existe une version bootstrapée qui calcule les intervalles de confiance de manière fiable même dans les cas limites. On utilisera `confint(mod, level = 0.95, method = "boot", nsim = 500)` où `nsim =` indique le nombre de fois que l'on va bootstraper les données. Attention que ce calcul peut être très long ! \`\`
 
+```{=html}
+<!-- H5P en cours de validation
+##### À vous de jouer ! {.unnumbered}
+
+`r h5p(238, height = 270, toc = NULL)`
+-->
+```
 ### Prédictions à l'aide d'un GLMM
 
 Les prédictions sont rendues difficiles à cause de deux modifications que nous avons introduites par rapport au modèle linéaire classique :
@@ -363,7 +383,7 @@ y <- c(0.8, 0.85, 0.9, 0.95)
 all.equal(y, y2)
 ```
 
-Nous pouvons maintenant tracer les graphique qui montre comment probit transforme nos valeurs Y :
+Nous pouvons maintenant tracer les graphiques qui montrent comment probit transforme nos valeurs Y :
 
 ```{r}
 dtbl(y = seq(0, 1, by = 0.001)) %>.%
@@ -393,7 +413,7 @@ conc <- c(0, 0.25, 0.5, 1, 2)
 slope * conc + intercept
 ```
 
-Nous obtenons des estimations de probabilité de mobilité de spermatozoïdes **mais dans l'échelle transformée logit**. Nous ne devons donc pas oublier d'appliquer la transformée inverse pour obtenir ces probabilités, soit :
+Nous obtenons des estimations de probabilité de mobilité de spermatozoïdes, **mais dans l'échelle transformée logit**. Nous ne devons donc pas oublier d'appliquer la transformée inverse pour obtenir ces probabilités, soit :
 
 ```{r}
 (mobi <- probit$linkinv(slope * conc + intercept))
@@ -461,7 +481,7 @@ if (exists("assignment"))
 
 ## Récapitulatif des exercices
 
-Ce quatrième module vous a permis de comprendre le modèle linéaire généralisé. Pour évaluer votre compréhension de cette matière vous aviez les exercices suivants à réaliser :
+Ce quatrième module vous a permis de comprendre le modèle linéaire généralisé. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
 
 `r show_ex_toc()`
 
