@@ -589,20 +589,20 @@ En pratique, et surtout en cas de doute, vous pouvez commencer par ajuster le mo
 
 Le projet suivant est individuel et cadré.
 
-```{r assign_B03Ia_cardiovascular, echo=FALSE, results='asis'}
+```{r assign_B03Ia_who, echo=FALSE, results='asis'}
 if (exists("assignment"))
-  assignment("B03Ia_cardiovascular", part = NULL,
-    url = "https://github.com/BioDataScience-Course/B03Ia_cardiovascular",
+  assignment("B03Ia_who", part = NULL,
+    url = "https://github.com/BioDataScience-Course/B03Ia_who",
     course.ids = c(
-      'S-BIOG-015' = !"B03Ia_{YY}M_cardiovascular"),
+      'S-BIOG-015' = !"B03Ia_{YY}M_who"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/5fbLSAV4"),
+      'S-BIOG-015' = "https://classroom.github.com/a/KTUzrsEE"),
     course.starts = c(
       'S-BIOG-015' = !"{W[9]+4} 08:00:00"),
     course.ends = c(
       'S-BIOG-015' = !"{W[10]+1} 23:59:59"),
     term = "Q1", level = 3,
-    toc = "Modèle linéaire (cardiovascular)")
+    toc = "Modèle linéaire (WHO)")
 ```
 
 ## Récapitulatif des exercices
