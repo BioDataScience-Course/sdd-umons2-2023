@@ -181,11 +181,11 @@ $$
 
 Vous voyez maintenant pourquoi les modèles avec fonctions de lien log sont considérés comme **multiplicatifs**, parce qu'une fois transformés, ils font apparaître la multiplication des termes au lieu de leur addition. Si un paramètre $\beta_i$ vaut zéro alors $e^{\beta_i}$ vaut un et le terme ne joue plus puisqu'il multiplie la valeur par un. Aussi, nous devons considérer l'exponentielle des paramètres. Donc, l'effet culture se marque comme $e^{\beta_2} = e^{1.92} = 6.82$. Donc, en culture, l'abondance de *L. perenne* est 6.82 fois plus abondante.
 
-Pour interpréter $\beta_3$ à $\beta_5$, nous devons nous souvenir que `Moisture` est un facteur ordonné et que les matrices de contraste pour ce type de variable sont polynomiales faisant ressortir un effet linéaire ($\beta_3$), conique ($\beta_4$) et quadratique ($\beta_5$). Ici, seul l'effet linéaire est significatif au seuil $\alpha$ de 1%, mais pas de 5% (donc, très faiblement significatif). Le paramètre est estimé à -1.07 et donc l'effet est de $e^{-1.07} = 0.34$. Notez au passage que des paramètres négatifs mènent à des multiplications par des nombres positifs inférieurs à un, soit à des **divisions**. Ainsi, cela signifie que l'abondance de *L. perenne* **diminue** avec le niveau d'humidité, ce qui nous mène à diviser son abondance par un terme qui est exponentiellement proportionnel avec le niveau d'humidité (oui, je sais, ce n'est pas facile... vous avez intérêt à relire la dernière phrase len-te-ment !).
+Pour interpréter $\beta_3$ à $\beta_5$, nous devons nous souvenir que `Moisture` est un facteur ordonné et que les matrices de contraste pour ce type de variable sont polynomiales faisant ressortir un effet linéaire ($\beta_3$), conique ($\beta_4$) et quadratique ($\beta_5$). Ici, des trois, seul l'effet linéaire est significatif au seuil $\alpha$ de 5%. Le paramètre est estimé à -1.07 et donc l'effet est de $e^{-1.07} = 0.34$. Notez au passage que des paramètres négatifs mènent à des multiplications par des nombres positifs inférieurs à un, soit à des **divisions**. Ainsi, cela signifie que l'abondance de *L. perenne* **diminue** avec le niveau d'humidité, ce qui nous mène à diviser son abondance par un terme qui est exponentiellement proportionnel avec le niveau d'humidité (oui, je sais, ce n'est pas facile... vous avez intérêt à relire la dernière phrase len-te-ment !).
 
-Enfin, $\beta_1$ est également significatif au seuil $\alpha$ de 1%, mais pas de 5% et est négatif. Cela signifie que l'abondance de *L. perenne* diminue avec l'augmentation de la couche A1 comme $e^{-0.34} = 0.71$. Nous l'avions déjà remarqué sur le graphique. L'ordonnée à l'origine $\alpha$ n'est, par contre, plus significativement différente de zéro ici.
+Enfin, $\beta_1$ est également significatif au seuil $\alpha$ de 5% et est négatif. Cela signifie que l'abondance de *L. perenne* diminue avec l'augmentation de la couche A1 comme $e^{-0.34} = 0.71$. Nous l'avions déjà remarqué sur le graphique. L'ordonnée à l'origine $\alpha$ n'est, par contre, plus significativement différente de zéro ici.
 
-Ce modèle pourrait être simplifié. Nous procèderons comme pour le modèle linéaire en comparant les critères d'Akaiké comme nous l'avons fait entre nos deux modèles Poissons précédents, ou en utilisant un test $\chi^2$ équivalent de l'ANOVA de comparaison dans le cas de modèles linéaires imbriqués. L'AIC était en faveur du second modèle, que nous donne le test $\chi^2$ ?
+Ce modèle pourrait être simplifié. Nous procéderons comme pour le modèle linéaire en comparant les critères d'Akaiké comme nous l'avons fait entre nos deux modèles Poissons précédents, ou en utilisant un test $\chi^2$ équivalent de l'ANOVA de comparaison dans le cas de modèles linéaires imbriqués. L'AIC était en faveur du second modèle, que nous donne le test $\chi^2$ ?
 
 ```{r}
 anova(dune_glm, dune_glm2, test = "Chisq") |> tabularise()
@@ -307,7 +307,7 @@ mite_glm <- glm(data = mite, Oribatl1 ~ WatrCont * Topo,
 summary(mite_glm) |> tabularise()
 ```
 
-Nous vérifions la dispersion $\phi$ observée qui doit être proche de un avec ce modèle en divisant la déviance résiduelle par les degrés de liberté, soit 67.7/66 = 1.03 ≈ 1. Nous avons une AIC de 75.7. Mais aucun paramètre n'est significatif au seuil $\alpha$ de 5% et l'ordonnée à l'origine ainsi que la teneur en eau le sont au seuil de 1%. Simplifions notre modèle en considérant que la topographie n'aurait aucun effet.
+Nous vérifions la dispersion $\phi$ observée qui doit être proche de un avec ce modèle en divisant la déviance résiduelle par les degrés de liberté, soit 67.7/66 = 1.03 ≈ 1. Nous avons une AIC de 75.7. Les paramètres $\alpha$ (ordonnées à l'origine) et $\beta_1$ (teneur en eau) sont significatifs au seuil $\alpha$ de 5%. Simplifions notre modèle en considérant que la topographie n'aurait aucun effet.
 
 ```{r}
 mite_glm2 <- glm(data = mite, Oribatl1 ~ WatrCont,
@@ -315,7 +315,7 @@ mite_glm2 <- glm(data = mite, Oribatl1 ~ WatrCont,
 summary(mite_glm2) |> tabularise()
 ```
 
-Les paramètres de ce second modèle simplifié sont tous significatifs au seuil $\alpha$ de 5%. Par contre, la dispersion observée augmente (74.6/68 = 1.1) sans être dramatique, mais l'AIC a augmenté à 78.6. Comparons également à l'aide d'un test $\chi^2$ .
+Les paramètres de ce second modèle simplifié sont tous également significatifs au seuil $\alpha$ de 5%. Par contre, la dispersion observée augmente (74.6/68 = 1.1) sans être dramatique, mais l'AIC a augmenté à 78.6. Comparons également à l'aide d'un test $\chi^2$ .
 
 ```{r}
 anova(mite_glm, mite_glm2, test = "Chisq")
@@ -329,7 +329,7 @@ mite_glm3 <- glm(data = mite, Oribatl1 ~ WatrCont + Topo,
 summary(mite_glm3) |> tabularise()
 ```
 
-C'est beaucoup mieux avec une bonne dispersion et l'AIC de 74.2 le plus petit des trois. Tous les paramètres sont significativement différents de zéro au seuil $\alpha$ de 1%, mais seul le paramètre relatif à la teneur en eau ($\beta_2$) l'est à 5%.
+C'est beaucoup mieux avec une bonne dispersion et l'AIC de 74.2 le plus petit des trois. Tous les paramètres sont significativement différents de zéro au seuil $\alpha$ de 5%.
 
 ```{r}
 anova(mite_glm, mite_glm3, test = "Chisq")
