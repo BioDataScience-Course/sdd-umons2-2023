@@ -695,20 +695,20 @@ De manière générale, les modèles linéaires, GLM, GLMM sont compliqués et i
 
 ##### À vous de jouer ! {.unnumbered}
 
-```{r assign_B04Ia_ovocyte, echo=FALSE, results='asis'}
+```{r assign_B04Ia_lungcap, echo=FALSE, results='asis'}
 if (exists("assignment"))
-  assignment("B04Ia_ovocyte", part = NULL,
-    url = "https://github.com/BioDataScience-Course/B04Ia_ovocyte",
+  assignment("B04Ia_lungcap", part = NULL,
+    url = "https://github.com/BioDataScience-Course/B04Ia_lungcap",
     course.ids = c(
-      'S-BIOG-015' = !"B04Ia_{YY}M_ovocyte"),
+      'S-BIOG-015' = !"B04Ia_{YY}M_lungcap"),
     course.urls = c(
-      'S-BIOG-015' = "https://classroom.github.com/a/..."),
+      'S-BIOG-015' = "https://classroom.github.com/a/FlJ7Kyr6"),
     course.starts = c(
-      'S-BIOG-015' = !"{W[11]+4} 08:00:00"),
+      'S-BIOG-015' = !"{W[11]+1} 10:00:00"),
     course.ends = c(
-      'S-BIOG-015' = !"{W[11]+4} 12:30:00"),
+      'S-BIOG-015' = !"{W[12]+1} 23:59:59"),
     term = "Q1", level = 3,
-    toc = "Modèle linéaire généralisé (ovocyte)")
+    toc = "Modèle linéaire généralisé (jeunes fumeurs)")
 ```
 
 ## Récapitulatif des exercices
