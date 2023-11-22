@@ -289,7 +289,7 @@ summary(urchin_lm2) |> tabularise()
 
 $$`r eq__(urchin_lm2, use_coefs = TRUE, coef_digits = c(2, 2, 3))`$$
 
-Nous avons l'équation du modèle qui reprend les deux droites en même temps. Le terme $(weight \times weight_{originPêcherie})$ est le terme d'interactions. Rappelons-nous que les niveaux de la variable **factor** `origin` sont réencodés en variables muettes. $weight_{originPêcherie}$ prend la valeur 0 pour la sous-population `"Culture"` et 1 pour la sous-population `"Pêcherie"`. On retrouve donc bien nos calculs de pentes qui valent 0.26 pour la première et 0.26 + 0.07 = 0.33 pour la seconde.
+Nous avons l'équation du modèle qui reprend les deux droites en même temps. Le terme $(weight \times weight_{originPêcherie})$ est le terme d'interactions. Rappelons-nous que les niveaux de la variable **factor** `origin` sont réencodés en variables muettes. $weight_{originPêcherie}$ prend la valeur 0 pour la sous-population `"Culture"` et 1 pour la sous-population `"Pêcherie"`. On retrouve donc bien nos calculs de pentes qui valent 0.23 pour la première et 0.23 + 0.057 = 0.29 pour la seconde.
 
 Pour le modèle complet avec décalage de pente, l'équation paramétrée est :
 
