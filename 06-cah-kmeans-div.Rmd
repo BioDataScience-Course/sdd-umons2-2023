@@ -3,7 +3,7 @@
 # Classification & indices {#cah-kmeans-div}
 
 ```{r setup, include=FALSE, echo=FALSE, message=FALSE, results='hide'}
-#SciViews::R("explore")
+SciViews::R("explore")
 ```
 
 ##### Objectifs {.unnumbered}
@@ -12,13 +12,11 @@
 
 -   Comprendre la notion de distance et la matrice de distance.
 
--   Maîtriser la classification ascendante hiérarchique et le dendrogramme.
+-   Maîtriser la classification ascendante hiérarchique (CAH) et le dendrogramme.
 
 -   Maîtriser la technique de classification par les k-moyennes comme alternative à la CAH pour les gros jeux de données.
 
 -   Appliquer ces techniques pour effectuer un regroupement pertinent à partir d'un jeu de données biologique.
-
--   Découvrir les indices de diversité biologique.
 
 ##### Prérequis {.unnumbered}
 
@@ -30,7 +28,7 @@ L'analyse de données (on parle aussi d'*analyse exploratoire des données*, EAD
 
 -   Celles visant à **réduire la dimensionnalité** (travailler avec des tableaux ayant moins de colonnes). Elles permettent ensuite de présenter les données de manière synthétique pour observer des relations entre les variables ou les individus via des **représentations graphiques**. Nous aborderons ces techniques dans les modules suivants.
 
--   Celles cherchant à **classifier** (ou regrouper) les individus. Il s'agit ici de synthétiser le gros tableau de données dans l'autre sens, selon les lignes. L'approche via la *classification hiérarchique* sera détaillée ici.
+-   Celles cherchant à **classifier** (ou regrouper) les individus. Il s'agit ici de synthétiser le gros tableau de données dans l'autre sens, selon les lignes. L'approche par la *classification ascendante hiérarchique* sera détaillée ici, de même que la **méthode des k-moyennes**.
 
 La vidéo suivante introduit l'EAD (jusqu'à 2:11) :
 
@@ -44,22 +42,22 @@ vembedr::embed_youtube("q-IVQoh1nxA", width = 770, height = 433, query = "end=13
 
 ## Distance entre individus
 
-Pour partir d'un exemple concret, imaginez que vous êtes en train d'analyser des données concernant les échantillons de plancton que vous avez prélevé sur votre lieu de recherche. Ce plancton a été numérisé (photo de chaque organisme) et les images ont été traitées avec un logiciel qui mesure automatiquement une vingtaine de variables telles que la surface de l'objet sur l'image, son périmètre, sa longueur ... Vous vous trouvez donc face à un jeu de données qui a une taille non négligeable : 20 colonnes par 1262 lignes, soit le nombre d'individus mesurés dans vos échantillons.
+Pour partir d'un exemple concret, imaginez que vous êtes en train d'analyser des données concernant les échantillons de plancton que vous avez prélevé sur votre lieu de recherche. Ce plancton a été numérisé (photo de chaque organisme) et les images ont été traitées avec un logiciel qui mesure automatiquement une vingtaine de variables telles que la surface de l'objet sur l'image, son périmètre, sa longueur... Vous vous trouvez donc face à un jeu de données qui a une taille non négligeable : 20 colonnes par 1262 lignes, soit le nombre d'individus mesurés dans vos échantillons.
 
-SciViews vous propose, comme d'habitude, une série de fonctions qui simplifient et homogénéisent l'utilisation de R (avec la part belle à l'interface "formule") pour votre exploration de données multivariées, notamment via le package {exploreit}. Tout ce que vous aurez besoin est chargé automatiquement si vous spécifiez `"explore"` comme section dans `SciViews::R`. Vous commencerez donc vos scripts R et vos documents R Markdowns avec l'instruction suivante :
+SciViews vous propose, comme d'habitude, une série de fonctions qui simplifient et homogénéisent l'utilisation de R (avec la part belle à l'interface "formule") pour votre exploration de données multivariées, notamment avec le package {exploreit}. Tout ce que vous aurez besoin est chargé automatiquement si vous spécifiez `"explore"` comme section dans `SciViews::R`. Vous commencerez donc vos scripts R et vos documents Quarto ou R Markdown avec l'instruction suivante :
 
 ```{r}
 SciViews::R("explore")
 ```
 
-Ensuite, comme à notre habitude, nous lisons les données avec `read()` :
+Ensuite, nous récupérons les données avec `read()` :
 
 ```{r}
 zoo <- read("zooplankton", package = "data.io")
 zoo
 ```
 
-Vous voulez regrouper votre plancton en fonction de la ressemblance entre les organismes, c'est-à-dire, en fonction des écarts entre les mesures effectuées pour les 19 variables quantitatives, à l'exclusion de la vingtième colonne `class` qui est une variable `factor`). En raison de la taille du tableau, il est évident que cela ne pourra pas se faire de manière manuelle. Nous pouvons raisonnablement considérer que plus les mesures sont similaires entre deux individus, plus ils ont des chances d'être semblables, c'est-à-dire, d'appartenir au même groupe taxonomique. **Mais comment faire pour synthétiser l'information de similarité ou différence contenue dans 19 paires de valeurs** (une paire par variable) ? Nous avons besoin d'une **mesure de distance** qui quantifie la similarité (ou à l'inverse la dissimilarité) en un seul nombre. Celle qui vient naturellement à l'esprit est la **distance euclidienne**. Prenons un cas simplifié. Quelle est la distance qui sépare deux individus *A* et *B* par rapport à trois variables *x*, *y*, *z* ? Ici, nous pouvons représenter l'information graphiquement dans un espace à trois dimensions. La distance qui nous intéresse est la distance linéaire entre les deux points dans l'espace. Autrement dit, c'est la longueur du segment de droite qui relie les deux points dans l'espace. Cette distance, nous pouvons la calculer à l'aide de la formule suivante (voir par exemple [ici](http://www.mathematiques-lycee.com/geometrie/2nde-01-longueur-segment.html) pour une résolution dans le plan) :
+Vous voulez regrouper votre plancton en fonction de la ressemblance entre les organismes, c'est-à-dire, en fonction des écarts entre les mesures effectuées pour les 19 variables quantitatives, à l'exclusion de la vingtième colonne `class` (qui est une variable `factor` qui indique le groupe taxonomique de chaque individu et que nous n'utiliserons pas ici). En raison de la taille du tableau, il est évident que cela ne pourra pas se faire de manière manuelle. Nous pouvons raisonnablement considérer que plus les mesures sont similaires entre deux individus, plus ils ont des chances d'être semblables. **Mais comment faire pour synthétiser l'information de similarité ou différence contenue dans 19 paires de valeurs** (une paire par variable) ? Nous avons besoin d'une **mesure de distance** qui quantifie la similarité (ou à l'inverse la dissimilarité) en un seul nombre. Celle qui vient naturellement à l'esprit est la **distance euclidienne**. Prenons un cas simplifié. Quelle est la distance qui sépare deux individus *A* et *B* par rapport à trois variables *x*, *y*, *z* ? Ici, nous pouvons représenter l'information graphiquement dans un espace à trois dimensions. La distance qui nous intéresse est la distance linéaire entre les deux points dans l'espace. Autrement dit, c'est la longueur du segment de droite qui relie les deux points dans l'espace. Cette distance, nous pouvons la calculer à l'aide de la formule suivante (voir par exemple [ici](http://www.mathematiques-lycee.com/geometrie/2nde-01-longueur-segment.html) pour une résolution dans le plan) :
 
 $$\mathrm{D_{Euclidean}}_{A, B} = \sqrt{(x_A - x_B)^2 + (y_A - y_B)^2 + (z_A - z_B)^2}$$
 
@@ -67,7 +65,7 @@ Notez que cette formule se généralise à *n* dimensions et s'écrit alors, pou
 
 $$\mathrm{D_{Euclidean}}_{j, k} = \sqrt{\sum_{i=1}^{n}(y_{ij}-y_{ik})^2}$$
 
-C'est la racine carrée de la somme dans les *n* dimensions des écarts entre les valeurs au carré pour toutes les variables *y~i~*. Plus sa valeur est grande, plus les individus sont éloignés (différents). Pour cette raison, nous appellerons cette distance, une mesure de **dissimilarité**.
+En français, nous dirons que c'est la racine carrée de la somme dans les *n* dimensions des écarts entre les valeurs au carré pour toutes les variables *y~i~*. Plus sa valeur est grande, plus les individus sont éloignés (différents). Pour cette raison, nous appellerons cette distance, une mesure de **dissimilarité**.
 
 ### Matrice de distances
 
@@ -91,11 +89,11 @@ Par conséquent, seulement une portion (soit le triangle inférieur, soit le tri
 
 Le package {exploreit} met à votre disposition les fonctions suivantes pour créer une matrice de dissimilarité et pour effectuer des regroupements (*cluster* en anglais) sur base de l'information qu'elle contient (nous verrons leur usage progressivement dans ce module) :
 
-- **`dissimilarity(data, method = "euclidean", scale = FALSE, transpose = FALSE)`**\ : matrice de dissimilarité, voir `?vegan::vegdist`
-    + `print()`, `chart()`, `labels()` et `nobs()` sont des méthodes disponibles pour les objets **Dissimilarity**/**dist**
-- **`cluster(x, method = "complete")`** : CAH (nous verron,s plus loin ce que c'est) à partir d'un objet **Dissimilarity**/*dist**, voir `?stats:hclust`
-    + `print()`, `str()`, `plot()`, `chart()`, `labels()`, `nobs()`, `predict()` et `augment()`
-- **`chart(cluster)`** : visualise un cluster (dendrogramme). Utiliser `+ geom_dendroline(h = XX, color = "red")` pour y visualiser la coupure
+- **`dissimilarity(data, method = "euclidean", scale = FALSE, transpose = FALSE)`** : matrice de dissimilarité, voir `?vegan::vegdist` sur laquelle elle est basée
+    + méthodes `print()`, `chart()`, `labels()` et `nobs()` sont des méthodes disponibles pour les objets **Dissimilarity**/**dist**
+- **`cluster(x, method = "complete")`** : CAH (nous verrons plus loin ce que c'est) à partir d'un objet **Dissimilarity**/*dist**, voir `?stats:hclust`
+    + méthodes `print()`, `str()`, `plot()`, `chart()`, `labels()`, `nobs()`, `predict()` et `augment()`
+- **`chart(cluster)`** : visualise un cluster (dendrogramme). Utiliser `+ geom_dendroline(h = XX, color = "red")` pour y visualiser la coupure (voir plus loin)
 - **`predict(cluster, h = 5)`** ou **`predict(cluster, k = 5)`** extrait les groupes
 - **`augment(data = df, cluster, h =|k = )`** ajoute les groupes dans le tableau `df`
 
@@ -106,13 +104,13 @@ Voici comment nous calculons une matrice de distances `zoo6_dist`, ici sur un pe
 ```{r}
 zoo %>.%
   sselect(., -class) %>.% # Élimination de la colonne class
-  head(., n = 6) %->%
+  head(., n = 6) ->
   zoo6 # Récupération des 6 premiers individus
 zoo6_dist <- dissimilarity(zoo6, method = "euclidean")
 zoo6_dist
 ```
 
-Nous voyons bien ici que R n'imprime que le *triangle inférieur* de notre matrice 6 par 6. Notez aussi que les objets **Dissimilarity** de tailles plus réalistes que vous utiliserez dans vos analyses ne sont **pas prévus pour être imprimés et visualisés telles quelles**. Il s'agit seulement de la *première étape* vers une représentation utile qui sera réalisée à la page suivante, à l'aide de la classification hiérarchisée. **Ne les imprimez donc jamais telles quelles dans vos scripts ou rapports !**
+Nous voyons bien ici que R n'imprime que le *triangle inférieur* de notre matrice 6 par 6. Notez aussi que les objets **Dissimilarity** de tailles plus réalistes que vous utiliserez dans vos analyses ne sont **pas prévus pour être imprimés et visualisés telles quelles**. Il s'agit seulement de la *première étape* vers une représentation utile qui sera réalisée ci-dessous, à l'aide de la classification hiérarchisée. **Ne les imprimez donc jamais telles quelles dans vos scripts ou rapports !**
 
 Nous verrons plus loin comment nous pouvons utiliser l'information que cette matrice de distances contient pour regrouper les individus de manière pertinente à l'aide de la technique CAH. Mais avant cela, nous avons besoin d'un peu de théorie pour bien comprendre quelle **métrique** choisir pour calculer nos distances et pourquoi. On parle aussi d'**indices** de **similarité** ou **dissimilarité**.
 
@@ -144,9 +142,9 @@ L'indice de dissimilarité de Bray-Curtis, aussi appelé coefficient de Czecanow
 
 $$\mathrm{D_{Bray-Curtis}}_{j,k}=\frac{\sum_{i=1}^{n}\left|y_{ij}-y_{ik}\right|}{\sum_{i=1}^{n}(y_{ij}+y_{ik})}$$
 
-Dans SciViews R nous utiliserons `dissimilarity(DF, method = "bray")`. cet indice s'utilise pour mesurer, entre autres, la similitude entre échantillons sur base du **dénombrement d'espèces**. Si le nombre d'espèces est très variable (espèces dominantes *versus* espèces rares), nous devons transformer les données pour éviter de donner trop de poids aux espèces les plus abondantes (par exemple à l'aide de transformations $log(x+1)$, double racine carrée ...).
+Dans SciViews::R nous utiliserons `dissimilarity(DF, method = "bray")`. Cet indice s'utilise pour mesurer, entre autres, la similitude entre échantillons sur base du **dénombrement d'espèces**. Si le nombre d'espèces est très variable (espèces dominantes *versus* espèces rares), nous devons transformer les données pour éviter de donner trop de poids aux espèces les plus abondantes (par exemple à l'aide de transformations $log(x+1)$, double racine carrée...).
 
-Une caractéristique essentielle de cet indice (contrairement à la distance euclidienne) est que toute double absence n'est pas prise en compte dans le calcul. C'est souvent pertinent dans le cadre de son utilisation comme le dénombrement d'espèces. En effet, quelle information utile retire-t-on de doubles zéros dans un tableau répertoriant la faune belge pour le crocodile du Nil et le tigre de Sibérie par exemple ? Aucune ! Ils sont tous deux systématiquement absents des dénombrements, mais cette double absence n'apporte aucune information utile pour caractériser la faune belge par ailleurs.
+Une caractéristique essentielle de cet indice (contrairement à la distance euclidienne) est que toute double absence n'est pas prise en compte dans le calcul. C'est souvent pertinent dans le cadre de son utilisation comme le dénombrement d'espèces. En effet, quelle information utile retire-t-on de doubles zéros dans un tableau répertoriant la faune belge pour le crocodile du Nil et le tigre de Sibérie par exemple ? Aucune ! Ils sont tous deux systématiquement absents des dénombrements, mais cette double absence n'apporte aucune information utile pour caractériser la faune belge par ailleurs. cet exemple extrême vous montre le côté absurde de considérer qu'une double absence puisse être une information utile dans le cas de dénombrement d'espèces.
 
 L'indice de similarité de Bray-Curtis (*sim*) est complémentaire à l'indice de dissimilarité correspondant (*dis* tel que calculé ci-dessus) :
 
@@ -158,7 +156,7 @@ L'indice de dissimilarité de Canberra est apparenté à l'indice de Bray-Curtis
 
 $$\mathrm{D_{Canberra}}_{j,k}=\frac{1}{nz}\sum_{i'=1}^{nz}\frac{\left|y_{i'j}-y_{i'k}\right|}{\left|y_{i'j}\right|+\left|y_{i'k}\right|}$$
 
-où $nz$ est le nombre de valeurs non nulles simultanément dans le tableau de départ. Tous les cas contribuent ici de manière égale. C'est un point positif, mais il faut faire attention à ce que cet indice a souvent tendance à donner, au contraire, trop d'importance aux dénombrements très rares observés une seule fois ou un petit nombre de fois ! Dans SciViews R, nous utiliserons `dissimilarity(DF, method = "canberra")`.
+où $nz$ est le nombre de valeurs non nulles simultanément dans le tableau de départ. Tous les cas contribuent ici de manière égale. C'est un point positif, mais il faut faire attention à ce que cet indice a souvent tendance à donner, au contraire, trop d'importance aux dénombrements très rares observés une seule fois ou un petit nombre de fois ! Dans SciViews::R, nous utiliserons `dissimilarity(DF, method = "canberra")`.
 
 Toute double absence n'est pas prise en compte ici également. Seuls les indices ne dépendant pas des doubles zéros sont utilisables pour des dénombrements d'espèces ou des présences-absences. Ainsi, pour ce type de données, notre choix se portera sur :
 
@@ -176,25 +174,25 @@ Attention : Si les volumes échantillonnés entre stations ne sont pas comparab
 
 De même que pour Bray-Curtis, l'indice de similarité *sim* se calcule à partir de l'indice de dissimilarité *dis* tel que ci-dessus comme $sim = 1 - dis$.
 
-#### Distance Euclidienne
+#### Distance euclidienne
 
 Nous savons déjà que c'est la distance géométrique entre les points dans un espace à *n* dimensions :
 
 $$\mathrm{D_{Euclidean}}_{j,k}=\sqrt{\sum_{i=1}^{n}(y_{ij}-y_{ik})^2}$$
 
-Dans SciViews R, cette distance peut être calculée avec `dissimilarity(DF, method = "euclidean")`. Attention : en anglais, c'est *euclidean* avec un "e", pas *euclidian* ! Cet indice de dissimilarité est utile pour des mesures quantitatives, pour des données environnementales, etc. Il faut que les mesures soient toutes effectuées dans les mêmes unités. Si ce n'est pas le cas, nous devons les standardiser avant le calcul, avec `scale = TRUE`. Il n'existe pas d'indice de similarité complémentaire.
+Dans SciViews::R, cette distance peut être calculée avec `dissimilarity(DF, method = "euclidean")`. Attention : en anglais, c'est *euclidean* avec un "e", pas *euclidian* ! Cet indice de dissimilarité est utile pour des mesures quantitatives, pour des données environnementales, etc. Il faut que les mesures soient toutes effectuées dans les mêmes unités. Si ce n'est pas le cas, nous devons les standardiser avant le calcul, avec `scale = TRUE`. Il n'existe pas d'indice de similarité complémentaire.
 
 #### Distance de Manhattan
 
-La distance de Manhattan, encore appelée *"city-block distance"* en anglais, est un indice de dissimilarité qui, contrairement à la distance euclidienne ne mesure pas la distance géométrique entre les points en ligne droite, mais via un trajet composé de segments de droites parallèles aux axes. C'est comme si la distance euclidenne reliait les points à vol d'oiseau, alors qu'avec la distance de Manhattan, nous devions contourner les blocs de maisons du quartier pour aller d'un point A à un point B (d'où le nom de cette métrique). Elle se calcule comme suit :
+La distance de Manhattan, encore appelée *"city-block distance"* en anglais, est un indice de dissimilarité qui, contrairement à la distance euclidienne, ne mesure pas la distance géométrique entre les points en ligne droite, mais via un trajet composé de segments de droites parallèles aux axes. C'est comme si la distance euclidienne reliait les points à vol d'oiseau, alors qu'avec la distance de Manhattan, nous devions contourner les blocs de maisons du quartier pour aller d'un point A à un point B (d'où le nom de cette métrique). Elle se calcule comme suit :
 
 $$\mathrm{D_{Manhattan}}_{j,k}=\sum_{i=1}^{n}|y_{ij}-y_{ik}|$$
 
-Dans SciViews R, nous utiliserons `dissimilarity(DF, method = "manhattan")`. Ici aussi, seul l'indice de dissimilarité est défini. L'indice de similarité complémentaire n'existe pas, car la valeur de l'indice de dissimlarité n'est pas bornée à droite et peut varier de zéro (dissimilarité nulle, cela signifie alors que les deux individus sont identiques) à l'infini pour une différence maximale.
+Dans SciViews::R, nous utiliserons `dissimilarity(DF, method = "manhattan")`. Ici aussi, seul l'indice de dissimilarité est défini. L'indice de similarité complémentaire n'existe pas, car la valeur de l'indice de dissimlarité n'est pas bornée à droite et peut varier de zéro (dissimilarité nulle, cela signifie alors que les deux individus sont identiques) à l'infini pour une différence maximale.
 
 ### Utilisation des indices
 
--   Les distances euclidienne ou de Manhattan sont à préférer pour les **mesures environnementales** ou de manière générale pour les variables quantitatives continues.
+-   Les distances euclidiennes ou de Manhattan sont à préférer pour les **mesures environnementales** ou de manière générale pour les variables quantitatives continues.
 
 -   Les distances de Bray-Curtis ou Canberra sont meilleures pour les **dénombrements d'espèces** (ou à chaque fois que les doubles zéros ne portent aucune information utile). Il s'agit souvent de variables quantitatives discrètes prenant des valeurs nulles ou positives.
 
@@ -216,7 +214,7 @@ Un indice est dit **métrique** si il a les propriétés suivantes :
 
 -   **Inégalité triangulaire** : $I_{j, k} + I_{k, l} >= I_{j, l}$
 
-La dernière propriété d'inégalité triangulaire est la plus difficile à obtenir, et n'est pas toujours nécessaire. Nous pouvons montrer que certains indices qui ne respectent pas cette dernière propriété sont pourtant utiles dans le contexte. Nous dirons alors d'un indice que c'est une **semi-métrique** s'il répond à toutes les conditions sauf la quatrième. Enfin, un indice est dit **non métrique** dans tous les autres cas. Le tableau suivant reprend les métriques que nous avons vues jusqu'ici, et rajoute d'autres candidats potentiels (la distance Chi carré, l'indice de corrélation ou de variance/covariance) en indiquant leur type :
+La dernière propriété d'inégalité triangulaire est la plus difficile à obtenir, et n'est pas toujours nécessaire. Nous pouvons montrer que certains indices qui ne respectent pas cette dernière propriété sont pourtant utiles dans le contexte. Nous dirons alors d'un indice que c'est une **semi-métrique** s'il répond à toutes les conditions sauf la quatrième. Enfin, un indice est dit **non métrique** dans tous les autres cas. Le tableau suivant reprend les métriques que nous avons vues jusqu'ici, et rajoute d'autres candidats potentiels (la distance du Chi carré, l'indice de corrélation ou de variance/covariance) en indiquant leur type :
 
 | **Distance**          | **Type**       |
 |-----------------------|----------------|
@@ -230,12 +228,12 @@ La dernière propriété d'inégalité triangulaire est la plus difficile à obt
 
 ##### Pour en savoir plus {.unnumbered}
 
--   Vous pouvez aussi transposer le tableau pour calculer la distance entre ses colonnes en utilisant l'argument `transpose = TRUE` dans `dissimilarity()`. Par exemple, dans le cas d'un tableau "espèces - station" (dénombrement d'espèces en différentes stations), nous pouvons comparer les stations du point de vue de la composition en espèces, mais nous pouvons aussi comparer les espèces du point de vue de leur répartition entre les stations. Pour passer d'un calcul à l'autre, nous transposerons donc le tableau (les colonnes deviennent les lignes et inversement).
+-   Vous pouvez aussi transposer le tableau pour calculer la distance entre ses colonnes en utilisant l'argument `transpose = TRUE` dans `dissimilarity()`. Par exemple, dans le cas d'un tableau "espèces - stations" (dénombrement d'espèces en différentes stations), nous pouvons comparer les stations du point de vue de la composition en espèces, mais nous pouvons aussi comparer les espèces du point de vue de leur répartition entre les stations. Pour passer d'un calcul à l'autre, nous transposerons donc le tableau (les colonnes deviennent les lignes et inversement).
 
--   Pour bien comprendre la logique derrière ces indices, il est utile de comprendre leurs équations. Si elles sont pour vous trop abstraites, une façon efficace de comprendre consiste à faire le calcul à la main. Par exemple dans le cas de l'indice de Canberra, la notion de nombre de données non nulles $nz$ n'est pas évident. Effectuons un calcul à la main détaillé sur le tableau fictif suivant concernant trois espèces `A`, `B`, et `C` dénombré en trois stations `sta1`, `sta2` et `sta3` dans le tableau nommé `ex1` :
+-   Pour bien comprendre la logique derrière ces indices, il est utile de comprendre leurs équations. Si elles sont pour vous trop abstraites, une façon efficace de comprendre consiste à faire le calcul à la main. Par exemple, dans le cas de l'indice de Canberra, la notion de nombre de données non nulles $nz$ n'est pas évidente. Effectuons un calcul à la main détaillé sur le tableau fictif suivant concernant trois espèces `A`, `B`, et `C` dénombré en trois stations `sta1`, `sta2` et `sta3` dans le tableau nommé `ex1` :
 
 ```{r, echo=FALSE}
-ex1 <- dtf( # Here we need to use a data.frame explicitly to use row names!
+ex1 <- dtf( # Here we need to create a data.frame explicitly to use row names!
   A = c(4, 3, 1),
   B = c(0, 0, 8),
   C = c(2, 10, 0))
@@ -274,7 +272,7 @@ La matrice finale est la suivante :
 ```{r, echo=FALSE}
 vegan::vegdist(ex1, method = "canberra") %>.%
   round(., 3) %>.%
-  as.matrix(.) %->%
+  as.matrix(.) ->
   dst # We need to use a data.frame explicitly (dtf) to use row names!
 dst[!lower.tri(dst)] <- ""
 dst <- dst[-1, -3]
@@ -289,7 +287,7 @@ Vérifions en laissant R faire le calcul :
 
 ## Regroupement avec CAH
 
-À partir du moment où nous avons une matrice de dissimilarités entre toutes les paires d'individus de notre jeu de données, nous pouvons les regrouper en fonction de leurs ressemblances. Deux approches radicalement différentes existent. Soit nous pouvons diviser l'échantillon progressivement jusqu'à obtenir des groupes homogènes (**méthodes divisives, telles que les K-moyennes** que nous aborderons un peu plus loin), soit nous pouvons regrouper les items semblables petit à petit jusqu'à avoir traité tout l'échantillon (**méthodes agglomératives, telles que la classification ascendante hiérarchique** ou CAH étudiée ici).
+À partir du moment où nous avons une matrice de dissimilarités entre toutes les paires d'individus de notre jeu de données, nous pouvons les regrouper en fonction de leurs ressemblances. Deux approches radicalement différentes existent. Soit nous pouvons diviser l'échantillon progressivement jusqu'à obtenir des groupes homogènes (**méthodes divisives, telles que les k-moyennes** que nous aborderons un peu plus loin), soit nous pouvons regrouper les items semblables petit à petit jusqu'à avoir traité tout l'échantillon (**méthodes agglomératives, telles que la classification ascendante hiérarchique** ou CAH étudiée ici).
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -303,7 +301,7 @@ Le **dendrogramme** est une manière très utile de représenter graphiquement u
 
 Dans l'arbre, nous représentons des divisions dichotomiques (division d'une branche en deux) matérialisant les divergences au cours de l'évolution. Dans l'arbre présenté ici, l'axe des ordonnées est utilisé pour représenter le temps et les branchements sont placés à une hauteur correspondante en face de l'axe. Le dendrogramme est une représentation similaire de la CAH avec l'axe des ordonnées indiquant *à quelle distance* le rassemblement se fait.
 
-Dans R, un dendrogramme se construit en deux étapes :
+Dans SciViews::R, un dendrogramme se construit en deux étapes :
 
 1)  Son calcul par CAH à l'aide de la fonction `cluster()`, à partir d'une matrice de dissimilarité dans un objet **Dissimilarity** ou **dist**.
 
@@ -312,18 +310,18 @@ Dans R, un dendrogramme se construit en deux étapes :
 Partons, pour étayer notre raisonnement, d'une matrice de distances euclidiennes sur les données de zooplancton. Au passage, voyons quelques options utiles pour préparer correctement nos données.
 
 -   A la section précédente, nous avons suggéré qu'il peut être utile de *standardiser* nos données préalablement si les données numériques sont mesurées dans des unités différentes, comme c'est le cas ici. La fonction `scale()` ou l'argument `scale = TRUE` de `dissimilarity()` effectuent ce travail.
--   Limitons, pour l'instant notre ambition à la comparaison de six individus. Afin d'observer tous les cas possibles dans le dendrogramme, nous ne prendrons pas les six premières lignes du tableau, mais les lignes 13 à 18. Cela peut se faire à l'aide de la fonction `slice()` que nous n'avons pas encore beaucoup utilisée jusqu'ici. Cette fonction permet de spécifier explicitement les numéros de lignes à conserver, contrairement à `sfilter()` ou `filter()` qui applique un test de condition pour décider quelles ligne(s) conserver. Nous pouvons aussi utilise l'argument `subset =` de `dissimilarity()` pour sélectionner une partie des données.
+-   Limitons, pour l'instant, notre ambition à la comparaison de six individus. Afin d'observer tous les cas possibles dans le dendrogramme, nous ne prendrons pas les six premières lignes du tableau, mais les lignes 13 à 18. Cela peut se faire à l'aide de la fonction `slice()` que nous n'avons pas encore beaucoup utilisée jusqu'ici. Cette fonction permet de spécifier explicitement les numéros de lignes à conserver, contrairement à `sfilter()` et `filter()` qui appliquent un test de condition pour décider quelles ligne(s) conserver. Nous pouvons aussi utilise l'argument `subset =` de `dissimilarity()` pour sélectionner une partie des données.
 
 Voici donc notre matrice de distances euclidiennes sur les données ainsi traitées. Les individus initiaux 13 à 18 sont renumérotés 1 à 6. Nous n'imprimons plus ici la matrice de distance obtenue, car ce n'est que la première étape du travail vers une représentation plus utile (le dendrogramme).
 
 ```{r}
 zoo %>.%
   select(., -class) %>.%   # Élimination de la colonne class
-  slice(., 13:18) %->%     # Récupération des lignes 13 à 18
+  slice(., 13:18) ->       # Récupération des lignes 13 à 18
   zoo6
 
 zoo6 %>.% # Matrice de dissimilarité sur données standardisées
-  dissimilarity(., method = "euclidean", scale = TRUE) %->%
+  dissimilarity(., method = "euclidean", scale = TRUE) ->
   zoo6std_dist
 ```
 
@@ -331,7 +329,7 @@ Notre objet `zoo6std_dist` est ensuite utilisé pour calculer notre CAH à l'aid
 
 ```{r}
 zoo6std_dist %>.%
-  cluster(.) %->%
+  cluster(.) ->
   zoo6std_clust # Calcul du dendrogramme
   chart(zoo6std_clust) +
     ylab("Hauteur")
@@ -345,9 +343,9 @@ Voici comment lire ce graphique. Les deux individus les plus semblables sont le 
 
 ```
 
-Notez que nous n'avons *pas* utilisé l'information concernant les classes taxonomiques auxquelles les individus appartiennent (nous avons éliminé la variable `class` en tout début d'analyse). Ce type de regroupement s'appelle une **classification non supervisée** parce que nous n'imposons pas les groupes que nous souhaitons réaliser[^06-cah-kmeans-div-2]. Cependant, comme nous possédons cette indication du groupe taxonominque de nos six individus par ailleurs dans `class`, nous pouvons en profiter pour l'utiliser à des fins de vérification :
+Notez que nous n'avons *pas* utilisé l'information concernant les classes taxonomiques auxquelles les individus appartiennent (nous avons éliminé la variable `class` en tout début d'analyse). Ce type de regroupement s'appelle une **classification non supervisée** parce que nous n'imposons pas les groupes que nous souhaitons réaliser[^06-cah-kmeans-div-2]. Cependant, comme nous possédons cette indication du groupe taxonomique de nos six individus par ailleurs dans `class`, nous pouvons en profiter pour l'utiliser à des fins de vérification :
 
-[^06-cah-kmeans-div-2]: Les techniques complémentaires de classification supervisées seront abordées dans le cours de Science des Données Biologiques III l'an prochain.
+[^06-cah-kmeans-div-2]: Les techniques complémentaires de classification supervisées seront abordées dans le cours de Science des Données biologiques III l'an prochain.
 
 ```{r}
 zoo$class[13:18]
@@ -357,7 +355,7 @@ Les individus 2, 3 et 5 ("Poecilostomatoid" ou "Calanoid") sont des [copépodes]
 
 ### Séparer les groupes
 
-Si notre dendrogramme est satisfaisant (nous le déterminons en l'étudiant et en vérifiant que les regroupements obtenus ont un sens biologique par rapport à l'objectif de notre étude), nous concrétisons les groupes que nous souhaitons retenir au final en coupant l'arbre horizontalement à une hauteur choisie et en récupérant les groupes avec `predict()`. Nous pouvons matérialiser ce niveau de coupure en traçant un trait horizontal rouge dans le dendrogramme en ajoutant `geom_dendroline(h = XXX, color = "red")`, avec 'XXX' la hauteur de coupure souhaitée. Par exemple, si nous coupons l'arbre à une hauteur de 8, nous obtenons deux groupes :
+Si notre dendrogramme est satisfaisant (nous le déterminons en l'étudiant et en vérifiant que les regroupements obtenus ont un sens biologique par rapport à l'objectif de notre étude), nous concrétisons les groupes que nous souhaitons retenir au final en coupant l'arbre horizontalement à une hauteur choisie et en récupérant ces groupes avec la méthode `predict()`. Nous pouvons matérialiser ce niveau de coupure en traçant un trait horizontal rouge dans le dendrogramme en ajoutant `geom_dendroline(h = XXX, color = "red")`, avec 'XXX' la hauteur de coupure souhaitée. Par exemple, si nous coupons l'arbre à une hauteur de 8, nous obtenons deux groupes :
 
 ```{r}
 chart(zoo6std_clust) +
@@ -407,9 +405,9 @@ Le groupe des individus 2, 3 et 5 est formé. Les trois autres groupes contienne
 (group4 <- predict(zoo6std_clust, h = 5))
 ```
 
-L'individu 1 est dans le groupe 1, les individus 2, 3 et 5 sont dans le groupe 2, l'individu 4 est dans le groupe 3 et enfin l'individu 6 est dans le groupe 4. Donc, `predict()` numérote ses groupes en fonction du premier item de cette catégorie rencontré dans le tableau des données dans l'ordre dans lequel il se présente.
+L'individu 1 est dans le groupe 1, les individus 2, 3 et 5 sont dans le groupe 2, l'individu 4 est dans le groupe 3 et enfin l'individu 6 est dans le groupe 4. Donc, `predict()` numérote ses groupes en fonction du premier item de cette catégorie rencontré dans le tableau des données dans l'ordre dans lequel les valeurs se présentent.
 
-Nous pouvons ajouter cette variable indiquant les groupes dans le tableau de données à l'aide de la méthode `augment()` (le nom de la variable ainsi créée est `.fitted`), et utiliser cette information pour en faire d'autres choses utiles. Par exemple, nous représentons un nuage de point à partir de deux variables quantitatives et colorons nos points en fonction de nos groupes comme suit :
+Nous pouvons ajouter cette variable indiquant les groupes dans le tableau de données à l'aide de la méthode `augment()`. Le nom de la variable ainsi créée est `.fitted`. Ensuite, nous utilisons cette information pour en faire d'autres choses utiles. Par exemple, nous représentons un nuage de point à partir de deux variables quantitatives et colorons nos points en fonction de nos groupes comme suit :
 
 ```{r}
 zoo6g <- augment(data = zoo6, zoo6std_clust, h = 7.5)
@@ -422,7 +420,7 @@ chart(data = zoo6g, area ~ circularity %col=% group) +
 
 Nous voyons que les copépodes (groupe 2 en turquoise) sont plus grands (`area`) et moins circulaires (`circularity`) que les deux autres particules du groupe 1 en rouge. Nous pouvons ainsi réexplorer nos données en fonction de ces groupes pour mieux les comprendre.
 
-#### Méthodes de CAH
+### Méthodes de CAH
 
 Tant que l'on compare des individus isolés entre eux, il n'y a pas d'ambiguïté. Par contre, dès que nous comparons un groupe avec un individu isolé, ou deux groupes entre eux, nous avons plusieurs stratégies possibles pour calculer leurs distances (argument `method =` de `cluster()`) :
 
@@ -438,7 +436,7 @@ zoo6std_dist %>.%
 
 Les données tendent à être agrégées de proche en proche en montrant une gradation d'un extrême à l'autre. Dans le cas d'une variation progressive, par exemple lors d'un passage graduel d'une situation A vers une situation B, le dendrogramme obtenu à l'aide de cette méthode représentera la situation au mieux.
 
--   **Liens complets** (*complete linkages* en anglais) `cluster(DIS, method = "complete")`, méthode utilisée par défaut si non précisée : la distance entre les plus lointains voisins est considérée. C'est le premier dendrogramme que nous allons réaliser.
+-   **Liens complets** (*complete linkages* en anglais) `cluster(DIS, method = "complete")`, méthode utilisée par défaut si non précisée : la distance entre les plus lointains voisins est considérée. C'est le premier dendrogramme que nous avions réalisé.
 
 ![](images/sdd2_06/link_complete.png)
 
@@ -468,7 +466,7 @@ zoo6std_dist %>.%
 
 Ici nous obtenons un dendrogramme très proche des liens complets. Encore une fois, ce n'est pas forcément le cas dans toutes les situations.
 
--   Liens **médians**, **centroïdes**, ..., constituent encore d'autres méthodes possibles, mais moins utilisées. Elles ont l'inconvénient de produire parfois des *inversions* dans le dendrogramme, c'est-à-dire qu'un regroupement plus avant se fait parfois à une hauteur plus basse sur l'axe des ordonnées, ce qui rend le dendrogramme peu lisible et beaucoup moins esthétique. Dans notre exemple, la méthode centroïde crée une telle inversion à la hauteur de 5 environ sur l'axe des ordonnées entre l'individu 6 et l'individu 1. Alors, qui est regroupé en premier ? Pas facile à déterminer dans ce cas !
+-   Liens **médians**, **centroïdes**..., constituent encore d'autres méthodes possibles, mais moins utilisées. Elles ont l'inconvénient de produire parfois des *inversions* dans le dendrogramme, c'est-à-dire qu'un regroupement plus avant se fait parfois à une hauteur plus basse sur l'axe des ordonnées, ce qui rend le dendrogramme peu lisible et beaucoup moins esthétique. Dans notre exemple, la méthode centroïde crée une telle inversion à la hauteur de 5 environ sur l'axe des ordonnées entre l'individu 6 et l'individu 1. Alors, qui est regroupé en premier ? Pas facile à déterminer dans ce cas !
 
 ```{r}
 zoo6std_dist %>.%
@@ -489,7 +487,7 @@ zoo %>.%
   sselect(., -class) %>.% # Élimination de la colonne class
   # Matrice de dissimilarités sur données standardisées
   dissimilarity(., method = "euclidean", scale = TRUE) %>.%
-  cluster(., method = "ward.D2") %->% # CAH avec Ward D2
+  cluster(., method = "ward.D2") -> # CAH avec Ward D2
   zoo_clust
 
 # Dendrogramme horizontal et sans labels (plus lisible si beaucoup d'items)
@@ -504,7 +502,7 @@ Notre CAH est terminée, nous pouvons récupérer les groupes dans une variable 
 
 ```{r}
 augment(data = zoo, zoo_clust, h = 70) %>.%
-  smutate(., group = as.factor(.fitted)) %->%
+  smutate(., group = as.factor(.fitted)) ->
   zoog
 
 chart(data = zoog, compactness ~ ecd %col=% group) +
@@ -512,13 +510,13 @@ chart(data = zoog, compactness ~ ecd %col=% group) +
   coord_trans(x = "log10", y = "log10") # Axes en log10
 ```
 
-Et de manière optionnelle, si un classement est disponible par ailleurs (c'est le cas ici avec la variable `class`), nous pouvons réaliser un tableau de contingence à doubles entrées entre le regroupement obtenu par CAH et le classement obtenu de manière indépendante à cette analyse pour comparaison.
+Et de manière optionnelle, si un classement est disponible par ailleurs (c'est le cas ici avec la variable `class`), nous pouvons réaliser un tableau de contingence à doubles entrées entre le regroupement obtenu par CAH et le classement récupéré de manière indépendante à cette analyse pour comparaison.
 
 ```{r}
 table(classe = zoog$class, cah = zoog$group)
 ```
 
-Ainsi, nous pouvons constater que le groupe 1 contient une fraction importante des annélides, des cladocères, des décapodes, des œufs ronds et des gastéropodes. Le groupe 2 contient un maximum des copépodes représentés par les calanoïdes, les cyclopoïdes, les harpacticoïdes et les poecilostomatoïdes. Il contient aussi tous les appendiculaires, tous les protistes, presque tous les œufs allongés, les poissons, et une majorité des malacostracés. Enfin, le groupe 3 contient une majorité des chaetognathes et des cnidaires. Le regroupement a été réalisé uniquement en fonction de mesures effectuées sur les images. Il n'est pas parfait, mais des tendances se dégagent tout de même.
+Ainsi, nous pouvons constater que le groupe 1 contient une fraction importante des annélides, des cladocères, des décapodes, des œufs ronds et des gastéropodes. Le groupe 2 contient un maximum des copépodes représentés par les calanoïdes, les cyclopoïdes, les harpacticoïdes et les poecilostomatoïdes. Il contient aussi tous les appendiculaires, tous les protistes, presque tous les œufs allongés, les poissons, et une majorité des malacostracés. Enfin, le groupe 3 contient une majorité des chétognathes et des cnidaires. Le regroupement a été réalisé uniquement en fonction de mesures effectuées sur les images. Il n'est pas parfait, mais des tendances se dégagent tout de même.
 
 ##### Pour en savoir plus {.unnumbered}
 
@@ -642,7 +640,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B06Ia_{YY}M_fish_market"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/FapvlKxt"),
     course.starts = c(
       'S-BIOG-061' = !"{W[22]+1} 13:00:00"),
     course.ends = c(
@@ -661,12 +659,12 @@ Les k-moyennes (ou *k-means* en anglais) représentent une autre façon de regro
 
 Le principe des k-moyennes est assez simple[^06-cah-kmeans-div-3] :
 
-[^06-cah-kmeans-div-3]: En pratique, différents algorithmes avec diverses optimisations existent. Le plus récent et le plus sophistiqué est celui de Hartigan-Wong. Il est utilisé par défaut par la fonction `kmeans()`. En pratique, il y a peu de raison d'en changer.
+[^06-cah-kmeans-div-3]: Différents algorithmes avec diverses optimisations existent. Le plus récent et le plus sophistiqué est celui de Hartigan-Wong. Il est utilisé par défaut par la fonction `kmeans()`. En pratique, il y a peu de raison d'en changer.
 
--   L'utilisateur choisit le nombre de groupes *k* qu'il veut obtenir à l'avance.
--   La position des *k* centres est choisie au hasard au début.
+-   L'utilisateur choisit à l'avance le nombre de groupes *k* qu'il veut obtenir.
+-   La position des *k* centres est placée au hasard au début.
 -   Les individus sont attribués aux *k* groupes en fonction de leurs distances aux centres (attribution au groupe de centre le plus proche).
--   Les *k* centres sont replacés au centre de gravité des groupes ainsi obtenus.
+-   Les *k* centres sont relocalisés au centre de gravité des groupes ainsi obtenus.
 -   Les individus sont réaffectés en fonction de leurs distances à ces nouveaux centres.
 -   Si au moins un individu a changé de groupe, le calcul est réitéré. Sinon, nous considérons avoir atteint la configuration finale.
 
@@ -685,7 +683,7 @@ knitr::include_app("https://jjallaire.shinyapps.io/shiny-kmeans/", height = "600
 
 ### Exemple simple
 
-R propose la fonction `kmeans()` et différents packages la supplémentent pour enrichir votre boite à outils. Nous rassemblons tout cela sous une interface cohérente dans SciViews autour d'une fonction légèrement différente : `k_means()`. Vous mettez cette fonction à disposition grâce à l'instruction `SciViews::R("explore")`.
+R propose la fonction `kmeans()` et différents packages la supplémentent pour enrichir votre boite à outils. Nous rassemblons tout cela sous une interface cohérente dans SciViews autour d'une fonction légèrement différente : `k_means()`. Vous rendez cette fonction disponible grâce à l'instruction `SciViews::R("explore")`.
 
 ```{r}
 SciViews::R("explore")
@@ -709,7 +707,7 @@ set.seed(38)
 ```{r}
 zoo %>.%
   select(., -class) %>.% # Élimination de la colonne class
-  slice(., 13:18) %->%   # Récupération des lignes 13 à 18
+  slice(., 13:18) ->   # Récupération des lignes 13 à 18
   zoo6
 
 zoo6_kmn <- k_means(zoo6, k = 2)
@@ -723,8 +721,8 @@ Nous voyons que la fonction `k_means()` effectue notre classification[^06-cah-km
 -   le nombre d'individus dans chaque groupe (ici 3 et 3),
 -   la position des centres pour les *k* groupes dans `Cluster means`,
 -   l'appartenance aux groupes dans `Clustering vector` (dans le même ordre que les lignes du tableau de départ),
--   la somme des carrés des distances entre les individus et la moyenne au sein de chaque groupe dans `Within cluster sum of squares` ; le calcul `between_SS / total_SS` est à mettre en parallèle avec le $R^2$ de la régression linéaire : c'est une mesure de la qualité de regroupement des données (plus la valeur est proche de 100% mieux c'est, mais attention que cette valeur augmente d'office en même temps que *k*),
--   et enfin, la liste des composants accessibles via l'opérateur `$` ; par exemple, pour obtenir la taille de chaque groupe (en nombre d'individus), nous ferons :
+-   la somme des carrés des distances entre les individus et la moyenne au sein de chaque groupe dans `Within cluster sum of squares` ; le calcul `between_SS / total_SS` est à mettre en parallèle avec le *R*^2^ de la régression linéaire : c'est une mesure de la qualité de regroupement des données (plus la valeur est proche de 100% mieux c'est, mais attention que cette valeur augmente d'office en même temps que *k*),
+-   et enfin, la liste des composants accessibles avec l'opérateur `$` ; par exemple, pour obtenir la taille de chaque groupe (en nombre d'individus), nous ferons :
 
 ```{r}
 zoo6_kmn$size
@@ -736,7 +734,7 @@ Le package {broom} contient trois fonctions complémentaires qui nous seront uti
 glance(zoo6_kmn)
 ```
 
-Si nous voulons déterminer la valeur optimale de *k*, nous pouvons utiliser `profile_k()` appliqué au jeu de données initial, ou à la composante `data` de notre objet `k_means` (spécifier éventuellement une valeur différente de celle par défaut pour l'argument `k.max =` de la fonction, voir l'aide en ligne de `?factoextra::fviz_nbclust`) :
+Si nous voulons déterminer la valeur optimale de *k*, nous pouvons utiliser `profile_k()` appliqué au jeu de données initial, ou à la composante `data` de notre objet `k_means` (spécifier éventuellement une valeur différente de celle par défaut pour l'argument `k.max =` de la fonction, voir l'aide en ligne de `?factoextra::fviz_nbclust`) dont `profile_k()` dérive :
 
 ```{r}
 profile_k(zoo6) # ou zoo6_kmn$data
@@ -760,7 +758,7 @@ A ce stade, nous pouvons collecter les groupes et les ajouter à notre tableau d
 
 ```{r}
 augment(zoo6_kmn, zoo6) %>.%
-  srename(., cluster = .cluster) %->%
+  srename(., cluster = .cluster) ->
   zoo6b
 names(zoo6b)
 ```
@@ -852,7 +850,7 @@ Récupérons les groupes dans `zoob`
 
 ```{r}
 augment(zoo_kmn, zoo) %>.%
-  srename(., cluster = .cluster) %->%
+  srename(., cluster = .cluster) ->
   zoob
 ```
 
@@ -869,7 +867,7 @@ Nous observons ici un regroupement beaucoup plus simple qu'avec la CAH, essentie
 table(zoob$class, zoob$cluster)
 ```
 
-Le groupe numéro 3 n'est pas vraiment défini en termes des classes de plancton, car aucune classe ne s'y trouve de manière majoritaire. Le groupe numéro 1 contient la majorité des items de diverses classes, alors que le groupe 2 a une majorité de calanoïdes, de cyclopoïdes et d'harpacticoïdes (différents copépodes). Globalement, le classement a un sens, mais est moins bien corrélé avec les classes de plancton que ce que la CAH nous a fourni. Notez que, si nous avions standardisé les données avant d'effectuer les k-moyennes comme nous l'avons fait pour la CAH, nous aurions obtenu d'autres résultats. **La transformation des variables préalablement à l'analyse reste une approche intéressante pour moduler l'importance des différentes variables entre elles dans leur impact sur le calcul des distances, et donc, des regroupements réalisés**. Nous vous laissons réaliser les k-moyennes sur les données zoo standardisées à l'aide de la fonction `scale()` comme pour la CAH comme exercice.
+Le groupe numéro 3 n'est pas vraiment défini en termes des classes de plancton, car aucune classe ne s'y trouve de manière majoritaire. Le groupe numéro 1 contient la majorité des items de diverses classes, alors que le groupe 2 a une majorité de calanoïdes, de cyclopoïdes et d'harpacticoïdes (différents copépodes). Globalement, le classement a un sens, mais est moins bien corrélé avec les classes de plancton que ce que la CAH nous a fourni. Notez que, si nous avions standardisé les données avant d'effectuer les k-moyennes comme nous l'avons fait pour la CAH, nous aurions obtenu d'autres résultats. **La transformation des variables préalablement à l'analyse reste une approche intéressante pour moduler l'importance des différentes variables entre elles dans leur impact sur le calcul des distances, et donc, des regroupements réalisés**. Nous vous laissons réaliser les k-moyennes sur les données `zoo` standardisées à l'aide de la fonction `scale()` comme pour la CAH comme exercice.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -877,7 +875,9 @@ Le groupe numéro 3 n'est pas vraiment défini en termes des classes de plancton
 
 ##### Pour en savoir plus {.unnumbered}
 
-Il existe une approche mixte qui combine la CAH et les k-moyennes. Cette approche est intéressante pour les gros jeux de données. Elle est expliquée [ici](https://lovelyanalytics.com/2017/11/18/cah-methode-mixte/), et l'implémentation dans la fonction `factoextra::hkmeans()` est détaillée [ici (en anglais)](https://www.datanovia.com/en/lessons/hierarchical-k-means-clustering-optimize-clusters/).
+Il existe une approche mixte qui combine la CAH et les k-moyennes. Cette approche est intéressante pour les gros jeux de données. Elle est implémentée dans la fonction `factoextra::hkmeans()` et son utilisation est détaillée [ici (en anglais)](https://www.datanovia.com/en/lessons/hierarchical-k-means-clustering-optimize-clusters/).
+
+<!-- Il y avait cette référence, mais plus accessible en janvier 2024: (https://lovelyanalytics.com/2017/11/18/cah-methode-mixte/ -->
 
 Cet [article](https://www.r-bloggers.com/the-complete-guide-to-clustering-analysis-k-means-and-hierarchical-clustering-by-hand-and-in-r/) explique dans le détail `kmeans()` et `hclust()` dans R, et montre aussi comment on peut calculer les k-moyennes à la main pour bien en comprendre la logique (en anglais).
 
@@ -892,7 +892,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B06Ia_{YY}M_fish_market"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/FapvlKxt"),
     course.starts = c(
       'S-BIOG-061' = !"{W[22]+1} 13:00:00"),
     course.ends = c(
@@ -923,7 +923,7 @@ SciViews::R("explore")
 bci <- read("BCI", package = "vegan")
 
 set.seed(2003)
-bci_sub %<-% sample_n(bci, 5) 
+bci_sub <- sample_n(bci, 5) 
 
 # Exploration partielle des données (15 premières espèces)
 skimr::skim(bci_sub[, 1:15])
@@ -946,14 +946,14 @@ où :
 -   $S$ est la richesse spécifique
 -   $b$ la base du logarithme
 -   $n_i$ est le nombre d'individus d'une espèce dans l'échantillon
--   $N$ est le nombre total d'individus de toutes les espèces dans l'échantillon : $N = \sum_{i=1}^S n_i$
+-   $N$ est le nombre total d'individus de toutes les espèces dans l'échantillon : $N = \sum_{i=1}^S n_i$
 
-L'indice H de Shannon varie donc en fonction du nombre d'espèces et de la proportion relative de ces différentes espèces. H vaudra 0 quand l'échantillon ne contient qu'une seule espèce et augmente lorsque le nombre d'espèces augmente. Plus l'indice H est élevé, plus la diversité est grande. À nombre d'espèces égal, H sera maximal et vaudra $log_b S$ quand toutes les espèces sont également représentées.
+L'indice H de Shannon varie donc en fonction du nombre d'espèces et de la proportion relative de ces différentes espèces. H vaudra 0 quand l'échantillon ne contient qu'une seule espèce et augmente lorsque le nombre d'espèces s’accroît. Plus l'indice H est élevé, plus la diversité est grande. À nombre d'espèces égal, H sera maximal et vaudra $log_b S$ quand toutes les espèces sont également représentées.
 
 Pour calculer l'indice de Shannon avec R, vous pouvez utiliser la fonction `vegan::diversity()`. Celle-ci demande comme argument :
 
 -   x : des données sur une communauté sous la forme d'un vecteur ou d'une matrice
--   index : le choix d'un indice de biodiversité, ici `"shannon"` (valeur pas défaut, donc, pouvant être omis ici)
+-   index : le choix d'un indice de biodiversité, ici `"shannon"` (valeur pas défaut, donc, pouvant être omis)
 -   base : la base du logarithme lors du calcul de l'indice de Shannon. Par défaut, la fonction utilise le logarithme népérien.
 
 ```{r}
@@ -997,7 +997,9 @@ où :
 -   $p_i$ représente l'abondance proportionnelle de l'espèce et est compris entre 0 et 1 : $p_i = \frac{n_i}{N}$
 -   $S$ est la richesse spécifique
 
-Sous cette forme, l'indice est inversement proportionnel à la diversité. La formulation suivante a donc été proposée pour que l'indice soit directement représentatif de la diversité. $$E = 1 - \sum_{i=1}^S p_i^2$$
+Sous cette forme, l'indice est inversement proportionnel à la diversité. La formulation suivante a donc été proposée pour que l'indice soit directement représentatif de la diversité : 
+
+$$E = 1 - \sum_{i=1}^S p_i^2$$
 
 L'indice de Simpson varie dans l'intervalle $[0,1[$. Cet indice tend donc vers 0 lorsque la diversité est minimale et vers $1 - \frac{1}{S}$ lorsque la diversité est maximale. Il vaudra donc 0 si une seule espèce est présente et une probabilité de $p_i = 1$ et $1 - \frac{1}{S}$ si les différentes espèces présentes ont la même probabilité $p_i = \frac{1}{S}$. Le calcul de cet indice dans R se fait aussi avec la fonction `diversity()`, mais en précisant l'argument `index=` : `vegan::diversity(, index = "simpson")`.
 
@@ -1012,7 +1014,7 @@ bci_sub_e
 
 ### Diversité beta
 
-La diversité $\beta$ traduit la diversité inter-stations. Pour identifier le degré de similarité, d'association entre des groupes ou la diversité de différenciation des espèces entre différents habitats, on utilise les coefficient ou indice de similarité ou de similitude. Le choix adéquat d'un indice de similarité n'est pas évident et la question à se poser est de savoir si le fait qu'une espèce soit absente ou non contribue à augmenter la dissimilarité. Nous avons étudié ces indices de dissimilarité au début du module et nous savons déjà qu'il en existe plusieurs. Nous allons vous présenter un autre indice qui s'applique sur des données de type présence-absence : l'**indice de Jaccard**.
+La diversité $\beta$ traduit la diversité interstations. Pour identifier le degré de similarité, d'association entre des groupes ou la diversité de différenciation des espèces entre différents habitats, on utilise les coefficients ou indices de similarité ou de similitude. Le choix adéquat d'un indice de similarité n'est pas évident et la question à se poser est de savoir si le fait qu'une espèce soit absente ou non contribue à augmenter la dissimilarité. Nous avons étudié ces indices de dissimilarité au début du module et nous savons déjà qu'il en existe plusieurs. Nous allons vous présenter un autre indice qui s'applique sur des données de type présence-absence : l'**indice de Jaccard**.
 
 Cet indice permet une comparaison entre deux sites, car il évalue la ressemblance en calculant le rapport entre les espèces communes aux deux sites et celles propres à chaque relevé. La formule est la suivante :
 
@@ -1025,7 +1027,7 @@ où :
 
 Les valeurs de l'indice varient entre 0 lorsque les deux sites n'ont aucune espèce en commun, et 1 quand les deux sites ont toutes leurs espèces en commun. Dès lors plus la valeur est proche de 1, plus les sites sont similaires.
 
-Dans SciViews R, l'indice est calculé avec la fonction `dissimilarity()` (indice de dissimilarité). L'indice de similarité est complémentaire à l'indice de dissimilarité et se calcule comme d'habitude comme son complément à 1 :
+Dans SciViews::R, l'indice est calculé avec la fonction `dissimilarity()` (indice de dissimilarité). L'indice de similarité est complémentaire à l'indice de dissimilarité et se calcule comme d'habitude comme son complément à 1 :
 
 $$ similarité = 1 – dissimilarité$$
 
@@ -1043,13 +1045,15 @@ dissimilarity(bci_sub, method = "jaccard", binary = TRUE)
 
 -   [L'introduction des indices de diversité](https://cran.r-project.org/web/packages/vegan/vignettes/diversity-vegan.pdf) dans `vegan` par son auteur (en anglais),
 
--   Un [document très détaillé décrivant les différents indices de diversité](http://www.ecofog.gf/fr/enseignement/fth2010/Cours/4-Biodiversite/Mesures%20de%20la%20biodiversité.pdf) en français,
+-   [Un ouvrage complet consacré à la mesure de la biodiversité](https://ericmarcon.github.io/MesuresBioDiv2/index.html) en français,
+
+<!-- Ce document n'est malheureusement plus accessible!  Un [document très détaillé décrivant les différents indices de diversité](http://www.ecofog.gf/fr/enseignement/fth2010/Cours/4-Biodiversite/Mesures%20de%20la%20biodiversité.pdf) en français, -->
 
 <!-- Ce document n'est malheureusement plus accessible! [Numerical Ecology with R](https://www.springer.com/gp/book/9781441979766) traite en détail de nombreuses méthodes multivariées avec illustrations dans R (ouvrage recommandé pour tous ceux qui explorent des données multivariées en écologie, en anglais). -->
 
 ## Récapitulatif des exercices
 
-Ce cinquième module vous a permis de comprendre la classification hiérarchique, la méthode des k-moyennes et divers indices intéressants en biologie. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
+Ce sixième module vous a permis de comprendre la classification hiérarchique, la méthode des k-moyennes et divers indices intéressants en biologie. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
 
 `r show_ex_toc()`
 
