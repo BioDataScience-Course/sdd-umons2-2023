@@ -857,7 +857,7 @@ Vous n'êtes pas correctement enregistré pour ce cours. Vous ne pouvez pas part
 ::: S-BIOG-015
 Vous pouvez soumettre vos résultats pendant une période de temps précise via l'application ci-dessous :
 
-r launch_shiny("https://sdd.umons.ac.be/B05Ca_models/", height = 800, delay = 20, toc = NULL, alt1 = "*Cliquez pour visualiser le classement.*", alt2 = "*Cliquez pour visualiser le classement.*")`
+`r launch_shiny("https://sdd.umons.ac.be/B05Ca_models/", height = 800, delay = 20, toc = NULL, alt1 = "*Cliquez pour visualiser le classement.*", alt2 = "*Cliquez pour visualiser le classement.*")`
 :::
 
 ## Récapitulatif des exercices
