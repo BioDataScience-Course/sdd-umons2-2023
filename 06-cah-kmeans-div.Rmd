@@ -659,7 +659,7 @@ Les k-moyennes (ou *k-means* en anglais) représentent une autre façon de regro
 
 Le principe des k-moyennes est assez simple[^06-cah-kmeans-div-3] :
 
-[^06-cah-kmeans-div-3]: Différents algorithmes avec diverses optimisations existent. Le plus récent et le plus sophistiqué est celui de Hartigan-Wong. Il est utilisé par défaut par la fonction `kmeans()`. En pratique, il y a peu de raison d'en changer.
+[^06-cah-kmeans-div-3]: Différents algorithmes avec diverses optimisations existent. Le plus récent et le plus sophistiqué est celui de Hartigan-Wong. Il est utilisé par défaut par la fonction `k_means()`. En pratique, il y a peu de raison d'en changer.
 
 -   L'utilisateur choisit à l'avance le nombre de groupes *k* qu'il veut obtenir.
 -   La position des *k* centres est placée au hasard au début.
@@ -710,11 +710,12 @@ zoo %>.%
   slice(., 13:18) ->   # Récupération des lignes 13 à 18
   zoo6
 
-zoo6_kmn <- k_means(zoo6, k = 2)
+# Ne pas oublier de standardiser avec scale()
+zoo6_kmn <- k_means(scale(zoo6), k = 2)
 zoo6_kmn
 ```
 
-Nous voyons que la fonction `k_means()` effectue notre classification[^06-cah-kmeans-div-4]. Nous lui fournissons le tableau de départ et spécifions le nombre *k* de groupes souhaités via l'argument `k =`. Ne pas oublier d'assigner le résultat du calcul à une nouvelle variable, ici `zoo6_kmn`, pour pouvoir l'inspecter et l'utiliser par la suite. L'impression du contenu de l'objet nous donne plein d'information dont :
+Nous voyons que la fonction `k_means()` effectue notre classification[^06-cah-kmeans-div-4]. Nous lui fournissons le tableau de départ et spécifions le nombre *k* de groupes souhaités via l'argument `k =`. Ne pas oublier de standardiser les données si les variables sont dans des unités différentes et/ou si leurs valeurs diffèrent de manière importante entre les colonnes. N'oubliez pas non plus d'assigner le résultat du calcul à une nouvelle variable, ici `zoo6_kmn`, pour pouvoir l'inspecter et l'utiliser par la suite. L'impression du contenu de l'objet nous donne plein d'information dont :
 
 [^06-cah-kmeans-div-4]: Utilisez l'aide en ligne de `?kmeans` pour connaître les arguments. Seul `centers =` est changé en `k =` dans `k_means()`, mais avec `centers =` aussi accepté.
 
@@ -737,14 +738,14 @@ glance(zoo6_kmn)
 Si nous voulons déterminer la valeur optimale de *k*, nous pouvons utiliser `profile_k()` appliqué au jeu de données initial, ou à la composante `data` de notre objet `k_means` (spécifier éventuellement une valeur différente de celle par défaut pour l'argument `k.max =` de la fonction, voir l'aide en ligne de `?factoextra::fviz_nbclust`) dont `profile_k()` dérive :
 
 ```{r}
-profile_k(zoo6) # ou zoo6_kmn$data
+profile_k(scale(zoo6)) # ou zoo6_kmn$data
 ```
 
 Le graphique obtenu montre la décroissance de la somme des carrés des distances intragroupes en fonction de *k*. Avec *k* = 1, nous considérons toutes les données dans leur ensemble et nous avons la somme des carrés des distances euclidiennes entre tous les individus et le centre de gravité du nuage de points dont les coordonnées sont les moyennes de chaque variable. C'est le point de départ qui nous indique de combien les données sont dispersées (la valeur absolue de ce nombre n'est pas importante).
 
 Ensuite, avec *k* croissant, notre objectif est de faire des regroupements qui diminuent la variance intragroupe autant que possible, ce que nous notons par la diminution de la somme des carrés intragroupes (la variance du groupe est, en effet, la somme des carrés des distances euclidiennes entre les points et le centre du groupe, divisée par les degrés de liberté).
 
-Nous recherchons ici des sauts importants dans la décroissance de la somme des carrés, tout comme dans le dendrogramme obtenu par la CAH nous recherchions des sauts importants dans les regroupements (hauteur des barres verticales du dendrogramme). Nous observons ici un saut important pour *k* = 2, puis une diminution un peu moins forte pour *k* = 3 et ensuite une stagnation. Ceci *suggère* que nous pourrions considérer deux voire trois groupes.
+Nous recherchons ici des sauts importants dans la décroissance de la somme des carrés, tout comme dans le dendrogramme obtenu par la CAH nous recherchions des sauts importants dans les regroupements (hauteur des barres verticales du dendrogramme). Nous observons ici un saut important pour *k* = 2, puis une diminution un peu moins forte. Ceci *suggère* que nous pourrions considérer deux groupes, mais qu'un regroupement plus détaillé a quand même un sens ici.
 
 ```{block2, type='note'}
 Le nombre de groupes proposé par `profile_k()` n'est qu'indicatif ! Si vous avez par ailleurs d'autres informations qui vous suggèrent un regroupement différent, ou si vous voulez essayer un regroupement plus ou moins détaillé par rapport à ce qui est proposé, c'est tout aussi correct.
@@ -782,35 +783,35 @@ zoo6_centers <- tidy(zoo6_kmn, col.names = names(zoo6))
 zoo6_centers
 ```
 
-La dernière colonne de ce tableau est également nommée `cluster`. C'est le lien entre le tableau `zoo6b` augmenté et `zoo6_centers`. Nous avons maintenant tout ce qu'il faut pour représenter graphiquement les regroupements effectués par les k-moyennes en colorant les points en fonction de la nouvelle variable `cluster`.
+La dernière colonne de ce tableau est également nommée `cluster`. C'est le lien entre le tableau `zoo6b` augmenté et `zoo6_centers`.
+
+Un outre outil très utile est la représentation graphique du regroupement effectué par nos k-moyennes sur un graphique en nuage de points. Évidemment, on ne peut choisir que deux variables parmi l'ensemble de celles qui sont utilisées pour le calcul (argument `choices =`).
 
 ```{r}
-chart(data = zoo6b, area ~ circularity %col=% cluster) +
-  geom_point() + # Affiche les points représentant les individus
-  geom_point(data = zoo6_centers, size = 5, shape = 17) # Ajoute les centres
+kmn_chart <- chart(zoo6_kmn, choices = c("circularity", "area"),
+  alpha = 0.8, c.size = 5, c.shape = 17)
+kmn_chart
+```
+Les arguments optionnels `c.size =` et `c.shape =` contrôlent l'apparence des centres des groupes. L'argument optionnel `alpha =` gère la semi-transparence des points, utile si vous avez beaucoup de points à afficher sur le graphique. À noter que nos variables étant standardisées avec `scale()`, les échelles des axes X et Y ne correspondent plus aux valeurs, ni aux unités initiales. De plus, les labels ont été perdus. Donc, vous pourriez y rajouter des labels plus informatifs pour indiquer que les valeurs sont standardisées :
+
+```{r}
+kmn_chart +
+  labs(x = "Circularité standardisée", y = "Aire standardisée")
 ```
 
-Comparez avec le graphique équivalent obtenu à l'aide de la CAH. Outre que l'ordre des groupes est inversé et que les données n'ont pas été standardisées ici, un point est classé dans un groupe différent par les deux méthodes. Il s'agit du point ayant environ 0.25 de circularité et 0.5 de surface. Comme nous connaissons par ailleurs la classe à laquelle appartient chaque individu, nous pouvons la récupérer comme colonne supplémentaire du tableau `zoo6b` et ajouter cette information sur notre graphique.
+Comparez avec le graphique équivalent obtenu à l'aide de la CAH. Outre que l'ordre des groupes est inversé, et que les données sont standardisées dans le présent graphique, un point est classé dans un groupe différent par les deux méthodes. Il s'agit du point ayant environ -0.2 de circularité standardisée et -0.5 d'aire standardisée. Comme nous connaissons par ailleurs la classe à laquelle appartient chaque individu, nous pouvons la récupérer comme colonne supplémentaire du tableau et ajouter cette information sur notre graphique. Cela nécessite cependant un petit peu de travail pour créer un jeu de données ne contenant que les 6 items avec les mesures standardisées et leur classe.
 
 ```{r}
-zoo6b$class <- zoo$class[13:18]
-zoo6_centers$class <- "" # Ceci est nécessaire pour éviter le label des centres
-chart(data = zoo6b, area ~ circularity %col=% cluster %label=% class) +
-  geom_point() +
-  ggrepel::geom_text_repel() + # Ajoute les labels intelligemment
-  geom_point(data = zoo6_centers, size = 5, shape = 17)
+# Données standardisées + classe pour les individus de 13 à 18 de zoo
+zoo6std <- scale(zoo6)
+zoo6std$class <- zoo$class[13:18] 
+# Graphique annoté des classes
+kmn_chart +
+  labs(x = "Circularité standardisée", y = "Aire standardisée") +
+  ggrepel::geom_text_repel(data = zoo6std, aes(label = class))
 ```
 
 Nous constatons que le point classé différemment est un "Poecilostomatoïd". Or, l'autre groupe des k-moyennes contient aussi un individu de la même classe. Donc, la CAH a mieux classé notre plancton que les k-moyennes dans le cas présent. Ce n'est pas forcément toujours le cas, mais souvent.
-
-Maintenant que nous comprenons bien la logique de création de ce graphique en l'ayant réalisé par l'extraction des groupes avec `augment()` et des centres de ces groupes à l'aide de `tidy()`, nous pouvons nous simplifier la vie en utilisant `chart()` simplement sur notre objet `k_means` pour obtenir directement ce graphique. Dans ce cas, nous n'utilisons pas une formule pour indiquer les variables à utiliser, mais un vecteur de deux nombres qui indique l'index de ces variables, ou leur nom directement dans `choices =` :
-
-```{r}
-chart(zoo6_kmn, choices = c("circularity", "area"),
-  alpha = 0.6, c.size = 5, c.shape = 17)
-```
-
-La taille et la forme des centres sont indiquées respectivement par `c.size =` et `c.shape =` , tandis que `alpha =` modifie la transparence des points. Ce dernier argument est surtout utile pour de gros jeux de données avec beaucoup de points à afficher sur le graphique.
 
 Comme les k-moyennes partent d'une position aléatoire des *k* centres, le résultat final peut varier et n'est pas forcément optimal. Pour éviter cela, nous pouvons indiquer à `k_means()` d'essayer différentes situations de départ via l'argument `nstart =`. Par défaut, nous prenons une seule situation aléatoire de départ `nstart = 1`, mais en indiquant une valeur plus élevée pour cet argument, il est possible d'essayer plusieurs situations de départ et ne garder que le meilleur résultat final. Cela donne une analyse plus robuste et plus reproductible... mais le calcul est naturellement plus long.
 
@@ -835,14 +836,18 @@ Maintenant que nous savons utiliser `k_means()` et les fonctions annexes, nous p
 ```{r}
 zoo %>.%
   sselect(., -class) %>.%
+  scale(.) %>.%
   profile_k(., k.max = 15)
 ```
 
-Nous observons un saut maximal pour *k* = 2, mais le saut pour *k* = 3 est encore conséquent. Afin de comparer avec ce que nous avons fait par CAH, nous utiliserons donc *k* = 3. Enfin, comme un facteur aléatoire intervient, qui définira au final le numéro des groupes, nous utilisons `set.seed()` pour rendre l'analyse reproductible. **Pensez à donner une valeur différente à cette fonction pour chaque utilisation !** Et pensez aussi à éliminer les colonnes non numériques à l'aide de `sselect()`.
+Nous observons un saut maximal pour *k* = 2, mais le saut pour *k* = 3 est encore conséquent. Afin de comparer avec ce que nous avons fait par CAH, nous utiliserons donc *k* = 3. Enfin, comme un facteur aléatoire intervient, qui définira au final le numéro des groupes, nous utilisons `set.seed()` pour rendre l'analyse reproductible. **Pensez à donner une valeur différente à cette fonction pour chaque utilisation !** Pensez aussi à éliminer les colonnes non numériques à l'aide de `sselect()` et à standardiser avec `scale()` si c'est nécessaire.
 
 ```{r}
 set.seed(562)
-zoo_kmn <- k_means(sselect(zoo, -class), k = 3, nstart = 50)
+sselect(zoo, -class) %>.%
+  scale(.) %>.%
+  k_means(., k = 3, nstart = 50) ->
+  zoo_kmn
 zoo_kmn
 ```
 
@@ -858,16 +863,17 @@ Et enfin, effectuons un graphique similaire à celui réalisé pour la CAH au mo
 
 ```{r}
 chart(zoo_kmn, choices = c("ecd", "compactness"), alpha = 0.2) +
+  labs(x = "ECD standardisée", y = "Compacité standardisée") +
   stat_ellipse()
 ```
 
-Nous observons ici un regroupement beaucoup plus simple qu'avec la CAH, essentiellement stratifié de bas en haut en fonction de la compacité des points (`Compactness`). La tabulation des groupes en fonction des classes connues par ailleurs montre aussi que les k-moyennes les séparent moins bien que ce qu'à pu faire la CAH :
+Nous observons ici un regroupement similaire, mais pas identique à la CAH. La tabulation des groupes en fonction des classes connues par ailleurs montre aussi que les k-moyennes donnent des résultats similaires à la CAH :
 
 ```{r}
 table(zoob$class, zoob$cluster)
 ```
 
-Le groupe numéro 3 n'est pas vraiment défini en termes des classes de plancton, car aucune classe ne s'y trouve de manière majoritaire. Le groupe numéro 1 contient la majorité des items de diverses classes, alors que le groupe 2 a une majorité de calanoïdes, de cyclopoïdes et d'harpacticoïdes (différents copépodes). Globalement, le classement a un sens, mais est moins bien corrélé avec les classes de plancton que ce que la CAH nous a fourni. Notez que, si nous avions standardisé les données avant d'effectuer les k-moyennes comme nous l'avons fait pour la CAH, nous aurions obtenu d'autres résultats. **La transformation des variables préalablement à l'analyse reste une approche intéressante pour moduler l'importance des différentes variables entre elles dans leur impact sur le calcul des distances, et donc, des regroupements réalisés**. Nous vous laissons réaliser les k-moyennes sur les données `zoo` standardisées à l'aide de la fonction `scale()` comme pour la CAH comme exercice.
+Le groupe 1 est également dominé par les annélides, les cladocères, les décapodes, les œufs ronds et les gastéropodes comme pour la CAH. Par contre, on y retrouve aussi la majorité de poissons alors que ces derniers sont dans le second groupe pour la CAH. Le groupe 2 contient majoritairement les copépodes (calanoïdes, cyclopoïdes et poecilostomatoïdes, ce dernier dans une moindre mesure), ainsi que les appendiculaires, les cirripèdes, les œufs allongés et les protistes, comme pour la CAH. Par contre, les malacostracés sont bien plus répartis entre les trois groupes. Enfin, le groupe 3 contient une majorité de chaetognathes et de cnidaires comme pour la CAH.
 
 ##### À vous de jouer ! {.unnumbered}
 
