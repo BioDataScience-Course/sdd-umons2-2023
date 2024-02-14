@@ -1,7 +1,7 @@
 # ACP & AFC {#acp-afc}
 
 ```{r setup, include=FALSE, echo=FALSE, message=FALSE, results='hide'}
-SciViews::R("explore")
+SciViews::R("explore", lang = "fr")
 ```
 
 ##### Objectifs {.unnumbered}
@@ -20,13 +20,13 @@ SciViews::R("explore")
 
 Ici, l'objectif n'est pas de **regrouper** ou de **classifier** les individus du tableau comme nous avons fait avec la CAH ou les k-moyennes, mais de les **ordonner** sur un graphique en nuage de points en deux ou trois dimensions. Ce graphique s'appelle une "carte", et la technique qui la réalise est une **méthode d'ordination**.
 
-Dès que le nombre de variables dans un tableau dépasse 3 ou 4, nous avons du mal à représenter l'information qu'il contient graphiquement. Une matrice de nuages de points pour des données quantitatives peut, à la limite, servir à représenter 3 à 6 variables en les visualisant deux à deux, mais les nuages de points deviennent vite trop petits et illisibles au fur et à mesure que le nombre de variables augmente.
+Dès que le nombre de variables dans un tableau dépasse trois ou quatre, nous avons du mal à représenter l'information qu'il contient graphiquement. Une matrice de nuages de points pour des données quantitatives peut, à la limite, servir à représenter de trois à six variables en les visualisant deux à deux, mais les nuages de points deviennent vite trop petits et illisibles au fur et à mesure que le nombre de variables augmente.
 
 En réalité, vous connaissez bien une technique de réduction des dimensions **par projection**. C'est comme cela que fonctionne votre œil ou l'objectif d'un appareil photographique. La scène que vous observez ou photographiez se déroule dans l'espace à trois dimensions. Mais la rétine de votre œil, l'écran de votre ordinateur, ou la feuille de papier sur laquelle vous imprimez vos photos sont à deux dimensions. Il y a donc une *projection* qui est réalisée de trois à deux dimensions. Ce faisant, une partie de l'information est perdue : certains objets peuvent, par exemple, en cacher d'autres et vous ne voyez que la face exposée des objets. Si le point de vue ne vous convient pas, vous pouvez bouger pour en adopter un autre qui fera que votre photo sera plus compréhensible : elle contiendra plus d'information utile à la comprendre.
 
 ![Pièce présentée selon deux angles. À gauche, la pièce est vue depuis sa tranche (information insuffisante pour l'identifier sur la photo). À droite, la pièce est vue côté face (information suffisante). Le point de vue selon lequel l'objet 3D est projeté en 2D est important pour porter plus ou moins d'information pertinente sur l'objet.](images/sdd2_07/coin_2sides.png)
 
-Ce que nous voulons faire avec l'**Analyse en Composantes Principales**, c'est une généralisation de ce mécanisme de projection (de *N* variables à *n* \< *N* dimensions, généralement deux ou trois), tout en choisissant le point de vue qui réalise cette projection le plus intéressant possible, c'est à dire, celui qui permettra de visualiser un maximum de l'information totale dans ce nombre réduit de dimensions. Nous voulons automatiser le choix du meilleur angle de vue. Notez que, bien souvent à l'image de la pièce de monnaie ci-dessus, ce meilleur angle correspond au point de vue qui présente la plus grande surface d'un objet dans le plan de la projection.
+Ce que nous voulons faire avec l'**Analyse en Composantes Principales**, c'est une généralisation de ce mécanisme de projection (de *N* variables à *n* \< *N* dimensions, généralement deux ou trois), tout en choisissant le point de vue qui réalise cette projection de la façon la plus intéressante possible. Cela correspond au point de vue qui permettra de visualiser un maximum de l'information totale dans ce nombre réduit de dimensions. Nous voulons automatiser le choix du meilleur angle de vue. Notez que, bien souvent à l'image de la pièce de monnaie ci-dessus, ce meilleur angle correspond au point de vue qui présente la plus grande surface d'un objet dans le plan de la projection.
 
 En statistique, cela correspond à réaliser une projection d'un ensemble à un autre qui va maximiser la **variance** des observations dans l'espace réduit choisi (le plan ou un espace à trois dimensions). Or, les mathématiciens savent très bien comment répondre à ce genre de question. Donc, c'est parfaitement réalisable avec un ordinateur.
 
@@ -36,7 +36,7 @@ L'**Analyse en Composantes Principales** ou ACP (*Principal Component Analysis* 
 
 -   Des **relations linéaires** sont suspectées entre les variables (si elles ne sont pas linéaires, penser à transformer les données auparavant pour les linéariser).
 
--   Ces relations conduisent à une répartition des individus (le nuage de points) qui forment une **structure que l'on cherchera à interpréter**.
+-   Ces relations conduisent à une répartition des individus (le nuage de points) qui forme une **structure que l'on cherchera à interpréter**.
 
 -   Pour **visualiser** cette structure, les données sont simplifiées (réduites) de **N variables à n (n \< N et n = 2 ou 3 généralement)**. La représentation sous forme d'un nuage de points s'appelle une **carte**.
 
@@ -48,10 +48,10 @@ L'**Analyse en Composantes Principales** ou ACP (*Principal Component Analysis* 
 
 ### Indiens diabétiques
 
-Partons d'un exemple concret pour voir comment cela se passe en pratique. L'ACP est facilitée dans `SciViews::R`, via la section `"explore"`. Donc, au début de votre script ou de votre document R Markdown, vous utiliserez l'instruction :
+Partons d'un exemple concret pour voir comment cela se passe en pratique. L'ACP est facilitée dans `SciViews::R`, grâce à sa section `"explore"`. Donc, au début de votre script ou de votre document Quarto ou R Markdown, vous utiliserez l'instruction (ajoutant ou non que vous voulez travailler en français avec `lang = "fr"`) :
 
 ```{r}
-SciViews::R("explore")
+SciViews::R("explore", lang = "fr")
 ```
 
 Nous allons aborder un problème de santé humaine. Les Indiens Pimas sont des Amérindiens originaires du nord du Mexique qui sont connus pour compter le plus haut pourcentage d'obèses et de diabétiques de toutes les ethnies. Ils ont fait l'objet de plusieurs études scientifiques d'autant plus que les Pimas en Arizona développent principalement cette obésité et ce diabète, alors que les Pimas mexicains les ont plus rarement. Il est supposé que leur mode de vie différent aux États-Unis pourrait en être la raison. Voici un jeu de données qui permet d'explorer un peu cette question :
@@ -86,15 +86,15 @@ skimr::skim(pima)
 
 Nous avons une variable facteur `diabetes` à exclure de l'analyse. De plus, la variable `pregnant` est une variable numérique discrète (nombre d'enfants portés). Nous l'éliminerons aussi de notre analyse.
 
-La fonction `correlation()` du package `SciViews` nous permet d'inspecter les corrélations entre les variables choisies (donc toutes à l'exception de `pregnant` et `diabetes` qui ne sont pas quantitatives continues) :
+La fonction `correlation()` du package {SciViews} nous permet d'inspecter les corrélations entre les variables choisies (donc toutes à l'exception de `pregnant` et `diabetes` qui ne sont pas quantitatives continues) :
 
 ```{r}
 pima_cor <- correlation(pima[, 2:8])
-knitr::kable(pima_cor, digits = 2)
+tabularise(pima_cor, digits = 2)
 plot(pima_cor)
 ```
 
-Quelques corrélations positives d'intensités moyennes se dégagent ici, notamment entre `mass` (masse corporelle) et `triceps` (épaisseur du pli cutané au niveau du triceps), ainsi qu'entre `glucose` (taux de glucose dans le sang), `insulin` (taux d'insuline dans le sang) et `age`. Par contre, la tension artérielle (`pressure`) et le `pedigree` (variable qui quantifie la susceptibilité au diabète en fonction de la parenté) semblent peu corrélés avec les autres variables.
+Quelques corrélations positives d'intensités moyennes se dégagent ici, notamment entre `mass` (masse corporelle) et `triceps` (épaisseur du pli cutané au niveau du triceps), ainsi qu'entre `glucose` (taux de glucose dans le sang) et `insulin` (taux d'insuline dans le sang) et `glucose` et `age`. Par contre, le `pedigree` (variable qui quantifie la susceptibilité au diabète en fonction de la parenté) semble peu corrélé avec les autres variables.
 
 Nous utiliserons la fonction `pca()` qui prend un argument `data =` et une formule du type `~ var1 + var2 + .... + varn`, ou plus simplement, directement un tableau contenant uniquement les variables à analyser comme argument unique. Comme les différentes variables sont mesurées dans des unités différentes, nous devons les standardiser (écart type ramené à un pour toutes). Ceci est réalisé par la fonction `pca()` en lui indiquant `scale = TRUE`. Donc :
 
@@ -118,9 +118,9 @@ Le nuage de points dans l'espace initial à sept dimensions a été centré (ori
 summary(pima_pca)
 ```
 
-Le premier tableau `Importance of components (eigenvalues):` montre la part de variance présentée sur chacun des sept axes de l'ACP (PC1, PC2, ..., PC7). Le fait qu'il s'agit de *valeurs propres* (*eigenvalues* en anglais) apparaîtra plus clair lorsque vous aurez lu les explications détaillées plus bas. Ces parts de variance s'additionnent pour donner la variance totale du nuage de points dans les sept dimensions (propriété d'additivité des variances). Pour faciliter la lecture, la `Proportion de Variance` en % est reprise également, ainsi que les proportions cumulées. Ainsi, les deux premiers axes de l'ACP capturent ici 53% de la variance totale. Et il faudrait considérer les cinq premiers axes pour capturer 90% de la variance totale. Cependant, les trois premiers axes cumulent tout de même plus des 2/3 de la variance. Nous pouvons restreindre notre analyse à ces trois axes-là.
+Le premier tableau `Importance of components (eigenvalues):` montre la part de variance présentée sur chacun des sept axes de l'ACP (PC1, PC2, ..., PC7). Le fait qu'il s'agit de *valeurs propres* (*eigenvalues* en anglais) apparaîtra plus clair lorsque vous aurez lu les explications détaillées plus bas. Ces parts de variance s'additionnent pour donner la variance totale du nuage de points dans les sept dimensions (propriété d'additivité des variances). Pour faciliter la lecture, la `Proportion de Variance` en % est reprise également, ainsi que les proportions cumulées. Ainsi, les deux premiers axes de l'ACP capturent ici 53% de la variance totale. Et il faudrait considérer les cinq premiers axes pour capturer presque 90% de la variance totale. Cependant, les trois premiers axes cumulent tout de même plus des 2/3 de la variance. Nous pouvons restreindre notre analyse à ces trois axes-là.
 
-Le second tableau `Loadings (eigenvectors, rotation matrix):` est la matrice de transformation des coordonnées initiales sur les lignes en coordonnées PC1 à PC7 en colonnes. C'est les coefficients multiplicateurs appliqués aux variables initiales pour réaliser la rotation du système d'axe recherché. Nous pouvons donc y lire l'**importante** des variables initiales sur les axes de l'ACP, car plus ces coefficients sont proches d'un en valeur absolue, plus la variable initiale prendra de l'importance sur les axes de la projection. Cela permet de déterminer ce que représente chaque axe principal. Par exemple, l'axe PC3 contraste essentiellement `pressure` et `pedigree`.
+Le second tableau `Loadings (eigenvectors, rotation matrix):` est la matrice de transformation des coordonnées initiales sur les lignes en coordonnées PC1 à PC7 en colonnes. C'est les coefficients multiplicateurs appliqués aux variables initiales pour réaliser la rotation du système d'axe recherché. Nous pouvons donc y lire l'**importante** des variables initiales sur les axes de l'ACP, car plus ces coefficients sont proches de un en valeur absolue, plus la variable initiale prendra de l'importance sur les axes de la projection. Cela permet de déterminer ce que représente chaque axe principal. Par exemple, l'axe PC3 contraste essentiellement `pressure` et `pedigree`.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -142,7 +142,7 @@ La diminution est importante entre le premier et le second axe, mais plus progre
 
 `r h5p(106, height = 270, toc = "Analyse du graphique des éboulis")`
 
-Deux types de représentations peuvent être réalisées à partir d'ici : la représentation dans **l'espace des variables**, et la représentation dans **l'espace des individus**. Ces deux représentations sont complémentaires et s'analysent conjointement. L'espace des variables représente les axes initiaux projetés (comme l'ombre portée d'un cadrant solaire) dans le plan choisi de l'ACP. Il se réalise à l'aide de `chart$loadings()`. Par exemple pour PC1 et PC2 nous indiquons `choices = c(1, 2)` (ou rien du tout, puisque ce sont les valeurs par défaut)) :
+Deux types de représentations peuvent être réalisées à partir d'ici : la représentation dans **l'espace des variables**, et la représentation dans **l'espace des individus**. Ces deux représentations sont complémentaires et s'analysent conjointement. L'espace des variables représente les axes initiaux projetés (comme l'ombre portée d'un cadran solaire) dans le plan choisi de l'ACP. Il se réalise à l'aide de `chart$loadings()`. Par exemple pour PC1 et PC2 nous indiquons `choices = c(1, 2)` (ou rien du tout, puisque ce sont les valeurs par défaut) :
 
 ```{r}
 chart$loadings(pima_pca, choices = c(1, 2))
@@ -150,17 +150,17 @@ chart$loadings(pima_pca, choices = c(1, 2))
 
 Ce graphique s'interprète comme suit :
 
--   Plus la norme (longueur) du vecteur qui représente une variable est grande et se rapproche d'une longueur de un (matérialisé par le cercle gris), plus la variable est bien représentée dans le plan choisi. On évitera d'interpréter ici les variables qui ont des normes petites, comme `pedigree` ou `pressure`.
+-   Plus la norme (longueur) du vecteur qui représente une variable est grande et se rapproche d'une longueur de un (matérialisée par le cercle gris), plus la variable est bien représentée dans le plan choisi. On évitera d'interpréter ici les variables qui ont des normes petites, comme `pedigree` ou `pressure`.
 
--   Des vecteurs qui pointent dans la même direction représentent des variables **directement corrélées** entre elles. C'est le cas de `glucose`, `insulin` et `age`d'une part, et par ailleurs aussi de `mass` et `triceps`.
+-   Des vecteurs qui pointent dans la même direction représentent des variables **directement corrélées** entre elles. C'est le cas de `glucose`, `insulin` et `age` d'une part, et par ailleurs aussi de `mass` et `triceps`.
 
 -   Des vecteurs qui pointent en directions opposées représentent des variables **inversement proportionnelles**. Il n'y en a pas ici.
 
--   Des vecteurs orthogonaux représentent des variables **non corrélées** entre elles. ainsi le groupe `glucose`/`insulin`/`age` n'est pas corrélé avec le groupe `mass`/`triceps`
+-   Des vecteurs orthogonaux représentent des variables **non corrélées** entre elles. ainsi le groupe `glucose`/`insulin`/`age` n'est pas corrélé avec le groupe `mass`/`triceps`.
 
 -   Les PCs sont orientés en fonction des vecteurs qui représentent les variables initiales sur ce graphique. Puisque le vecteur qui représente la variable `mass` pointe vers le haut et la droite, les plus gros Indiens seront représentés aussi en haut à droite dans l'espace des individus que nous représenterons un peu plus tard. À l'inverse, les individus moins lourds seront représentés en bas à gauche. D'autre part, la variable `age` pointe vers le bas à droite. Donc, nous aurons un gradient des individus en fonction de leur âge, avec les plus jeunes à l'opposé en haut à gauche et les plus vieux en bas à droite dans le graphique des individus (voir plus loin). Et cela est corrélé également avec les variables `insulin` et `glucose` dans le sang.
 
-Cela donne déjà une vision synthétique des différentes corrélations entre les variables. Naturellement, on peut très bien choisir d'autres axes, pour peu qu'ils représentent une part de variance relativement importante. Par exemple, ici, nous pouvons représente le plan constitué par PC1 et PC3, puisque nous avons décidé de retenir les trois premiers axes :
+Cela donne déjà une vision synthétique des différentes corrélations entre les variables. Naturellement, on peut très bien choisir d'autres axes, pour peu qu'ils représentent une part de variance relativement importante. Par exemple, ici, nous pouvons représenter le plan constitué par PC1 et PC3, puisque nous avons décidé de retenir les trois premiers axes :
 
 ```{r}
 chart$loadings(pima_pca, choices = c(1, 3))
@@ -178,7 +178,7 @@ chart$loadings(pima_pca, choices = c(2, 3))
 
 `r h5p(107, height = 270, toc = "Représentation dans l'espace des variables")`
 
-La seconde représentation se fait dans **l'espace des individus**. Ici, nous allons projeter les points relatifs à chaque individu dans le plan de l'ACP choisi. Cela se réalise à l'aide de `chart$scores()` (l'aspect ratio est le rapport hauteur/largeur peut s'adapter) :
+La seconde représentation se fait dans **l'espace des individus**. Ici, nous allons projeter les points relatifs à chaque individu dans le plan de l'ACP choisi. Cela se réalise à l'aide de `chart$scores()` (l'aspect ratio est le rapport hauteur/largeur qui peut être adapté) :
 
 ```{r}
 chart$scores(pima_pca, choices = c(1, 2), aspect.ratio = 3/5)
@@ -198,7 +198,7 @@ Ce graphique est nettement plus intéressant. Il s'interprète comme suit :
 
 -   À l'inverse, le groupe des non-diabétiques s'étale vers la gauche, c'est-à-dire dans une région reprenant les individus les plus jeunes et aussi les moins gros.
 
-On comprend mieux maintenant comment nous avons d'abord analysé de graphique des variables pour observer les corrélations entre ces variables, mais aussi, pour l'utiliser comme une boussole qui va orienter notre carte représentée par le graphique de l'espace des individus. Une fois ce premier travail réalisé, la projection des individus dans le second graphique révèle une quantité complémentaire d'information très utile. Voyons ce que donne le graphique entre PC1 et PC3 (analyse du troisième axe) :
+On comprend mieux maintenant comment nous avons d'abord analysé le graphique des variables pour observer les corrélations entre ces variables, mais aussi, pour l'utiliser comme une boussole qui va orienter notre carte représentée par le graphique dans l'espace des individus. Une fois ce premier travail réalisé, la projection des individus dans le second graphique révèle une quantité complémentaire d'information très utile. Voyons ce que donne le graphique entre PC1 et PC3 (analyse du troisième axe) :
 
 ```{r}
 chart$scores(pima_pca, choices = c(1, 3),
@@ -224,7 +224,7 @@ Bien moins lisible, en effet !
 
 ### Biométrie d'oursin
 
-Analysons à présent un autre jeu de données qui nous montrera l'importance de la transformation (linéarisation), du choix de réduire ou non (argument `scale =`), et l'effet d'un **effet saturant**, et comment s'en débarrasser. Il s'agit de la biométrie effectuée sur deux populations de l'oursin violet *Paracentrotus lividus*, une en élevage et une autre provenant du milieu naturel. Nous avons abondamment utilisé ce jeu de données en SDD I dans la section visualisation. Nous le connaissons bien, mais reprenons certains éléments essentiels ici...
+Analysons à présent un autre jeu de données qui nous montrera l'importance de la transformation (linéarisation), du choix de réduire ou non (argument `scale =` dans la fonction `pca()`). Ces données nous permettront aussi de découvrir ce qu'est un **effet saturant** et comment s'en débarrasser. Il s'agit de la biométrie effectuée sur deux populations de l'oursin violet *Paracentrotus lividus*, une en élevage et une autre provenant du milieu naturel. Nous avons abondamment utilisé ce jeu de données en SDD I dans la section visualisation. Nous le connaissons bien, mais reprenons certains éléments essentiels ici...
 
 ```{r}
 urchin <- read("urchin_bio", package = "data.io", lang = "FR")
@@ -237,12 +237,12 @@ Ici aussi nous avons des valeurs manquantes :
 naniar::vis_miss(urchin)
 ```
 
-Ces valeurs manquantes sont rassemblées essentiellement dans les variables `buoyant_weight`, `dry_integuments`, les mesures relatives au squelette (`skeleton`, `lantern`, `test` et `spines`), et surtout au niveau de `sex` (impossible de déterminer le sexe des individus les plus jeunes). Si nous éliminons purement et simplement les lignes qui ont au moins une valeur manquante, nous perdons tous les individus jeunes, et c'est dommage. Nous allons donc d'abord éliminer les variables `sex`, ainsi que les quatre variables liées au squelette. Dans un second temps, nous appliquerons `sdrop_na()` sur ce qui reste :
+Ces valeurs manquantes sont rassemblées essentiellement dans les variables `buoyant_weight`, `dry_integuments`, les mesures relatives au squelette (`skeleton`, `lantern`, `test` et `spines`), et surtout au niveau de `sex` (impossible de déterminer le sexe des individus les plus jeunes). Si nous éliminons purement et simplement les lignes qui ont au moins une valeur manquante, nous perdons tous les individus jeunes, et c'est dommage. Nous allons donc d'abord éliminer la variable `sex`, ainsi que les quatre variables liées au squelette. Dans un second temps, nous appliquerons `sdrop_na()` sur ce qui reste :
 
 ```{r}
 urchin %>.%
   sselect(., -(skeleton:spines), -sex) %>.%
-  sdrop_na(.) %->%
+  sdrop_na(.) ->
   urchin2
 urchin2
 ```
@@ -257,7 +257,8 @@ Nous avons 12 variables quantitatives continues. Notez la distribution très asy
 
 ```{r}
 urchin2_cor <- correlation(urchin2[, 2:13])
-knitr::kable(urchin2_cor, digits = 2)
+tabularise(urchin2_cor)
+# ou knitr::kable(urchin2_cor, digits = 2)
 plot(urchin2_cor)
 ```
 
@@ -278,7 +279,7 @@ chart(data = urchin2, log(weight) ~ log(diameter1)) +
 ```
 
 ```{block2, type='warning'}
-Il est crucial de bien nettoyer son jeu de données avant une ACP, et aussi, de vérifier que les relations sont linéaires. Sinon il faut transformer les données de manière appropriée. Rappelez-vous que l'ACP s'intéresse aux corrélations **linéaires** entre vos variables. 
+Il est crucial de bien nettoyer son jeu de données avant une ACP, et aussi, de vérifier que les relations sont linéaires. Sinon, il faut transformer les données de manière appropriée. Rappelez-vous que l'ACP s'intéresse aux corrélations **linéaires** entre vos variables. 
 ```
 
 Attention toutefois à la transformation logarithmique appliquée sur des données qui peuvent contenir des zéros (par exemple, `gonads` ou `dry_gonads`). Dans ce cas, la transformation logarithme(x + 1) réalisée avec la fonction `log1p()` est plus indiquée. Nous allons ici transformer **toutes** les variables en `log(x + 1)`. C'est assez fastidieux à faire avec `smutate()`, mais nous pouvons l'utiliser directement sur le tableau entier réduit aux variables quantitatives continues seules lors de l'appel à `pca()` comme suit :
@@ -287,7 +288,7 @@ Attention toutefois à la transformation logarithmique appliquée sur des donné
 urchin2 %>.%
   sselect(., -origin, -maturity) %>.% # Élimine les variables non quantitatives
   log1p(.) %>.% # Transforme toutes les autres en log(x + 1)
-  pca(., scale = TRUE) %->% # Effectue l'ACP après standardisation
+  pca(., scale = TRUE) -> # Effectue l'ACP après standardisation
   urchin2_pca
 ```
 
@@ -297,7 +298,7 @@ Nous avons standardisé les données puisqu'elles sont mesurées dans des unité
 summary(urchin2_pca)
 ```
 
-Whaaa ! Plus de 93% de la variance représentée sur le premier axe. Ça parait parfait ! Voici le graphique des éboulis :
+Nous observons plus de 93% de la variance représentée sur le premier axe. Cela parait parfait ! Voici le graphique des éboulis :
 
 ```{r}
 chart$scree(urchin2_pca)
@@ -309,19 +310,19 @@ Ne vous réjouissez pas trop vite. Nous avons ici un **effet saturant** lié au 
 Puisque l'ACP optimise la variance sur le premier axe, un effet saturant aura tendance à occulter d'autres effets intéressants. Nous pouvons nous en débarrasser en identifiant une des variables représentant le mieux cet effet, et en calculant les ratios entre toutes les autres variables et celle-là. Ainsi, nous passons de quantification de la taille sur toutes les variables à des ratios qui quantifient beaucoup mieux des effets de forme plus subtils.
 ```
 
-Notez aussi les valeurs relativement faibles, mais homogènes de toutes les variables sur l'axe PC1 dans le tableau des vecteurs propres, avec des valeurs comprises entre 0,26 et 0,30. Le graphique des variables est également très moche dans le premier plan de l'ACP, même si un effet différent relatif aux gonades apparaît tout de même sur l'axe PC2, il ne compte que pour 4,2% de la variance totale :
+Notez aussi les valeurs relativement faibles, mais homogènes de toutes les variables sur l'axe PC1 dans le tableau des vecteurs propres, avec des valeurs comprises entre 0,26 et 0,30. Le graphique des variables n'est pas beau du tout dans le premier plan de l'ACP, même si un effet différent relatif aux gonades apparaît tout de même sur l'axe PC2, il ne compte que pour 4,2% de la variance totale :
 
 ```{r}
 chart$loadings(urchin2_pca)
 ```
 
-Recommençons tout de suite l'analyse en éliminant l'effet saturant. Nous pourrons considérer comme référence de la taille, par exemple, la masse immergée (`buoyant weight`) connue comme étant une mesure pouvant être mesurée très précisément. **Elle fait partie des variables les mieux corrélées sur l'axe PC1, représentant ainsi très bien cet effet saturant que nous voulons éliminer.** Voici notre calcul :
+Recommençons tout de suite l'analyse en éliminant l'effet saturant. Nous pourrons considérer comme référence de la taille, par exemple, la masse immergée (`buoyant weight`) connue comme étant une grandeur pouvant être mesurée très précisément. **Elle fait partie des variables les mieux corrélées sur l'axe PC1, représentant ainsi très bien cet effet saturant que nous voulons éliminer.** Voici notre calcul :
 
 ```{r}
 urchin2 %>.%
   sselect(., -origin, -maturity, -buoyant_weight) %>.% # Élimination des variables inutiles
   (. / urchin2$buoyant_weight) %>.% # Division par buoyant_weight
-  log1p(.) %->% # Transformation log(x + 1)
+  log1p(.) -> # Transformation log(x + 1)
   urchin3
 head(urchin3)
 ```
@@ -404,7 +405,7 @@ Enfin, nous l'introduisons dans le document à l'aide de ceci :
 rgl::rglwidget(width = 800, height = 800)
 ```
 
-À noter que cela ne fonctionne que pour les documents au format HTML.
+À noter que cela ne fonctionne que pour les documents Quarto ou R Markdown au format HTML.
 
 #### Plus de trois dimensions
 
@@ -506,7 +507,7 @@ plt2 <- ggplot(dat) +
 plt2
 ```
 
-C'est une bien meilleure solution, car la perte d'information est ici minimale. Regardez à nouveau la distance entre 7 et 9 sur le graphique initial à deux dimensions et sur le nouveau graphique réduit à une dimension : c'est mieux qu'avant. Comparez aussi les distances respectives entre les paires 7 - 9 et 9 - 8, ainsi que 1 - 2 par rapport à 1 - 3. Tout cela est bien pieux représenté à présent.
+C'est une bien meilleure solution, car la perte d'information est ici minimale. Regardez à nouveau la distance entre 7 et 9 sur le graphique initial à deux dimensions et sur le nouveau graphique réduit à une dimension : c'est mieux qu'avant. Comparez aussi les distances respectives entre les paires 7 - 9 et 9 - 8, ainsi que 1 - 2 par rapport à 1 - 3. Tout cela est bien mieux représenté à présent.
 
 **L'ACP effectue précisément la projection que nous venons d'imaginer.**
 
@@ -522,7 +523,7 @@ La rotation optimale des axes vers les PC1 à PCN se résout par un calcul matri
 
 -   Multiplication matricielle : $\begin{pmatrix} 2 & 3\\ 2 & 1 \end{pmatrix} \times \begin{pmatrix} 1\\ 3 \end{pmatrix} = \begin{pmatrix} 11\\ 5 \end{pmatrix}$
 
--   Vecteurs propres et valeurs propres (il en existe autant qu'il y a de colonnes dans la matrice de départ) :
+-   Vecteurs propres et valeurs propres (il en existe autant qu'il y a de colonnes dans la matrice de départ) :
 
 $$
 \begin{pmatrix}
@@ -567,7 +568,7 @@ y'
 \end{pmatrix}
 $$
 
-Dans le cas particulier de l'ACP, la matrice de transformation qui effectue la rotation voulue pour obtenir les axes principaux est **la matrice rassemblant tous les vecteurs propres calculés après diagonalisation de la matrice de corrélation ou de variance/covariance** (réduction ou non, respectivement). Le schéma suivant visualise la rotation depuis les axes initiaux X et Y (variables de départ) en bleu royal vers les PC1, PC2 en rouge. Un individu p est représenté par les coordonnées {x, y} dans le système d'axes initial XY. Les nouvelles coordonnées {x', y'} sont recalculées par projection sur les nouveaux axes PC1-PC2. Les flèches bleues sont représentées dans l'espace des variables, tandis que les points reprojetés sur PC1-PC2 sont représentés dans l'espace des individus selon les coordonnées primes en rouge.
+Dans le cas particulier de l'ACP, la matrice de transformation qui effectue la rotation voulue pour obtenir les axes principaux est **la matrice rassemblant tous les vecteurs propres calculés après diagonalisation de la matrice de corrélation ou de variance/covariance** (réduction ou non, respectivement). Le schéma suivant visualise la rotation depuis les axes initiaux X et Y (variables de départ) en bleu foncé vers les PC1, PC2 en rouge. Un individu p est représenté par les coordonnées {x, y} dans le système d'axes initial XY. Les nouvelles coordonnées {x', y'} sont recalculées par projection sur les nouveaux axes PC1-PC2. Les flèches bleues sont représentées dans l'espace des variables, tandis que les points reprojetés sur PC1-PC2 sont représentés dans l'espace des individus selon les coordonnées primes en rouge.
 
 ```{r, fig.width=4.5, fig.height=4.5, echo=FALSE, message=FALSE, warning=FALSE}
 # Point
@@ -603,7 +604,7 @@ text(-0.32, 0.55, "y'", col = "red")
 
 Effectuons une ACP sur matrice var/covar sans réduction des données (mais calcul très similaire lorsque les données sont réduites) sur un exemple numérique simple.
 
--   Étape 1 : centrage des données
+-   Étape 1 : centrage des données (moyenne nulle de chaque colonne)
 
 $$
 \mathop{\begin{pmatrix}
@@ -748,7 +749,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B07Ia_{YY}M_acp_afc"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/6OnLABS6"),
     course.starts = c(
       'S-BIOG-061' = !"{W[24]+1} 13:00:00"),
     course.ends = c(
@@ -759,13 +760,13 @@ if (exists("assignment"))
 
 ##### Pour aller plus loin {.unnumbered}
 
--   N'hésitez pas à **combiner** plusieurs techniques. Par exemple, vous pouvez représenter les groupes créés par classification ascendante hiérarchique sur un graphique de l'ACP dans l'espace des individus en faisant varier les couleurs ou les labels des individus en fonction des groupes de la CAH.
+-   N'hésitez pas à **combiner** plusieurs techniques. Par exemple, vous pouvez représenter les groupes créés par classification ascendante hiérarchique ou des k-moyennes sur un graphique de l'ACP dans l'espace des individus en faisant varier les couleurs ou les labels des individus en fonction des groupes.
 
 -   Une [autre explication de l'ACP](http://www.sthda.com/english/articles/31-principal-component-methods-in-r-practical-guide/112-pca-principal-component-analysis-essentials/) en utilisant quelques autres fonctions de R pour visualiser le résultat
 
 -   Une [explication détaillée de la PCA en anglais](http://staff.ustc.edu.cn/~zwp/teach/MVA/abdi-awPCA2010.pdf).
 
--   Une page qui reprend [une série de vidéos](http://www.sthda.com/english/articles/21-courses/65-principal-component-analysis-course-using-factominer/) qui présentent les différentes facettes de l'ACP (en anglais).
+-   Une page qui reprend [des explications et une série de vidéos](http://www.sthda.com/english/articles/21-courses/65-principal-component-analysis-course-using-factominer/) qui présentent les différentes facettes de l'ACP (en anglais).
 
 ## Analyse factorielle des correspondances
 
@@ -775,11 +776,11 @@ Comme l'ACP s'intéresse à des corrélations linéaires entre variables quantit
 
 `r h5p(108, height = 270, toc = "Rôle de l'AFC")`
 
-Tout comme pour l'ACP, nous aborderons l'AFC au travers d'un exemple concret en utilisant la fonction `ca()` (issue du package {ca}) dans `SciViews::R("explore")`.
+Tout comme pour l'ACP, nous aborderons l'AFC au travers d'un exemple concret en utilisant la fonction `ca()` (issue du package {ca}) avec `SciViews::R("explore")`.
 
 ### Enquête sur la science
 
-L'idée de départ de l'AFC est de pouvoir travailler sur des données qualitatives en les transformant en variables quantitatives via une astuce de calcul, et ensuite de réaliser une ACP sur ce tableau quantitatif pour en représenter l'information visuellement sur une carte. Les enquêtes (mais pas seulement) génèrent souvent des quantités importantes de variables qualitatives qu'il faut ensuite analyser. En effet, des sondages proposent la plupart du temps d'évaluer une question sur une échelle de plusieurs niveaux du genre "tout à fait d'accord", "d'accord", "pas d'accord", "pas du tout d'accord", ce qui donnerait une variable facteur à quatre niveaux ordonnés.
+L'idée de départ de l'AFC est de pouvoir travailler sur des données qualitatives en les transformant en variables quantitatives via une astuce de calcul, et ensuite de réaliser une ACP sur ce tableau quantitatif pour en représenter l'information visuellement sur une carte. Les enquêtes (mais pas seulement) génèrent souvent des quantités importantes de variables qualitatives qu'il faut ensuite analyser. En effet, des sondages proposent la plupart du temps d'évaluer une question sur une échelle de plusieurs niveaux du genre "tout à fait d'accord", "d'accord", "pas d'accord", "pas du tout d'accord", ce qui donnerait une variable facteur à quatre niveaux ordonnés. On appelle cela une **[échelle de Likert](https://www.questionpro.com/blog/fr/quest-ce-que-lechelle-delikert/)**.
 
 Une grande enquête mondiale a été réalisée en 1993 pour déterminer (entre autres) ce que la population pense de la science en général. Quatre questions sont posées (section 4 de [ce questionnaire](https://dbk.gesis.org/dbksearch/download.asp?db=E&id=7987), voir aussi [ici](https://dbk.gesis.org/dbksearch/sdesc2.asp?no=2450&search=issp%201993&search2=&field=all&field2=&DB=e&tab=0&notabs=&nf=1&af=&ll=10)) :
 
@@ -791,7 +792,7 @@ C. Tout changement dans la nature apporté par les êtres humains risque d'empir
 
 D. La science moderne va résoudre nos problèmes relatifs à l'environnement sans faire de grands changements à notre mode de vie
 
-Les réponses possibles sont : 1 = tout à fait d'accord à 5 = pas du tout d'accord. Le jeu de données `wg93` du package {ca} reprend les réponses données par les Allemands de l'ouest à ces questions. De plus, les caractéristiques suivantes des répondants sont enregistrées :
+Les réponses possibles sont : 1 = tout à fait d'accord à 5 = pas du tout d'accord. Le jeu de données `wg93` du package {ca} reprend les réponses données par les Allemands de l'ouest à ces questions (à l'époque où les deux Allemagnes n'étaient pas encore réunifiées). De plus, les caractéristiques suivantes des répondants sont enregistrées :
 
 -   le sexe (1 = homme, 2 = femme),
 -   l'âge (1 = 18-24, 2 = 25-34, 3 = 35-44, 4 = 45-54, 5 = 55-64, 6 = 65+)
@@ -799,7 +800,7 @@ Les réponses possibles sont : 1 = tout à fait d'accord à 5 = pas du tout d'a
 
 ```{r}
 wg <- read("wg93", package = "ca")
-wg
+tabularise$headtail(wg)
 ```
 
 Ceci est un tableau cas par variables avec sept variables facteurs et 871 cas. Nous commençons par réencoder les niveaux des variables pour plus de clarté :
@@ -816,8 +817,8 @@ wg %>.%
       `4` = "45-54", `5` = "55-64", `6` = "65+"),
     edu = recode(edu, `1` = "primaire", `2` = "sec. part", `3` = "secondaire",
       `4` = "univ. part", `5` = "univ. cycle 1", `6` = "univ. cycle 2")
-  ) %->% wg
-wg
+  ) -> wg
+tabularise$headtail(wg)
 ```
 
 Par exemple, si nous nous posons la question de l'impact de l'éducation sur l'impression que la science est néfaste (question B), nous pourrons faire l'analyse suivante :
@@ -834,7 +835,7 @@ table(wg$B, wg$edu)
 chisq.test(wg$B, wg$edu)
 ```
 
-L'avertissement nous prévient qu'une approximation a dû être réalisée, mais le test reste utilisable si la valeur est loin du seuil $/alpha$. La valeur *p* de 0,2% est très inférieure à $\alpha$. Nous rejetons H~0~. Il y a dépendance entre le niveau d'éducation et la réponse à la question B. OK, mais comment se fait cette dépendance ? C'est ici que l'AFC nous vient en aide.
+L'avertissement nous prévient qu'une approximation a dû être réalisée, mais le test reste utilisable si la valeur est loin du seuil $/alpha$. La valeur *p* de 0,2% est très inférieure à $\alpha$. Nous rejetons H~0~. Il y a dépendance entre le niveau d'éducation et la réponse à la question B. D'accord, mais comment se fait cette dépendance ? C'est ici que l'AFC nous vient en aide.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -875,11 +876,11 @@ L'interprétation se fait d'abord sur les points d'une couleur (niveau de la pre
 
 L'essentiel se lit ici effectivement sur un seul axe (dimension 1) qui capture environ 90% de la variation totale. Le second axe vient moduler légèrement ce classement avec 8,5% de variabilité, mais sans tout bouleverser.
 
-Ici la lecture de la carte générée par l'AFC est limpide... Et manifestement, nous pouvions légitimement conclure à l'époque qu'un effort éducatif et d'information était nécessaire auprès de la population la moins éduquée pour leur faire prendre conscience de l'intérêt de la science moderne (à moins que cette dernière remarque ne soit un parti pris... d'un universitaire :-).
+Ici la lecture de la carte générée par l'AFC est limpide... Et manifestement, nous pouvions légitimement conclure à l'époque qu'un effort éducatif et d'information était nécessaire auprès de la population la moins éduquée pour leur faire prendre conscience de l'intérêt de la science moderne (à moins que cette dernière remarque ne soit justement un parti pris... d'un universitaire).
 
-### Des acariens sinon rien
+### Communautés d'acariens
 
-Un deuxième exemple illustre une utilisation légèrement différente de l'AFC. Il s'agit des tableaux de type "espèces par stations". Ces tableaux contiennent différentes espèces ou autres groupes taxonomiques dénombrés dans plusieurs échantillons prélevés à des stations différentes. Le dénombrement des espèces peut être quantitatif (nombre d'individus observés par unité de surface ou de volume), semi-quantitatif (peu, moyen, beaucoup), ou même binaire (présence ou absence de l'espèce). Ces tableaux sont assimilables, en réalité, à des tableaux de contingence à double entrée qui croisent deux variables qualitatives "espèce" et "station". C'est comme si la première étape avait déjà été réalisée dans l'analyse précédente du jeu de données `wg`.
+Un deuxième exemple illustre une utilisation légèrement différente de l'AFC. Il s'agit des tableaux de type "espèces par stations". Ces tableaux contiennent différentes espèces ou autres groupes taxonomiques dénombrés dans plusieurs échantillons prélevés à des stations différentes. Le dénombrement des espèces peut être quantitatif (nombre d'individus observés par unité de surface ou de volume), semi-quantitatif (peu, moyen, beaucoup), ou même binaire (présence ou absence du taxon). Ces tableaux sont assimilables, en réalité, à des tableaux de contingence à double entrée qui croisent deux variables qualitatives "espèce" et "station". C'est comme si la première étape avait déjà été réalisée dans l'analyse précédente du jeu de données `wg`.
 
 Naturellement, comme il ne s'agit pas réellement d'un tableau de contingence, nous ne réaliserons pas le test Chi^2^ d'indépendance ici, et nous passerons directement à l'étape de l'AFC. L'exemple choisi concerne des populations d'acariens dans de la litière (acarien se dit "mite" en anglais, d'où le nom du jeu de données issu du package {vegan}).
 
@@ -888,25 +889,24 @@ mite <- read("mite", package = "vegan")
 skimr::skim(mite)
 ```
 
-35 espèces d'acariens sont dénombrés en 70 stations différentes, et il n'y a aucune valeur manquante. Comme il ne peut y avoir aucun total de ligne ou de colonne égal à zéro pour le calcul des Chi^2^ (sinon, on aurait une division par zéro), nous vérifions cela de la façon suivante :
+Nous voyons que 35 espèces d'acariens sont dénombrés en 70 stations différentes, et il n'y a aucune valeur manquante. Comme il ne peut y avoir aucun total de ligne ou de colonne égal à zéro pour le calcul des Chi^2^ (sinon, on aurait une division par zéro), nous vérifions cela de la façon suivante :
 
 ```{r}
 rowSums(mite)
 colSums(mite)
 ```
 
-De plus, l'AFC est très sensible à la présence de valeurs extrêmes. Il faut être particulièrement attentif à ne pas avoir trop de disparité, surtout en présence d'espèces très abondantes *versus* d'autres, très rares. Si quelques échantillons contiennent une quantité particulièrement large d'items, cela peut aussi être problématique. Pour des dénombrements ou du semi-quantitatif à plus d'une dizaine de niveaux, la boite de dispersion parallèle est un bon graphique, mais nous devons transformer le tableau de données en format long avec `spivot_longer()` pour pouvoir le faire, et ensuite, nous présentons les espèces sur l'axe des ordonnées avec `coord_flip()` :
+De plus, l'AFC est très sensible à la présence de valeurs extrêmes. Il faut être particulièrement attentif à ne pas avoir trop de disparité, surtout en présence d'espèces très abondantes avec d'autres, très rares. Si quelques échantillons contiennent une quantité particulièrement large d'items, cela peut aussi être problématique. Pour des dénombrements ou du semi-quantitatif à plus d'une dizaine de niveaux, la boite de dispersion parallèle est un bon graphique, mais nous devons transformer le tableau de données en format long avec `spivot_longer()` pour pouvoir le faire :
 
 ```{r}
 mite %>.%
   spivot_longer(., everything(), names_to = "species", values_to = "n") %>.%
-  chart(., n ~ species) +
+  chart(., species ~ n) +
     geom_boxplot() +
-  labs(x = "Espèces", y = "Observations") +
-  coord_flip()
+  labs(x = "Espèces", y = "Observations")
 ```
 
-Aïe ! Nous avons ici une magnifique valeur extrême, ainsi que des différences trop nettes entre les espèces les plus abondantes et les plus rares. Nous devons y remédier avant de faire notre AFC. Deux solutions sont possibles :
+Nous avons ici une magnifique valeur extrême, ainsi que des différences trop nettes entre les espèces les plus abondantes et les plus rares. Nous devons y remédier avant de faire notre AFC. Deux solutions sont possibles :
 
 (1) Soit nous dégradons l'information vers du semi-quantitatif en définissant des niveaux d'abondance, du genre 0, 1-10, 10-20, 20-30, 31+. Nous pouvons réaliser cela avec `cut()` comme illustré ici sur un exemple fictif.
 
@@ -917,11 +917,11 @@ cut(sample, breaks = c(-1, 0, 10, 20, 30, Inf))
 
 Nous voyons que `cut()` a ici remplacé nos données quantitatives dans `sample` en une variable qualitative à cinq niveaux clairement libellés. Notez l'astuce du groupe `(-1,0]` pour capturer les valeurs nulles dans un groupe séparé.
 
-(2) Autre solution, nous transformons les données pour réduire l'écart entre les extrêmes. Typiquement, une transformation $log(x + 1)$ est efficace pour cela, et fonctionne bien en présence de valeurs nulles aussi. Nous utiliserons cette dernière technique pour notre jeu de données `mite`. Enfin, nous nous assurons que les stations sont bien numérotées de 1 à 70 en lignes (`rownames()`).
+(2) Autre solution, nous transformons les données pour réduire l'écart entre les extrêmes. Typiquement, une transformation $log(x + 1)$ est efficace pour cela et fonctionne bien en présence de valeurs nulles aussi. Nous utiliserons cette dernière technique pour notre jeu de données `mite`. Enfin, nous nous assurons que les stations sont bien numérotées de 1 à 70 en lignes (`rownames()`).
 
 ```{r}
-mite2 <- log1p(as_dtf(mite)) # We want a data.frame to use row names
-# Ajouter le numéro des stations explicitement
+mite2 <- log1p(as_dtf(mite)) # Utilisons un data.frame pour les noms des lignes
+# Ajouter le numéro des stations explicitement comme nom des lignes
 rownames(mite2) <- 1:nrow(mite2)
 ```
 
@@ -930,10 +930,9 @@ Le graphique en boite de dispersion parallèle montre plus d'homogénéité main
 ```{r}
 mite2 %>.%
   spivot_longer(., everything(), names_to = "species", values_to = "log_n_1") %>.%
-  chart(., log_n_1 ~ species) +
+  chart(., species ~ log_n_1) +
   geom_boxplot() +
-  labs(x = "Espèces", y = "Logarithme des observations") +
-  coord_flip()
+  labs(x = "Espèces", y = "Logarithme des observations")
 ```
 
 A noter que ce type de graphique ne convient pas pour les données semi-quantitatives ou qualitatives. Nous pouvons réaliser le graphique suivant à la place dans ce cas pour visualiser la distribution des espèces dans les différentes stations (qui fonctionne aussi en quantitatif) :
@@ -946,7 +945,7 @@ mite2 %>.%
   geom_raster()
 ```
 
-Maintenant que nos données sont vérifiées, nettoyées (phase de préparation), et décrites correctement (phase descriptive), nous pouvons réaliser notre AFC et explorer les particularités de ce jeu de données en vue d'une étude plus approfondie ultérieure (phase exploratoire). L'utilisation de `ca()` sur un tableau de type contingence à double entrée déjà prêt est ultra-simple. Il suffit de fournir le tableau en question comme seul argument à la fonction.
+Maintenant que nos données sont vérifiées, nettoyées (phase de préparation) et décrites correctement (phase descriptive), nous pouvons réaliser notre AFC et explorer les particularités de ce jeu de données en vue d'une étude plus approfondie ultérieure (phase exploratoire). L'utilisation de `ca()` sur un tableau de type contingence à double entrée déjà prêt est ultra-simple. Il suffit de fournir le tableau en question comme seul argument à la fonction.
 
 ```{r}
 mite2_ca <- ca(mite2)
@@ -1009,7 +1008,7 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B07Ia_{YY}M_acp_afc"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/6OnLABS6"),
     course.starts = c(
       'S-BIOG-061' = !"{W[24]+1} 13:00:00"),
     course.ends = c(
@@ -1018,7 +1017,7 @@ if (exists("assignment"))
     toc = "ACP et AFC en pratique (II)")
 ```
 
-**Le projet suivant est un travail par groupe de quatre personnes et se poursuivra au module 8.**
+**Le projet suivant est un travail par groupe de quatre personnes et se poursuivra tout au long du Q2.**
 
 ```{r assign_B07Ga_doubs_I, echo=FALSE, results='asis'}
 if (exists("assignment2"))
@@ -1027,7 +1026,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-061' = !"B07Ga_{YY}M_doubs"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/uyW7jJrE"),
     course.starts = c(
       'S-BIOG-061' = !"{W[24]+1} 13:00:00"),
     course.ends = c(
@@ -1040,11 +1039,11 @@ if (exists("assignment2"))
 
 -   Une courte introduction de l'AFC en [vidéo](https://www.youtube.com/watch?v=tEc5cmlQVdI) avec résolution d'un exemple volontairement simpliste pour faire comprendre la signification du graphique obtenu et la façon de l'interpréter.
 
--   Une [autre explication](http://www.sthda.com/french/articles/38-methodes-des-composantes-principales-dans-r-guide-pratique/74-afc-analyse-factorielle-des-correspondances-avec-r-l-essentiel/) qui utilise les packages {FactoMineR} et {factoextra} et qui va plus loin dans les concepts (notamment la qualité de la représentation des points via leur "cos^2^", les différents types de biplots, et l'ajout de données supplémentaires).
+-   Une [autre explication](http://www.sthda.com/french/wiki/wiki.php?title=analyse-factorielle-des-correspondances-avec-r) qui utilise les packages {FactoMineR} et {factoextra}.
 
 ## Récapitulatif des exercices
 
-Ce module 7 vous a permis de découvrir deux méthodes très utilisées dans les statistiques exploratoires (ACP et AFC). Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
+Ce module 7 vous a permis de découvrir deux méthodes très utilisées dans les statistiques exploratoires : l' ACP et l'AFC. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
 
 `r show_ex_toc()`
 
