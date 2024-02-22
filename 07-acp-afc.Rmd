@@ -1041,6 +1041,37 @@ if (exists("assignment2"))
 
 -   Une [autre explication](http://www.sthda.com/french/wiki/wiki.php?title=analyse-factorielle-des-correspondances-avec-r) qui utilise les packages {FactoMineR} et {factoextra}.
 
+## Challenge
+
+À la fin de ces modules 6 et 7 vous devriez maîtriser les méthodes principales de classification non supervisée (CAH et k-moyennes) et d'ordination (ACP et AFC). Le challenge suivant vous permettra de mettre en pratique vos connaissance plus spécifiquement au niveau de l'écriture des instruction en R pour réaliser de telles analyses multivariées.
+
+##### À vous de jouer ! {.unnumbered}
+
+```{r assign_B07Ca_multi, echo=FALSE, results='asis'}
+if (exists("challenge"))
+  challenge("B07Ca_multi", part = NULL,
+    url = "https://github.com/BioDataScience-Course/B07Ca_multi",
+    course.ids = c(
+      'S-BIOG-061' = !"B07Ca_{YY}M_multi"),
+    course.urls = c(
+      'S-BIOG-061' = "https://classroom.github.com/a/mzK-IJui"),
+    course.starts = c(
+      'S-BIOG-061' = !"{W[24]+5} 11:00:00"),
+    course.ends = c(
+      'S-BIOG-061' = !"{W[24]+5} 12:30:00"),
+    toc = "Challenge analyses multivariées")
+```
+
+::: nocourse
+Vous n'êtes pas correctement enregistré•e pour ce cours. Vous ne pouvez pas participer à ce challenge. Si vous êtes étudiant•e de l'UMONS, vérifiez que vous vous êtes bien enregistré•e via Moodle...
+:::
+
+::: {.S-BIOG-061}
+Vous pouvez soumettre vos résultats pendant une période de temps précise via l'application ci-dessous :
+
+`r launch_shiny("https://sdd.umons.ac.be/B07Ca_multi/", height = 800, delay = 20, toc = NULL, alt1 = "*Cliquez pour visualiser le classement.*", alt2 = "*Cliquez pour visualiser le classement.*")`
+:::
+
 ## Récapitulatif des exercices
 
 Ce module 7 vous a permis de découvrir deux méthodes très utilisées dans les statistiques exploratoires : l' ACP et l'AFC. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
