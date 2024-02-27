@@ -383,7 +383,13 @@ Mais revenons à notre onglet **Environment**. Si vous cliquez sur la petite fl�
 )[["elapsed"]])
 ```
 
-Il a fallu bien moins d'une seconde sur la machine qui compile ce cours pour faire cette opération. Vous voyez donc que, non seulement, nous pouvons lire dans R très facilement des tableaux de plusieurs millions de lignes, mais qu'en plus, les remaniements classiques avec les fonctions "speedy" dont le nom commence par "s" sont également très rapides. Voici les dix prénoms les plus utilisés aux États-Unis :
+Il a fallu bien moins d'une seconde sur la machine qui compile ce cours pour faire cette opération. Vous voyez donc que, non seulement, nous pouvons lire dans R très facilement des tableaux de plusieurs millions de lignes, mais qu'en plus, les remaniements classiques avec les fonctions "speedy" dont le nom commence par "s" sont également très rapides.
+
+```{block2, type='note'}
+Lorsque vos calculs commencent à "devenir lents", c'est-à-dire, quand il faut plus d'une dizaine de secondes pour retrouver la main, cela vaut la peine d'utiliser les versions les plus rapides des fonctions de manipulation de tableaux de données. En général, les fonctions "tidy" privilégient la clarté de l'interface utilisateur à la vitesse. Les fonctions "speedy" sont plus rapides et moins gourmandes en mémoire vive. S'il faut encore gagner, utilisez [{data.table}](https://rdatatable.gitlab.io/data.table/), [{duckdb}](https://r.duckdb.org), ou [{polars}](https://rpolars.github.io). Dans tous les cas, il existe un package qui permet de continuer à écrire son code presque comme d'habitude avec des `select()`, `filter()` ... grâce à [{dtplyr}](https://dtplyr.tidyverse.org), [{dbplyr}](https://dbplyr.tidyverse.org) ou [{tidypolars}](https://tidypolars.etiennebacher.com). [Cette page](https://duckdblabs.github.io/db-benchmark/) présente une comparaison des performances de différents systèmes de traitement de gros jeux de données en mémoire.
+```
+
+Suite au traitement que nous venons de réaliser ci-dessus, voici les dix prénoms les plus utilisés aux États-Unis :
 
 ```{r}
 head(names, n = 10)
@@ -447,7 +453,7 @@ Nous récupérons également la taille du fichier :
 timings$taille_Mo[1] <- file_size(csv_file) / 2^20 # Transformation en Mo
 ```
 
-La vitesse d'écriture (et de lecture) dépend naturellement de R, mais aussi de la vitesse du disque utilisé. La machine où ce cours est compilé est assez rapide. L'écriture prend moins d'une seconde. Dans SaturnCloud, c'est un peu plus lent, mais toujours très acceptable.
+La vitesse d'écriture (et de lecture) dépend naturellement de R, mais aussi de la vitesse du disque utilisé. La machine où ce cours est compilé est rapide. L'écriture prend moins d'une seconde. Dans SaturnCloud, c'est un peu plus lent, mais toujours très acceptable.
 
 Nous faisons maintenant de même pour les trois formats de compression **.gz**, **.bz2** et .**xz**. Compression GZ :
 
