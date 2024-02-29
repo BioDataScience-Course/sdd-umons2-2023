@@ -14,7 +14,9 @@ SciViews::R("explore", lang = "fr")
 
 -   Les modules 6 et 7 doivent être assimilés avant d'attaquer le présent module.
 
+```{asis, eval=is_html_output()}
 ![[Plume, generative aRt (art généré à l'aide du langage R), CC-BY-4.0, Danielle Navarro.](https://storage.googleapis.com/djnavarro-art/series-puffs/3000/pollen_13_1366.jpg)](https://storage.googleapis.com/djnavarro-art/series-puffs/800/pollen_13_1366.jpg)
+```
 
 ## Analyse factorielle multiple (AFM)
 

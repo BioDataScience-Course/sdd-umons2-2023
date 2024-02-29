@@ -18,6 +18,10 @@ Les techniques MDS étudiées à la fin de ce module étant basées sur des matr
 
 **Le script R relatif à cette section est disponible [ici](https://raw.githubusercontent.com/BioDataScience-Course/sdd_lessons/2023-2024/B09/R/B09Ra_db_mds.R).** Il peut être copié et collé dans un document `.R` dans RStudio sous SaturnCloud pour l'exécuter et l'explorer par vous-même.
 
+```{asis, eval=is_html_output()}
+![[Mosaïque d'"identicônes" de SaturnCloud, generative aRt (art généré à l'aide du langage R), par Ijeamaka Anyene.](https://ijeamaka.art/portfolio/saturn_cloud/)](https://ijeamaka.art/img/portfolio/saturn_cloud_final_collage.png)
+```
+
 ## Accès aux bases de données
 
 Puisque nous traitons de jeux de données multivariés potentiellement très gros, il devient important de pouvoir accéder aux données stockées de manière plus structurée que dans un fichier au format CSV ou Excel, par exemple. Les bases de données, et notamment les **bases de données relationnelles**, sont prévues pour stocker de grandes quantités de données de manière structurée et pour pouvoir en extraire la partie qui nous intéresse à l'aide de **requêtes**. Nous allons ici étudier les rudiments indispensables pour nous permettre de gérer l'accès à de telles bases de données depuis R.

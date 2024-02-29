@@ -244,3 +244,10 @@ learnitdown::learnitdown_init(
 
 # Knitr default options
 knitr::opts_chunk$set(comment = "#", fig.align = "center")
+
+# Format-dependent sections
+is_html_output = function()
+  knitr::opts_knit$get("rmarkdown.pandoc.to") == "html"
+
+is_pdf_output = function()
+  knitr::opts_knit$get("rmarkdown.pandoc.to") == "latex"
