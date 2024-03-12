@@ -12,9 +12,9 @@ SciViews::R("explore")
 
 ##### Prérequis {.unnumbered}
 
-La section relative aux bases de données fait suite aux notions vues dans le cadre du traitement de données volumineuses vu à la fin du module 8 et qui doit être donc parfaitement compris et assimilé.
+La section relative aux bases de données fait suite aux notions vues dans le cadre du traitement de données volumineuses vues au module 8 et qui doivent être donc parfaitement comprises et assimilées.
 
-Les techniques MDS étudiées à la fin de ce module étant basées sur des matrices de distances et complémentaires à la classification ascendante hiérarchique, le module \@ref(cah-kmeans-div) doit être assimilé avant de s'attaquer au présent module.
+Les techniques MDS étudiées à la fin de ce module sont basées sur des matrices de distances. Elles sont complémentaires à la classification ascendante hiérarchique. Le module \@ref(cah-kmeans-div) doit être assimilé avant de s'attaquer à la présente matière, et en particulier, les métriques et les matrices de distances.
 
 **Le script R relatif à cette section est disponible [ici](https://raw.githubusercontent.com/BioDataScience-Course/sdd_lessons/2023-2024/B09/R/B09Ra_db_mds.R).** Il peut être copié et collé dans un document `.R` dans RStudio sous SaturnCloud pour l'exécuter et l'explorer par vous-même.
 
@@ -24,25 +24,25 @@ Les techniques MDS étudiées à la fin de ce module étant basées sur des matr
 
 ## Accès aux bases de données
 
-Puisque nous traitons de jeux de données multivariés potentiellement très gros, il devient important de pouvoir accéder aux données stockées de manière plus structurée que dans un fichier au format CSV ou Excel, par exemple. Les bases de données, et notamment les **bases de données relationnelles**, sont prévues pour stocker de grandes quantités de données de manière structurée et pour pouvoir en extraire la partie qui nous intéresse à l'aide de **requêtes**. Nous allons ici étudier les rudiments indispensables pour nous permettre de gérer l'accès à de telles bases de données depuis R.
+Puisque nous traitons de jeux de données multivariées potentiellement très gros, il devient important de pouvoir accéder aux données stockées de manière plus structurée que dans un fichier au format CSV ou Excel. Les bases de données, et notamment les **bases de données relationnelles**, sont prévues pour stocker de grandes quantités de données de manière structurée et pour pouvoir en extraire la partie qui nous intéresse à l'aide de **requêtes**. Nous allons ici étudier les rudiments indispensables pour nous permettre de gérer l'accès à de telles bases de données depuis R.
 
 ```{block2, type='note'}
-SQL est un langage dédié aux requêtes et la manipulation de bases de données relationnelles, constituées de tables (équivalent à des tableaux cas par variables en statistiques) reliées entre elles par une ou plusieurs *clés*. Par exemple, le champ `auteur` d'une liste de livres dans la table `Livres` renvoie (est lié à) vers le champs `nom` d'une autre table `Ecrivains` qui fournit plus de détails sur chaque auteur.
+SQL est un langage dédié aux requêtes et à la manipulation de bases de données relationnelles, constituées de *tables* (équivalent à des tableaux cas par variables en statistiques) reliées entre elles par une ou plusieurs *clés*. Par exemple, le champ `auteur` d'une liste de livres dans la table `Livres` renvoie (est lié à) vers le champs `nom` d'une autre table `Ecrivains` qui fournit plus de détails sur chaque auteur.
 ```
 
-Il existe différents moteurs de bases de données relationnelles. Les plus courants sont : SQLite, MySQL/MariaDB, PosgreSQL, SQL Server, Oracle ... Mais il y a aussi des nouveaux qui offrent des fonctions intéressantes et/ou des performances inégalées dans certaines applications, notamment **DuckDB** que nous avons déjà utilisé au module précédent et que nous continuerons à utiliser ici. La plupart de ces solutions nécessitent d'installer un **serveur** de base de données centralisé. Cependant, SQLite et DuckDB proposent une approche plus légère permettant d'exploiter le langage SQL ([prononcez "S.Q.L." ou "Sequel"](https://www.vertabelo.com/blog/notes-from-the-lab/sql-or-sequel)) sans devoir installer un serveur externe à R, y compris avec des petites bases de données tests en mémoire ou contenues dans un fichier.
+Il existe différents moteurs de bases de données relationnelles. Les plus courants sont : SQLite, MySQL/MariaDB, PosgreSQL, SQL Server, Oracle ... Mais il y a aussi des nouveaux systèmes qui offrent des fonctions intéressantes et/ou des performances inégalées dans certaines applications, notamment **DuckDB** que nous utiliserons ici. La plupart de ces solutions nécessitent d'installer un **serveur** de base de données centralisé. Cependant, SQLite et DuckDB proposent une approche plus légère permettant d'exploiter le langage SQL ([prononcez "S.Q.L." ou "Sequel"](https://learnsql.com/blog/sql-or-sequel/)) sans devoir installer un serveur externe à R, y compris avec des petites bases de données tests en mémoire ou contenues dans un fichier.
 
 ### Drivers de bases de données dans RStudio
 
-S'il existe divers packages dans R permettant d'accéder à ces différentes bases de données, RStudio offre aussi une interface plus intuitive via l'onglet **Connections** que nous n'avons pas encore utilisé jusqu'ici.
+S'il existe divers packages dans R permettant d'accéder à ces bases de données, RStudio offre aussi une interface plus intuitive via l'onglet **Connexions** que nous n'avons pas encore utilisé jusqu'ici.
 
-Dans la SciViews Box, une série de drivers sont préinstallés, notamment pour accéder facilement à DuckDB, SQLite (version 2) et SQLite version 3 ainsi qu'à PostgreSQL. Avec ces trois bases de données différentes, il est possible d'aller très loin déjà. Pour créer une base de données DuckDB et s'y connecter à partir de RStudio (situation sans projet actif et répertoire courant `~/workspace`) :
+Dans la SciViews Box, une série de drivers sont préinstallés, notamment pour accéder facilement à DuckDB, SQLite version 2 et SQLite version 3 ainsi qu'à PostgreSQL (plus quelques autres dans SaturnCloud). Avec ces trois bases de données différentes, il est possible d'aller très loin déjà. Pour créer une base de données DuckDB et s'y connecter à partir de RStudio (situation sans projet actif et répertoire courant `~/workspace`) :
 
--   Activer l'onglet **Connections**
--   Cliquer sur le bouton **New Connection**
+-   Activer l'onglet **Connexions**
+-   Cliquer sur le bouton **Nouvelle connexion**
 -   Choisir **DuckDB** dans la liste
 -   Indiquer le nom du fichier qui va contenir une nouvelle base de données, par exemple, `duckdb_test.db`
--   Indiquer **New R Script** dans la section **Connect from:**
+-   Indiquer **Nouveau script R** dans le champ **Connexion de:**
 -   Cliquer sur **OK**
 
 Un nouveau script s'ouvre avec le code suivant :
@@ -63,14 +63,14 @@ con <- dbConnect(drv)
 
 ```
 
-Ce code vous permet de vous connecter, interagir et vous déconnecter de la base DuckDB créée dans `~/workspace/duckdb_test.db`. Moyennant l'adaptation du chemin d'accès, il est utilisable dans un projet (un script R, ou un document R Markdown). Exécutez ce code et votre session R est connectée à la base de données.
+Ce code vous permet de vous connecter, interagir et vous déconnecter de la base DuckDB créée dans `~/workspace/duckdb_test.db`. Moyennant l'adaptation du chemin d'accès, il est utilisable dans un projet (un script R, ou un document Quarto ou R Markdown). Exécutez ce code et votre processus R sera connectée à la base de données.
 
 ##### À vous de jouer ! {.unnumbered}
 
-`r h5p(110, height = 270, toc = "Connection à une base de données")`
+`r h5p(110, height = 270, toc = "Connexion à une base de données")`
 
 ```{block2, type='note'}
-Avec certains drivers (SQLite2, PostgreSQL, ...) RStudio affiche la liste des tables et des variables disponibles dans la base de données dans l'onglet **Connections** de manière assez similaire à l'affichage des objets R en mémoire dans l'onglet **Environnement**. Malheureusement, cette fonctionnalité n'est pas (encore) disponible pour DuckDB. Par contre, vous pouvez utiliser `dbListTables(con)` pour lister les tables disponibles et `dbListFields(con, "table_name")` pour lister les champs dans une table nommée `table_name`.
+Avec certains drivers (SQLite2, PostgreSQL ...) RStudio affiche la liste des tables et des variables disponibles dans la base de données dans l'onglet **Connexions** de manière assez similaire à l'affichage des objets R en mémoire dans l'onglet **Environnement**. Malheureusement, cette fonctionnalité n'est pas (encore) disponible pour DuckDB. Par contre, vous pouvez utiliser `dbListTables(con)` pour lister les tables disponibles et `dbListFields(con, "table_name")` pour lister les champs dans une table nommée `table_name`.
 ```
 
 ##### À vous de jouer ! {.unnumbered}
@@ -79,7 +79,7 @@ Avec certains drivers (SQLite2, PostgreSQL, ...) RStudio affiche la liste des ta
 
 ### Base de données dans un fichier
 
-Nous allons utiliser la connexion créée ci-avant pour explorer quelques notions relatives aux bases de données relationnelles. Nous profiterons de la simplicité de DuckDB qui inclut le serveur de base de données et qui permet de stocker nos données dans un simple fichier, tout comme SQLite permet également de le faire.
+Nous allons utiliser la connexion créée ci-avant pour explorer quelques notions relatives aux bases de données relationnelles. Nous profiterons de la simplicité organisationnelle de DuckDB qui inclut le serveur de base de données directement dans le processus R et qui permet de stocker nos données dans un simple fichier (tout comme SQLite permet également de le faire).
 
 ```{r, echo=FALSE}
 library(DBI)
@@ -104,7 +104,7 @@ Allez voir l'aide relative à ces données en entrant `?tidyr::who` à la consol
 -   **year :** l'année (entier)
 -   **population :** le nombre d'habitants dans ce pays cette année-là (entier).
 
-Par contre, la table `who` est un peu plus "nébuleuse", car elle contient 60 variables. Nous y retrouvons des variables identiques à la table `pop` : **country** et **year**. De plus, deux colonnes précisent le pays avec des codes abrégés (colonnes nommées **iso2** et **iso3**). Par exemple pour l'Afghanistan (premier pays par ordre alphabétique), le code ISO2 est "AF" et le code ISO3 est "AFG". Ces quatre colonnes ne posent pas de problèmes particuliers.
+Par contre, la table `who` est un peu plus "nébuleuse", car elle contient 60 variables. Nous y retrouvons des variables identiques à la table `pop` : **country** et **year**. Deux colonnes précisent le pays avec des codes abrégés (colonnes nommées **iso2** et **iso3**). Par exemple pour l'Afghanistan (premier pays par ordre alphabétique), le code ISO2 est "AF" et le code ISO3 est "AFG". Ces quatre colonnes ne posent pas de problèmes de compréhension particuliers.
 
 Ce sont les 56 autres colonnes qui devraient vous intriguer. La page d'aide indique que le nom de chaque colonne est formé de plusieurs items : "new" (pour nouveaux cas de tuberculose), "rel", "sn", "sp", "ep", un code indiquant la méthode de diagnostic, et enfin, une dernière composante commençant par "m" ou "f" (le genre) et suivi de deux à quatre chiffres indiquant la classe d'âge, par exemple, "1524" pour les 15 à 24 ans, avec "014", la classe de 0 à 14 ans et "65", la classe de 65 ans et plus. Vous vous doutez bien qu'un tel encodage des données ne va pas être facile à utiliser ! Cela nous permet d'aborder des règles de remaniement des tableaux de données qui simplifient leur usage dans une base de données relationnelle. Cela s'appelle la **normalisation** des données. Mais avant d'aborder cela, voyons comment travailler dans R directement avec ces données (à titre de comparaison).
 
@@ -139,7 +139,7 @@ dim(who)
 dim(pop)
 who %>.%
   left_join(., pop) %>.% # étape 1 fusion
-  filter(., year >= 2000 & year < 2010) %->% # étape 2 filtrage années 2000-2010
+  filter(., year >= 2000 & year < 2010) -> # étape 2 filtrage années 2000-2010
   who2
 dim(who2)
 ```
@@ -148,7 +148,7 @@ Nous marquons un point d'arrêt après l'étape 2 avec `who2` afin de constater 
 
 ```{r}
 who2 %>.% # étape 3 filtrage des femmes entre 25 et 54 ans uniquement
-  select(., country, year, population, ends_with(c("f2534", "f3544", "f4554"))) %->%
+  select(., country, year, population, ends_with(c("f2534", "f3544", "f4554"))) ->
   who3
 dim(who3)
 names(who3)
@@ -160,8 +160,7 @@ L'étape 4 pose aussi quelques soucis, car à nouveau, l'information nécessaire
 who3 %>.%
   select(., -country, -year, -population) %>.%
   transmute(., all_new = rowSums(., na.rm = TRUE)) %>.%
-  collect_dtx(.) %>.%
-  dtx(country = who3$country, year = who3$year, population = who3$population, all_new = .$all_new) %->%
+  dtx(country = who3$country, year = who3$year, population = who3$population, all_new = .$all_new) ->
   who4
 dim(who4)
 names(who4)
@@ -175,25 +174,25 @@ who4 %>.%
   group_by(., country) %>.% # étape 6 regroupement par pays
   summarise(., mean_prev = mean(prevalence, na.rm = TRUE)) %>.% # étape 7 prévalence moyenne
   arrange(., desc(mean_prev)) %>.% # étape 8 tri décroissant
-  collect_dtx(.) %>.%
   head(., 10) # étape 9 seulement les 10 premiers pays
 ```
 
 Ouf ! Cela n'a pas été simple du tout. Faites une pause bien méritée, mais ne vous découragez pas si vous avez perdu le fil. L'important est de tirer la conclusion que, lorsque les données sont mal encodées, le traitement risque de s'avérer très pénible même dans R.
+
+Nous avons quand même un petit problème ici que nous détaillerons un peu plus moin. Si vous examinez bien la page d'aide de `?rowSums`, vous constaterez que, lorsque tous les éléments de la ligne contiennent `NA`, `rowSums(..., na.rm = TRUE)` renvoie `0` au lieu de `NA`. Dans ce cas, est-ce qu'il n'y a pas de cas répertoriés (et le calcul est le bon), ou est-ce qu'il n'y a pas eu de mesures durant cette année-là dans ce pays (auquel cas, il faut utiliser `NA`). Ici, le résultat considère 0 dans ce cas.
+
 
 </details>
 
 Nous allons remanier le tableau `who` pour nous économiser les difficultés dans nos traitements ultérieurs et dans la base de données. Le tableau `who` est en fait une **forme large** et nous devons le transformer en un **tableau long** en tout premier lieu avec `pivot_longer()`. Nous avons vu ces techniques au module 6 du cours de SDD I. Outre le tableau à traiter, nous indiquons successivement les colonnes à remanier en long (toutes celles qui commencent par `"new"`), le nom de la colonne qui reprend les anciens noms (`type`) et le nom de la colonne qui reprend les valeurs (`new_cases`).
 
 ```{r}
-who %>.%
-  pivot_longer(., starts_with("new"), names_to = "type", values_to = "new_cases") %->%
-  whol
+whol <- pivot_longer(who, starts_with("new"), names_to = "type", values_to = "new_cases")
 dim(whol)
 head(whol)
 ```
 
-Notez que notre tableau long possède plus de 400.000 lignes. Nous devons encore modifier le tableau afin d'avoir trois colonnes à la place de `type`. Ces colonnes vont reprendre les informations suivantes : (1) la méthode de détection (`method`), (2) le genre (`sex`) et (3) la classe d'âge (`age`). Nous pourrions être tentés d'utiliser `separate()` ici. Malheureusement, nous n'avons pas un caractère qui sépare de manière parfaite nos informations. Le trait souligné sépare la méthode du reste, mais il est repris dans la méthode également comme avec `new_sp`, mais pas toujours comme avec `newrel`. De plus, aucun caractère ne sépare le genre de la classe d'âge. Décidément, ce jeu de données est particulièrement pénible à traiter. Pas de découragement. Cela nous donne l'occasion de découvrir d'autres fonctions R utiles ! Nous allons extraire les infos avec `substring()` que vous n'avez probablement pas encore utilisé. Cette fonction extrait des parties d'une chaîne de caractères, en indiquant le caractère de début et de fin pour le découpage. Par exemple :
+Notez que notre tableau long possède plus de 400.000 lignes. Nous devons encore modifier le tableau pour avoir trois colonnes à la place de `type`. Ces colonnes vont reprendre les informations suivantes : (1) la méthode de détection (`method`), (2) le genre (`sex`) et (3) la classe d'âge (`age`). Nous pourrions être tentés d'utiliser `separate()` ici. Malheureusement, nous n'avons pas un caractère qui sépare de manière parfaite nos informations. Le trait souligné sépare la méthode du reste, mais il est repris dans la méthode également comme avec `new_sp`, mais pas toujours comme avec `newrel`. De plus, aucun caractère ne sépare le genre de la classe d'âge. Décidément, ce jeu de données est particulièrement pénible à traiter. Pas de découragement. Cela nous donne l'occasion de découvrir d'autres fonctions R utiles ! Nous allons extraire les infos avec `substring()`, fonction que vous n'avez probablement pas encore utilisée. Cette fonction extrait des parties d'une chaîne de caractères, en indiquant le caractère de début et de fin pour le découpage. Par exemple :
 
 ```{r}
 substring("new_ep_f2534", 1, 6) # method
@@ -209,7 +208,7 @@ whol %>.%
     method = substring(type, 1, 6),
     sex    = substring(type, 8, 8),
     age   = substring(type, 9, 12)) %>.%
-  select(., -type) %->%
+  select(., -type) ->
   whol
 head(whol)
 ```
@@ -217,7 +216,7 @@ head(whol)
 Notre tableau `whol` est enfin correctement encodé. Toute l'information est maintenant dans les cellules du tableau et chaque cellule contient une et une seule information ou donnée. C'est parti pour le traitement avec fonctions "tidy" qui va répondre à notre question. Nous décomposons ce traitement comme suit :
 
 1.  fusion des tableaux `whol` et `pop`,
-2.  filtrage des données pour ne conserver que les années \>= 2000 e \< 2010, et que les femmes entre 25 et 54 ans,
+2.  filtrage des données pour ne conserver que les années \>= 2000 et \< 2010, en ne conservant que les femmes entre 25 et 54 ans,
 3.  regroupement par pays et par année,
 4.  somme des nouveaux cas de tuberculose par pays et par année,
 5.  calcul des proportions, soit la somme de cas divisés par la population totale, variable nommée `prevalence`,
@@ -234,17 +233,37 @@ whol %>.%
   mutate(., prevalence = all_new / total) %>.% # étape 5, calcul de la prévalence
   group_by(., country) %>.% # étape 6 regroupement par pays
   summarise(., mean_prev = mean(prevalence, na.rm = TRUE)) %>.% # étape 7 prévalence moyenne
-  slice_max(., mean_prev, n = 10) %>.% # étape 8 ne garder que les 10 plus élevés
-  collect_dtx(.)
+  slice_max(., mean_prev, n = 10) # étape 8 ne garder que les 10 plus élevés
+```
+
+Ici, lorsqu'il y a des `NA` partout pour un pays et une année, le calcul avec `sum()` considère que le total vaut 0. L'autre fonction que nous utilisions parfois, `fsum()` renvoie `NA` dans ce cas.
+
+```{r}
+sum(NA, na.rm = TRUE)
+fsum(NA, na.rm = TRUE)
+```
+
+Voici le résultat, légèrement différent (comparez le Lesotho, le Botswana, et la Zambie), du calcul avec `fsum()` :
+
+```{r}
+whol %>.%
+  left_join(., pop) %>.% # étape 1 fusion
+  filter(., year >= 2000 & year < 2010 & sex == "f" & age %in% c("2534", "3544", "4554")) %>.% # étape 2 filtrage
+  group_by(., country, year) %>.% # étape 3 regroupement par pays et année
+  summarise(., total = first(population), all_new = fsum(new_cases, na.rm = TRUE)) %>.% # étape 4 somme des cas AVEC fsum()
+  mutate(., prevalence = all_new / total) %>.% # étape 5, calcul de la prévalence
+  group_by(., country) %>.% # étape 6 regroupement par pays
+  summarise(., mean_prev = mean(prevalence, na.rm = TRUE)) %>.% # étape 7 prévalence moyenne
+  slice_max(., mean_prev, n = 10) # étape 8 ne garder que les 10 plus élevés
 ```
 
 ### Normalisation des données
 
-La normalisation permet de présenter les données de manière correcte et optimale pour son utilisation dans une base de données relationnelle. Elle fait appel à des règles strictes. Il existe plusieurs niveaux de normalisation de 1 à 6. Nous n'étudierons ensemble que les trois premiers niveaux qui permettent déjà d'atteindre un schéma de base de données très utilisable et qui est suffisant pour comprendre la logique d'une base de données relationnelle. Ces notions sont également utilisables avec le package {dm} pour une série de data frames reliés entre eux.
+La normalisation permet de présenter les données de manière correcte et optimale pour son utilisation dans une base de données relationnelle. Elle fait appel à des règles strictes. Il existe plusieurs niveaux de normalisation de 1 à 6. Nous n'étudierons ensemble que les trois premiers niveaux qui permettent déjà d'atteindre un schéma de base de données très utilisable et qui est suffisant pour comprendre la logique d'une base de données relationnelle. Ces notions sont également utilisables avec le package {dm} pour une série de data frames reliés entre eux, donc directement dans R, hors base de données externe ou complémentaire.
 
 #### Normalisation niveau 1
 
-La normalisation niveau 1 (on peut écrire **1NF**) s'intéresse à chaque table séparément (en bases de données on parle de **table** au lieu de jeu de données ou data frame, et d'**enregistrement** au lieu des cas ou individus = lignes du tableau). Il s'agit ici de reformatter (éventuellement) une table afin que :
+La normalisation niveau 1 (on peut écrire **1NF**) s'intéresse à chaque table séparément (en bases de données on parle de **table** au lieu de jeu de données ou data frame, et d'**enregistrement** au lieu des cas ou individus = lignes de la table). Il s'agit ici de reformater (éventuellement) une table afin que :
 
 -   il n'y ait aucune ligne ou colonne dupliquée
 -   chaque cellule de la table ne contienne qu'une seule valeur
@@ -272,6 +291,8 @@ drv <- duckdb(dbdir = "duckdb_test.db")
 con <- dbConnect(drv)
 
 # injection de deux data frames comme tables
+# notez bien que nous utilisons le data frame long et correctement nettoyé
+# `whol` pour notre table "who",... pas l'horrible data frame `who` initial !
 dbWriteTable(con, "who", whol)
 dbWriteTable(con, "pop", pop)
 ```
@@ -281,11 +302,16 @@ Pour manipuler et visualiser le schéma de la base de données il existe différ
 ```{r}
 library(dm)
 # création d'un objet dm qui reprend le schéma de la base
-who_dm <- dm_from_src(con) %>.%
-  dm_set_colors(., red = who, darkgreen = pop) # Couleurs pour les tables (pour le schéma)
+# nous indiquons learn_keys = FALSE car nous n'avons pas encore de clés
+# primaires et de toutes façons, {dm} ne les détecte pas depuis DuckDB
+dm_from_con(con, learn_keys = FALSE) %>.%
+  dm_set_colors(., red = who, darkgreen = pop) -> # Couleurs pour les tables (pour le schéma)
+  who_dm
+# graphique du schéma de la base
+dm_draw(who_dm, view_type = "all")
 ```
 
-Si les clés primaires sont définies à partir d'une seule colonne, la fonction `dm_enum_pk_candidates()` est utile pour découvrir les colonnes qui pourraient être utilisées(voyez pour `who` à titre d'exercice) :
+Si les clés primaires sont définies à partir d'une seule colonne, la fonction `dm_enum_pk_candidates()` est utile pour découvrir les colonnes qui pourraient être utilisées (voyez pour `who` à titre d'exercice) :
 
 ```{r}
 dm_enum_pk_candidates(who_dm, pop)
@@ -297,19 +323,19 @@ La colonne `candidate` indique si la variable peut être utilisée et la colonne
 # création des clés primaires
 who_dm %>.%
   dm_add_pk(., pop, c(country, year), force = TRUE) %>.%
-  dm_add_pk(., who, c(country, year, method, sex, age), force = TRUE) %->%
+  dm_add_pk(., who, c(country, year, method, sex, age), force = TRUE) ->
   who_dm
 # graphique du schéma de la base
 dm_draw(who_dm, view_type = "all")
 ```
 
-Nous voyons un nouvel item souligné dans chaque table : nos clés primaires composites.
+Nous voyons un nouvel item souligné au bas de chaque table : nos clés primaires composites. À ce stade, la normalisation au niveau 1 est terminée.
 
 #### Relations entre tables
 
-Jusqu'ici nous avons traité chaque table "pop" et "who" indépendamment. Mais une *relation* existe entre les deux qui permet de rassembler leurs données si nécessaire. C'est le côté *relationnel* de la base de données. C'est aussi ce que nous avons fait dans R avec le `left_join()` en utilisant les colonnes communes **country** et **year** comme colonnes servant à la jointure. Contrairement à R, avec les bases de données relationnelles, nous n'allons pas fusionner des tableaux mais plutôt les diviser en sous-tables plus compactes liées entre elles.
+Jusqu'ici nous avons traité chaque table "pop" et "who" indépendamment. Mais une *relation* existe entre les deux qui permet de rassembler leurs données si nécessaire. C'est le côté *relationnel* de la base de données. C'est aussi ce que nous avons fait dans R avec le `left_join()` en utilisant les colonnes communes **country** et **year** comme colonnes servant à la jointure. Contrairement à R, avec les bases de données relationnelles, nous n'allons pas fusionner des tableaux en un seul gros data frame, mais plutôt les diviser en sous-tables plus compactes liées entre elles.
 
-Comment spécifier ces relations ? Avec des **clés étrangères**. Ces clés vont lier une table à la clé primaire d'une autre table avec un lien un à un, ou un à plusieurs (un enregistrement de la table avec clé primaire pointe vers un seul ou plusieurs enregistrement de la table qui contient la clé étrangère). Par contre, il n'est pas possible d'avoir une relation plusieurs à un ou plusieurs à plusieurs puisque les clés primaires doivent être uniques par définition. Il est cependant possible que certaines valeurs de la clé primaire ne pointent vers rien (c'est optionnel), ou pas. Les quatres situations possibles sont donc :
+Comment spécifier ces relations ? Avec des **clés étrangères**. Ces clés vont lier une table à la clé primaire d'une autre table avec un lien *un à un*, ou *un à plusieurs* (un enregistrement de la table avec clé primaire pointe vers un seul ou plusieurs enregistrements de la table qui contient la clé étrangère). Par contre, il n'est pas possible d'avoir une relation plusieurs à un ou plusieurs à plusieurs puisque les clés primaires doivent être uniques par définition. Il est cependant possible que certaines valeurs de la clé primaire ne pointent vers rien (c'est optionnel), ou pas. Les quatre situations possibles sont donc :
 
 -   un à un
 -   zéro ou un à un
@@ -319,6 +345,8 @@ Comment spécifier ces relations ? Avec des **clés étrangères**. Ces clés v
 Ici, nous pouvons donc utiliser la clé primaire de la table "pop" et établir une relation zéro ou un à plusieurs vers une clé étrangère dans la table "who" composée de **country** et **year**. Il existe aussi une fonction `dm_enum_fk_candidates()` qui permet de repérer les candidats pour des clés étrangères dans une table par rapport à une autre.
 
 ```{r, eval=FALSE}
+# argument #2: table où l'on recherche une clé étrangère
+# argument #3: table ayant la clé primaire pour la relation
 dm_enum_fk_candidates(who_dm, who, pop)
 ```
 
@@ -330,10 +358,10 @@ who_dm <- dm_add_fk(who_dm, who, c(country, year), pop)
 dm_draw(who_dm, view_type = "all")
 ```
 
-La définition de ce lien via une clé étrangère ne garanti pas l'**intégrité** des données à ce stade. En pratique, il faudrait que chaque clé étrangère composée de country + year soit également présente dans la table "pop". Mais nous n'avons jamais vérifié cela, et il est facile de le vérifier avec les fonctions `check_cardinality_x_y()` où x est "0" ou "1" et y est "1" ou "n". Cela défini les relations un à un, un à plusieurs, ou zéro à un et zéro à plusieurs qui permet aussi d'avoir des vlaeurs pour la clé primaire qui ne se retrouvent *pas* dans la clé étrangère. Sinon, toutes doivent être représentées. Vérifions donc si nous avons une cardinalité zéro ou un à plusieurs ici (remarque : les tableaux doivent être transformés en **tibble** sinon un bug empêche le calcul de se faire correctement).
+La définition de ce lien via une clé étrangère ne garanti pas l'**intégrité** des données à ce stade. En pratique, il faudrait que chaque clé étrangère composée de `country` + `year` soit également présente dans la table "pop". Mais nous n'avons jamais vérifié cela. Il est facile de le vérifier avec les fonctions `check_cardinality_x_y()` où x est "0" ou "1" et y est "1" ou "n". Cela défini les relations un à un, un à plusieurs, ainsi que zéro à un et zéro à plusieurs qui permettent aussi d'avoir des valeurs pour la clé primaire qui ne se retrouvent *pas* dans la clé étrangère. Vérifions donc si nous avons une cardinalité zéro ou un à plusieurs ici.
 
 ```{r, error=TRUE}
-check_cardinality_0_n(as_dtbl(pop), c(country, year), as_dtbl(whol), c(country, year))
+check_cardinality_0_n(pop, c(country, year), whol, c(country, year))
 ```
 
 Une erreur est générée et un tableau présente un échantillon d'enregistrements de `whol` qui ne se retrouvent pas dans `pop`. si nous investiguons plus loin, nous nous rendons compte que les années reprises dans `pop` sont plus restreintes que dans `whol` :
@@ -346,7 +374,7 @@ unique(whol$year)
 Les données de `whol` commencent en 1980 alors que les données de `pop` ne commencent qu'en 1995. Nous devrions donc compléter `pop` en remontant jusqu'en 1980... ou alors, tronquer `whol` pour éliminer les données avant 1995. Réalisons la seconde option...
 
 ```{r}
-whol1995 %<-% filter(whol, year >= 1995)
+whol1995 <- filter(whol, year >= 1995)
 ```
 
 Nous pouvons aussi vérifier si tous les pays repris dans `whol1995` le sont aussi dans `pop` :
@@ -357,13 +385,13 @@ pop_countries <- unique(pop$country)
 all(whol_countries %in% pop_countries)
 ```
 
-Aïe, quels sont les pays non repris ?
+Aïe, ce n'est pas le cas. Quels sont les pays non repris ?
 
 ```{r}
 whol_countries[!whol_countries %in% pop_countries]
 ```
 
-Bizarre que ces deux pays ne soient pas repris, qu'avons-nous comme pays commençant pas "C" dans pop_countries ?
+Bizarre que ces deux pays ne soient pas repris. Qu'avons-nous comme pays commençant pas "C" dans pop_countries ?
 
 ```{r}
 pop_countries[substring(pop_countries, 1, 1) == "C"]
@@ -381,58 +409,58 @@ all(unique(whol1995$country) %in% pop_countries)
 Cette fois-ci c'est bon. Cela ne garantit pas que toutes les combinaisons pays-année se retrouvent dans `pop`, mais nous pouvons le retester à présent avec `check_cardinality_0_n()`.
 
 ```{r}
-check_cardinality_0_n(as_dtbl(pop), c(country, year), as_dtbl(whol1995), c(country, year))
+check_cardinality_0_n(pop, c(country, year), whol1995, c(country, year))
 ```
 
-Si la fonction ne génère plus d'erreur, comme ici, c'est bon. On a donc bien une relation zéro ou un à plusieurs entre la clé primaire de `pop` et la clé étrangère de `whol1995`. Nous allons mettre à jour notre base de données et recréer les relations pour qu'elles soient correctes. Nous pouvons effacer des clés avec `dm_rm_fk()` et `dm_rm_pk()`, mais ici, cela sera plus facile de recommencer notre objet `whol_dm` après avoir remplacé la table "who".
+Si la fonction ne génère plus d'erreur, comme ici, c'est bon. On a donc bien une relation zéro ou un à plusieurs entre la clé primaire de `pop` et la clé étrangère de `whol1995`. Nous allons mettre à jour notre base de données et recréer les relations pour qu'elles soient correctes. Nous pouvons effacer des clés avec `dm_rm_fk()` et `dm_rm_pk()`, mais ici, cela sera plus facile de recommencer notre objet `who_dm` après avoir remplacé la table "who".
 
 ```{r}
-# Effacement de la table "whol"
+# effacement de l'ancienne table "whol" et remplacement par la version corrigée
 dbRemoveTable(con, "who")
 dbWriteTable(con, "who", whol1995)
-# Data model
-who_dm <- dm_from_src(con) %>.%
+# nouvel objet data model
+who_dm <- dm_from_con(con, learn_keys = FALSE) %>.%
   dm_set_colors(., red = who, darkgreen = pop) %>.% # Couleurs (optionel)
   dm_add_pk(., pop, c(country, year)) %>.% # Clé primaire pop
   dm_add_pk(., who, c(country, year, method, sex, age)) %>.% # Clé primaire who
-  dm_add_fk(., who, c(country, year), pop) %->% # Clé étrangère who -> pop
+  dm_add_fk(., who, c(country, year), pop) -> # Clé étrangère who -> pop
   who_dm
 # graphique du schéma de la base
 dm_draw(who_dm, view_type = "all")
 ```
 
-Et voilà le travail. Tout cela vous semble sans doute bien compliqué... et ça l'est si vous devez gérer manuellement toutes ces contraintes d'intégrité dans la base de données. Mais la bonne nouvelle, c'est qu'elles peuvent être spécifiées dès le départ dans son schéma. Dans ce cas, le serveur de base de données vérifiera l'intégrité à chaque modification et ne permettra pas les opérations qui la mettent à mal. Cela s'appelle l'**intégrité référentielle**. La définition d'un tel schéma ne peut être réalisé dans le cadre de ce cours (il faudrait pratiquement un cours entièrement consacré aux bases de données pour ce faire). L'important ici, c'est de comprendre la logique. Ainsi, lorsque vous utiliserez une base de données relationnelle existante, vous pourrez comprendre son modèle de données.
+Et voilà le travail. Tout cela vous semble sans doute bien compliqué... et ça l'est si vous devez gérer manuellement toutes ces contraintes d'intégrité dans la base de données. Mais la bonne nouvelle, c'est qu'elles peuvent être spécifiées dès le départ dans son schéma. Dans ce cas, le serveur de base de données vérifiera l'intégrité à chaque modification et ne permettra pas les opérations qui la mettent à mal. Cela s'appelle l'**intégrité référentielle**. La définition d'un tel schéma ne peut être réalisée dans le cadre de ce cours (il faudrait pratiquement un cours entièrement consacré aux bases de données pour ce faire). L'important ici, c'est de comprendre la logique. Ainsi, lorsque vous utiliserez une base de données relationnelle existante, vous pourrez comprendre son modèle de données.
 
 Nous pouvons examiner le type de cardinalité rencontrée avec `examine_cardinality()`  :
 
 ```{r}
-examine_cardinality(as_dtbl(pop), c(country, year), as_dtbl(whol1995), c(country, year))
+examine_cardinality(pop, c(country, year), whol1995, c(country, year))
 ```
 
 Ceci nous suggère une relation un à plusieurs, même si nous acceptons aussi le zéro ou un à plusieurs.
 
 #### Normalisation niveau 2
 
-La normalisation au niveau 2 impose déjà comme première règle que toutes les tables soient 1NF. Une règle supplémentaire vient cependant s'ajouter : **il ne peut y avoir aucune donnée qui ne dépende pas de la clé primaire**. Si c'est le cas, c'est le signe qu'il faut diviser la table en deux ou plusieurs sous-tables ayant chacune sa propre clé primaire. Un exemple serait si deux organisations différentes comptabilisaient indépendamment les cas de tuberculose. Pour chaque clé primaire de la table "whol", nous aurions donc deux enregistrement possibles, un par organisation. Dans ce cas, nous serions obligé de diviser les données en deux tables et créer une nouvelle table "org" qui définirait une clé primaire pour chaque organisation. Comme ce n'est pas le cas ici, nous pouvons considérer que notre base de données satisfait aussi au niveau 2, autrement dit, elle est 2NF.
+La normalisation au niveau 2 impose déjà comme première règle que toutes les tables soient 1NF. Une règle supplémentaire vient cependant s'ajouter : **il ne peut y avoir aucune donnée qui ne dépende pas de la clé primaire**. Si c'est le cas, c'est le signe qu'il faut diviser la table en deux ou plusieurs sous-tables ayant chacune sa propre clé primaire. Un exemple serait si deux organisations différentes comptabilisaient indépendamment les cas de tuberculose. Pour chaque clé primaire de la table "who", nous aurions donc deux enregistrement possibles, un par organisation. Dans ce cas, nous serions obligé de diviser les données en deux tables et créer une nouvelle table "org" qui définirait une clé primaire pour chaque organisation. Comme ce n'est pas le cas ici, nous pouvons considérer que notre base de données satisfait aussi au niveau 2, autrement dit, elle est 2NF.
 
 #### Normalisation niveau 3
 
-Le niveau 3 de normalisation vise à réduire la duplication de données dans les tables. Techniquement, on parle de **dépendance fonctionnelle transitive** qui définit que, si on change une. entrée dans un enregistrement, une ou plusieurs autres doivent changer également. Pour qu'une base de données soit 3NF, il faut qu'elle soit 2NF et qu'en plus, elle n'ait pas de dépendance fonctionnelle transitive.
+Le niveau 3 de normalisation vise à réduire la duplication de données dans les tables. Techniquement, on parle de **dépendance fonctionnelle transitive** qui définit que, si l'on change une entrée dans un enregistrement, une ou plusieurs autres doivent changer également. Pour qu'une base de données soit 3NF, il faut qu'elle soit 2NF et qu'en plus, elle n'ait pas de dépendance fonctionnelle transitive.
 
 Un exemple concret sera plus parlant certainement. Dans la table "who", nous avons les champs "country", "iso2" et "iso3". Or iso2 est le code en deux lettres du pays (par exemple "Belgium" et "BE"). Si le pays change, le code doit changer aussi. Il y a donc dépendance fonctionnelle transitive entre les champs "country" et "iso2". Idem avec "iso3".
 
-Une autre façon, peut-être plus facile, de détyecter le problème consiste à voir si des champs ont des entrées répétées et inutiles dans la table. C'est le cas ici. Si on connait le pays, on pourra en déduite les codes iso2 et iso3. Les champs iso2 et iso3 ne sont donc pas utiles dans la table "who". Ils peuvent être déportés dans une autre table, par exemple nommée "countries" qui reprend le nom du pays comme clé primaire et "iso2" + "iso3". Si nous effectuons cette modification, notre base de données atteindra le niveau 3 de normalisation ou 3NF.
+Une autre façon, peut-être plus facile, de détecter le problème consiste à voir si des champs ont des entrées répétées et inutiles dans la table. C'est le cas ici. Si on connait le pays, on pourra en déduite les codes iso2 et iso3. Les champs iso2 et iso3 ne sont donc pas utiles dans la table "who". Ils peuvent être déportés dans une autre table, par exemple nommée "countries" qui reprend le nom du pays comme clé primaire et "iso2" + "iso3". Si nous effectuons cette modification, notre base de données atteindra le niveau 3 de normalisation ou 3NF.
 
 ```{r}
 # Création du data frame coutries
 whol1995 %>.%
   select(., country, iso2, iso3) %>.%
-  distinct(.) %->%
+  distinct(.) ->
   countries
 head(countries)
 ```
 
-Nous allons éliminer les colonnes "iso2" et "iso3" dans la table "who" et ajouter la talbe "countries" ainsi que la clé primaire et les clés étrangères utiles. Au lieu de passer son temps à effecter toute la table "who" et la recréer, nous allons ici utiliser une commande SQL pour effacer les deux colonnes.
+Nous allons éliminer les colonnes "iso2" et "iso3" dans la table "who" et ajouter la table "countries" ainsi que la clé primaire et les clés étrangères utiles. Au lieu de passer son temps à effacer toute la table "who" et la recréer, nous allons maintenant utiliser une commande SQL pour effacer les deux colonnes "iso2" et "iso3" de "who".
 
 ```{r}
 dbExecute(con, 'ALTER TABLE "who" DROP COLUMN "iso2";')
@@ -449,61 +477,86 @@ dbWriteTable(con, "countries", countries)
 dbListTables(con)
 ```
 
-Enfin, nous ajustions le schéma en ajoutant les clés nécessaires (il faut recommencer le dm) :
+Enfin, nous ajustons le schéma en ajoutant les clés nécessaires (il faut recommencer le dm, mais cela se fait rapidement) :
 
 ```{r}
-dm_from_src(con) %>.%
+dm_from_con(con, learn_keys = FALSE) %>.%
   dm_set_colors(., red = who, darkgreen = pop, blue = countries) %>.% # Couleurs (optionel)
   dm_add_pk(., pop, c(country, year)) %>.% # Clé primaire pop
   dm_add_pk(., who, c(country, year, method, sex, age)) %>.% # Clé primaire who
   dm_add_pk(., countries, country) %>.% # Clé primaire countries
   dm_add_fk(., who, c(country, year), pop) %>.% # Clé étrangère who -> pop
-  #dm_add_fk(., pop, country, countries) %>.% # Clé étrangère pop -> countries
-  dm_add_fk(., who, country, countries) %->% # Clé étrangère who -> countries
+  dm_add_fk(., pop, country, countries) %>.% # Clé étrangère pop -> countries
+  dm_add_fk(., who, country, countries) -> # Clé étrangère who -> countries
   who_dm
 # Graphique du schéma de la base
 dm_draw(who_dm, view_type = "all")
 ```
 
-Nous pourrions être tenté de rajouter une clé étrangère sur "country" entre les tables "pop" et "countries" également. Cependant, cela définirait une relation cyclique ente les trois tables que l'objet **dm** ne peut pas encore gérer. Nous l'avons donc mise en commentaire dans le code. Voilà notre modèle de données qui répond aux exigences 3NF. Enfin, nous pouvons valider le modèle de données comme suit (encore une fois, si aucune erreur n'est générée, le modèle est bon) :
+La définition de deux clés étrangères depuis "who" et "pop" vers la clé primaire "country" dans la table "countries" crée ce que l'on appelle une **relation cyclique** entre les trois tables. Avec les versions antérieures de {dm} cela n'était pas possible. Vérifiez donc bien la version de votre package {dm}. Dans la SciViews Box 2023, il s'agit de la version 1.0.5. Cependant, ces relations cycliques ne sont pas encore bien gérées par d'autres fonctions de {dm}, notamment `dm_filter()` que nous utiliserons ensuite. Nous allons donc créer une version plus simple de notre modèle de données sans la clé étrangère entre "pop" et "countries".
 
 ```{r}
-validate_dm(who_dm)
+dm_from_con(con, learn_keys = FALSE) %>.%
+  dm_set_colors(., red = who, darkgreen = pop, blue = countries) %>.% # Couleurs (optionel)
+  dm_add_pk(., pop, c(country, year)) %>.% # Clé primaire pop
+  dm_add_pk(., who, c(country, year, method, sex, age)) %>.% # Clé primaire who
+  dm_add_pk(., countries, country) %>.% # Clé primaire countries
+  dm_add_fk(., who, c(country, year), pop) %>.% # Clé étrangère who -> pop
+  # Nous n'utilisons pas cette clé étrangère pour éviter une relation cyclique
+  #dm_add_fk(., pop, country, countries) %>.% # Clé étrangère pop -> countries
+  dm_add_fk(., who, country, countries) -> # Clé étrangère who -> countries
+  who_dm
+# Graphique du schéma de la base
+dm_draw(who_dm, view_type = "all")
+```
+
+
+Voilà notre modèle de données répond maintenant aux exigences 3NF. Enfin, nous pouvons valider le modèle de données comme suit (encore une fois, si aucune erreur n'est générée, le modèle est bon) :
+
+```{r}
+dm_validate(who_dm)
 ```
 
 ### Requête dans une base de données relationnelle avec {dm}
 
-Revenons sur notre question de départ, nous souhaitons déterminer quels sont les dix pays où la prévalence annuelle moyenne entre les années 2000 et 2010 est la plus forte pour les femmes âgées de 25 à 54 ans. Nous pouvons interroger notre base de données via notre objet **dm** en utilisant les fonctions équivalentes à celles que vous connaissez déjà comme `dm_filter()`, `dm_select()`. Comme notre objet **dm** connait les liens entre les tables, il va les combiner automatiquement de la meilleure façon. Pas besoin d'utiliser `left_join()` ici pour rassembler les données issues de la table "who" et de la table "pop". c'est fait automatiquement ! Il suffit à un moment donné de demander de regrouper le résultat calculé jusqu'ici avec `dm_flatten_to_tbl()` pour obtenir un data frame avec toutes les colonnes jointes (nous ne l'avons pas fait ici, mais `dm_select()` permet naturellement de restreindre les colonnes de chaque table liée que nous récupérons).
+Revenons sur notre question de départ, nous souhaitons déterminer quels sont les dix pays où la prévalence annuelle moyenne entre les années 2000 et 2010 est la plus forte pour les femmes âgées de 25 à 54 ans. Nous pouvons interroger notre base de données au travers de notre objet **dm** en utilisant les fonctions équivalentes à celles que vous connaissez déjà comme `dm_filter()`, `dm_select()`. Comme notre objet **dm** connait les liens entre les tables, il va les combiner automatiquement de la meilleure façon. Pas besoin d'utiliser `left_join()` ici pour rassembler les données issues de la table "who" et de la table "pop". Cela est fait automatiquement ! Il suffit, à un moment donné, de demander de regrouper le résultat calculé jusqu'ici avec `dm_flatten_to_tbl()` pour obtenir un data frame avec toutes les colonnes jointes (nous ne l'avons pas fait ici, mais `dm_select()` permet naturellement de restreindre les colonnes de chaque table liée que nous récupérons).
 
 ```{r}
 who_dm %>.%
   dm_filter(., who, year >= 2000 & year < 2010 & sex == "f" & age %in% c("2534", "3544", "4554")) %>.% # étape 2 filtrage
-  dm_flatten_to_tbl(., who) %->%
+  dm_flatten_to_tbl(., who) ->
   who_flat
 head(who_flat)
 ```
 
-à partir de ce point, nous pouvons effectuer le calcul comme si de rien était avec les fonctions "tidy". Pour l'ensemble du traitement, cela donne :
+À partir de ce point, nous pouvons effectuer le calcul comme si de rien était avec les fonctions "tidy". Pour l'ensemble du traitement, cela donne :
 
 ```{r}
 who_dm %>.% # étape 1 de jointure inutile avec un objet dm
   dm_filter(., who, year >= 2000 & year < 2010 & sex == "f" & age %in% c("2534", "3544", "4554")) %>.% # étape 2 filtrage
   dm_flatten_to_tbl(., who) %>.% # Réduction en une seule table
-  # Le traitement ci-dessous est identique à celui dans R !
+  # Le traitement ci-dessous est identique à celui dans R,
+  # sauf pour la gestion des pays ne rencontrant aucun cas !
   group_by(., country, year) %>.% # étape 3 regroupement par pays et année
   summarise(., total = first(population), all_new = sum(new_cases, na.rm = TRUE)) %>.% # étape 4 somme des cas
   mutate(., prevalence = all_new / total) %>.% # étape 5, calcul de la prévalence
   group_by(., country) %>.% # étape 6 regroupement par pays
   summarise(., mean_prev = mean(prevalence, na.rm = TRUE)) %>.% # étape 7 prévalence moyenne
+  # étape supplémentaire nécessaire ici : éliminer les pays où mean_prev est NA
+  filter(., !is.na(mean_prev)) %>.% # drop_na() ne fonctionne pas ici
   slice_max(., mean_prev, n = 10) # étape 8 garder les 10 plus élevés
 ```
+
+Si nous comparons ce résultat avec ce que nous avions obtenu plus haut en utilisant `sum()` ou `fsum()`, nous voyons que le résultat est identique à la version `fsum()` qui considère qu'il y a bel et bien un **manque** de données s'il y a des `NA` partout pour un pays et une année. C'est typiquement le traitement réalisé par une base de données qui peut différer, on le voit, de celui de R de base (version `sum()`). **Faites bien attention aux cas particuliers et à la façon dont les valeurs manquantes sont traitées lorsque vous passez d'un code R à un code base de données et _vice versa_ !**
 
 Une fois que nous avons terminé avec notre base de données, n'oublions pas de nous déconnecter.
 
 ```{r}
 # Déconnexion et nettoyage de la base de données
 dbDisconnect(con, shutdown = TRUE)
-unlink("duckdb_test.db") # Seulement pour effacer définitivement la base de données!
+# Seulement pour effacer définitivement la base de données !
+# NE PAS utiliser avec une "vraie" base de données !!!
+unlink("duckdb_test.db")
 ```
 
 ##### À vous de jouer ! {.unnumbered}
@@ -518,7 +571,7 @@ unlink("duckdb_test.db") # Seulement pour effacer définitivement la base de don
 
 -   Un autre tutoriel sur la [normalisation des données](https://www.freecodecamp.org/news/database-normalization-1nf-2nf-3nf-table-examples/) en anglais.
 
--   Site web du [package {dm}](https://krlmlr.github.io/dm/index.html) en anglais. Il y a queqlques documents techniques qui explisuent les différents aspects de ce package riche en fonctions.
+-   Site web du [package {dm}](https://krlmlr.github.io/dm/index.html) en anglais. Il y a quelques documents techniques qui expliquent les différents aspects de ce package riche en fonctions.
 
 -   Une introduction aux [requêtes SQL dans R](http://dept.stat.lsa.umich.edu/~jerrick/courses/stat701/notes/sql.html) (en anglais).
 
@@ -526,7 +579,7 @@ unlink("duckdb_test.db") # Seulement pour effacer définitivement la base de don
 
 -   Un [cours en ligne sur SQL](https://fr.khanacademy.org/computing/computer-programming/sql/sql-basics/v/welcome-to-sql) par vidéos par la Kahn Academy (en anglais).
 
--   Un autre [tutoriel complet sur SQL](http://blog.paumard.org/cours/sql/), en français cette fois-ci. Remarquez qu'il en existe beaucoup. Faites une recherche via Google et choisissez le tutoriel qui vous plaît le plus.
+-   Un autre [tutoriel complet sur SQL](http://blog.paumard.org/cours/sql/), en français cette fois-ci. Remarquez qu'il en existe beaucoup. Faites une recherche avec Google et choisissez le tutoriel qui vous plaît le plus.
 
 -   Les [dix commandements d'une base de données réussie](https://thinkr.fr/base-de-donnees-reussie/). Il s'agit ici plutôt de la création d'une base de données que de la requête sur une base de données existante... mais tôt ou tard, vous créerez vos propres bases de données et ces conseils vous seront alors utiles.
 
@@ -536,7 +589,7 @@ Revenons à présent sur les techniques statistiques d'analyse de données multi
 
 `r img("sdd2_06/tenor.gif")`
 
-Ce que nous allons faire avec la MDS correspond exactement à cela : nous allons littéralement "écraser" les données dans un plan (deux dimensions) ou dans un espace à trois dimensions. C'est donc ce qu'on appelle une technique de **réduction de dimensions**. Il existe, en réalité, plusieurs techniques de MDS. Elles répondent toutes au schéma suivant :
+Ce que nous allons faire avec la MDS correspond exactement à cela : nous allons littéralement "écraser" les données dans un plan (deux dimensions) ou dans un espace à trois dimensions. C'est donc ce qu'on appelle une technique de **réduction de dimensions** ou d'**ordination**. Il existe, en réalité, plusieurs techniques de MDS. Elles répondent toutes au schéma suivant :
 
 -   À partir d'un tableau multivarié de *n* lignes et *p* colonnes, nous calculons une matrice de distances (le choix de la transformation initiale éventuelle et de la métrique de distance utilisée sont totalement libres ici[^09-db-mds-1]).
 -   Nous souhaitons représenter une carte (nuage de points) à *k* dimensions (*k* = 2, éventuellement *k* = 3) où les *n* individus seront placés de telle façon que les proximités exprimées par des valeurs faibles dans la matrice de dissimilarité soient respectées *autant que possible* entre tous les points.
@@ -551,10 +604,10 @@ Nous vous épargnons ici les développements mathématiques qui mènent à la d�
 
 `r h5p(96, height = 270, toc = "Objectif du MDS")`
 
-Dans R, il existe plus d'une dizaine de fonctions différentes pour réaliser le MDS. Afin de vous simplifier le travail et de pouvoir traiter votre MDS comme d'autres analyses similaires, nous vous proposons une interface simplifiée au travers de la fonction `mds()` qui est rendue disponible grâce à l'instruction suivante à utiliser systématiquement en tête de script ou de document R Markdown :
+Dans R, il existe plus d'une dizaine de fonctions différentes pour réaliser le MDS. Afin de vous simplifier le travail et de pouvoir traiter votre MDS comme d'autres analyses similaires, nous vous proposons une interface simplifiée au travers de la fonction `mds()` qui est rendue disponible grâce à l'instruction suivante à utiliser systématiquement en tête de script ou de document Quarto ou R Markdown :
 
 ```{r}
-SciViews::R("explore")
+SciViews::R("explore", lang = "fr")
 ```
 
 ### MDS métrique ou PCoA
@@ -573,12 +626,12 @@ Considérons un relevé de couverture végétale en 24 stations concernant 44 pl
 
 ```{r}
 read("varespec", package = "vegan") %>.%
-  srename(., station = .rownames) %->%
+  srename(., station = .rownames) ->
   veg
 veg
 ```
 
-Typiquement ce genre de données ne contient pas d'information constructive lorsqu'une plante est simultanément absente de deux stations (doubles zéros). Donc, les métriques de type euclidienne ou Manhattan ne conviennent pas ici. Nous devons choisir entre distance de Bray-Curtis ou Canberra en fonction de l'importance que nous souhaitons donner aux plantes les plus rares (avec couverture végétale faible et/ou absentes de la majorité des stations).
+Typiquement, ce genre de données ne contient pas d'information constructive lorsqu'une plante est simultanément absente de deux stations (doubles zéros). Donc, les métriques de type euclidienne ou Manhattan ne conviennent pas ici. Nous devons choisir entre distance de Bray-Curtis ou Canberra en fonction de l'importance que nous souhaitons donner aux plantes les plus rares (avec couverture végétale faible et/ou absentes de la majorité des stations).
 
 Afin de décider quelle métrique utiliser, visualisons à présent l'abondance ou la rareté des différentes plantes :
 
@@ -608,7 +661,7 @@ C'est nettement mieux, car les données concernant les espèces rares ne sont pl
 veg %>.%
   sselect(., -station) %>.%
   log1p(.) %>.%
-  dissimilarity(., method = "bray") %->%
+  dissimilarity(., method = "bray") ->
   veg_dist
 ```
 
@@ -642,13 +695,13 @@ Attention : rien ne garantit que notre MDS métrique projettée en deux dimensi
 
 ```
 
-Les indicateurs "GOF" sont obtenus via la fonction `glance()` :
+Les indicateurs "GOF" sont obtenus en utilisant la fonction `glance()` :
 
 ```{r}
 glance(veg_mds)
 ```
 
-Ici `GOF1` est la somme des valeurs propres obtenues lors du calcul (ces valeurs propres vous seront expliquées dans le module suivant consacré à l'ACP). Retenez simplement que c'est une mesure de la part de variance du jeu de données initial qui a pu être représentée sur la carte. Plus la valeur se rapproche de 1, mieux c'est, avec des valeurs \> 0.7 ou 0.8 qui restent acceptables. Le second indicateur, `GOF2` est la somme uniquement des valeurs propres positives. Certains préfèrent ce dernier indicateur. En principe, les deux sont proches ou égaux. Donc, le choix de l'un ou de l'autre ne devrait pas fondamentalement modifier vos conclusions.
+Ici `GOF1` est la somme des valeurs propres obtenues lors du calcul. Retenez simplement que c'est une mesure de la part de variance du jeu de données initial qui a pu être représentée sur la carte. Plus la valeur se rapproche de 1, mieux c'est, avec des valeurs \> 0.7 ou 0.8 qui restent acceptables. Le second indicateur, `GOF2` est la somme uniquement des valeurs propres positives. Certains préfèrent ce dernier indicateur. En principe, les deux sont proches ou égaux. Donc, le choix de l'un ou de l'autre ne devrait pas fondamentalement modifier vos conclusions.
 
 **Ici, avec des valeurs de goodness-of-fit à peine supérieures à 50% nous pouvons considérer que la carte n'est pas suffisamment représentative.** Soit nous tentons de la représenter en trois dimensions (mais c'est rarement plus lisible, car il faut quand même se résigner à présenter ce graphique 3D dans un plan à deux dimensions -l'écran de l'ordinateur, ou une feuille de papier- au final). Une autre solution lorsque la MDS métrique ne donne pas satisfaction est de se tourner vers la MDS non métrique. Ce que nous allons faire ci-dessous.
 
@@ -658,7 +711,7 @@ Ici `GOF1` est la somme des valeurs propres obtenues lors du calcul (ces valeurs
 
 ```{block2, type='note'}
 
-Rappelons que la PCoA sur matrice euclidienne après standardisation ou non des données est équivalente à une **Analyse en Composantes Principales** (ACP), ... mais avec un calcul nettement moins efficace. Dans ce contexte, la PCoA n'a donc pas grand intérêt. Elle est surtout utile lorsque vous voulez représenter des métriques de distances *différentes* de la distance euclidienne comme c'est le cas ici avec un choix de distances de Bray-Curtis.
+Rappelons que la PCoA sur matrice euclidienne après standardisation ou non des données est équivalente à une **Analyse en Composantes Principales** (ACP) ... mais avec un calcul nettement moins efficace. Dans ce contexte, la PCoA n'a donc pas grand intérêt. Elle est surtout utile lorsque vous voulez représenter des métriques de distances *différentes* de la distance euclidienne comme c'est le cas ici avec un choix de distances de Bray-Curtis.
 
 ```
 
@@ -690,7 +743,7 @@ veg_nmds <- mds$nonmetric(veg_dist) # Calcul
 chart(veg_nmds, labels = veg$station)
 ```
 
-Nous avons une représentation assez différente de celle de la MDS métrique. Les stations 5, 21, 27 et 28 sont toujours isolées, mais le reste est regroupé de manière plus homogène. Comment savoir si cette représentation est meilleure que la version métrique qui avait une "goodness-of-fit" décevante ? En visualisant les indicateurs de qualité d'ajustement, ainsi que la fonction de stress sur un graphique dit **graphique de Shepard**. Comme d'habitude, `glance()` nous donnent les statistiques voulues.
+Nous avons une représentation assez différente de celle de la MDS métrique. Les stations 5, 21, 27 et 28 sont toujours isolées, mais le reste est regroupé de manière un peu plus homogène. Comment savoir si cette représentation est meilleure que la version métrique qui avait une "goodness-of-fit" relativement décevante ? En visualisant les indicateurs de qualité d'ajustement, ainsi que la fonction de stress sur un graphique dit **graphique de Shepard**. Comme d'habitude, `glance()` nous donnent les statistiques voulues.
 
 ```{r}
 glance(veg_nmds)
@@ -715,21 +768,21 @@ Ce diagramme se lit comme suit :
 
 Vous pouvez très bien décider que seul l'*ordre* des individus sur la carte compte. Dans ce cas, la forme de la fonction de stress et la valeur du R^2^ linéaire importent peu. Seul compte la proximité la plus forte possible des points par rapport à la fonction de stress sur le diagramme de Shepard, ainsi donc que la valeur du R^2^ non métrique.
 
-Si par contre, vous voulez être plus contraignant, alors, les distances seront considérées également comme importantes. Vous rechercherez alors une fonction de stress pas trop éloignée d'une droite, ainsi qu'un R^2^ linéaire élevé. Dans ce cas, nous nous rapprochons des exigences de la MDS métrique.
+Si par contre, vous voulez être plus contraignant, alors, les distances seront considérées également comme importantes. Vous rechercherez une fonction de stress pas trop éloignée d'une droite, ainsi qu'un R^2^ linéaire élevé. Dans ce cas, nous nous rapprochons des exigences de la MDS métrique.
 
 Ici, nous pouvons constater que les deux critères sont bons. Nous pouvons donc nous fier à la carte obtenue à l'aide de la MDS non métrique de Kruskal.
 
 ```{block2, type='warning'}
 
-Restez toujours attentif à la taille du jeu de données que vous utilisez pour réaliser une MDS, en particuliers une MDS non métrique. Quelques centaines de lignes, cela dois passer, plusieurs dizaines de milliers ou plus, cela ne passera pas\ ! La limite dépend bien sûr de la puissance de votre ordinateur et de la quantité de mémoire vive disponible. Retenez toutefois que la quantité de calculs augmente drastiquement avec la taille du jeu de données à traiter.
+Restez toujours attentif à la taille du jeu de données que vous utilisez pour réaliser une MDS, en particuliers une MDS non métrique. Quelques centaines de lignes, cela dois passer, plusieurs dizaines de milliers ou plus, cela ne passera pas ! La limite dépend bien sûr de la puissance de votre ordinateur et de la quantité de mémoire vive disponible. Retenez toutefois que la quantité de calculs augmente drastiquement avec la taille du jeu de données à traiter.
 
 ```
 
 ##### Pour en savoir plus {.unnumbered}
 
--   La fonction `mds()` donne accès à d'autres versions de MDS non métriques également. Ainsi, `mds$isoMDS()` ou `mds$monoMDS()` correspondent toutes deux à la version de Kruskal, mais en utilisant une seule configuration de départ (donc, moins robustes, mais plus rapides à calculer). La `mds$sammon()` est une autre forme de MDS non métrique décrite dans l'aide en ligne de `?MASS::sammon`.
+-   La fonction `mds()` donne accès à d'autres versions de MDS non métriques également. Ainsi, `mds$isoMDS()` ou `mds$monoMDS()` correspondent toutes deux à la version de Kruskal, mais en utilisant une seule configuration de départ (donc, moins robuste, mais plus rapide à calculer). La `mds$sammon()` est une autre forme de MDS non métrique décrite dans l'aide en ligne de `?MASS::sammon`.
 
--   Des techniques existent pour déterminer la dimension *k* idéale de la carte. Le **graphique des éboulis** (*screeplot* en anglais) sera abordé au module suivante dans le cadre de l'ACP. Il en existe une version pour le MDS, voyez [ici](https://rpubs.com/YaPi/393252) (en anglais).
+-   Des techniques existent pour déterminer la dimension *k* idéale de la carte. Le **graphique des éboulis** (*screeplot* en anglais) que nous avons utilisé en ACP, par exemple, existe ici aussi sous une autre version. Voyez [ici](https://rpubs.com/YaPi/393252) (en anglais).
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -742,18 +795,18 @@ if (exists("assignment"))
     course.ids = c(
       'S-BIOG-061' = !"B09Ia_{YY}M_portalr"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/H3zPnIP1"),
     course.starts = c(
       'S-BIOG-061' = !"{W[28]+1} 13:00:00"),
     course.ends = c(
-      'S-BIOG-061' = !"{W[32]+1} 23:59:59"),
+      'S-BIOG-061' = !"{W[29]+1} 23:59:59"),
     term = "Q2", level = 3,
     toc = "Bases de données et analyse MDS (rat-kangourous à Portal)")
 ```
 
 ## Récapitulatif des exercices
 
-Ce neuvième module vous a permis de découvrir le travail sur les bases de données ainsi qu'une autre famille d'analyse multivariée: les MDS. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
+Ce neuvième module vous a permis de découvrir le travail sur les bases de données ainsi qu'une autre famille d'analyses multivariées : les MDS. Pour évaluer votre compréhension de cette matière, vous aviez les exercices suivants à réaliser :
 
 `r show_ex_toc()`
 
