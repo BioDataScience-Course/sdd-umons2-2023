@@ -207,7 +207,7 @@ whol %>.%
   mutate(.,
     method = substring(type, 1, 6),
     sex    = substring(type, 8, 8),
-    age   = substring(type, 9, 12)) %>.%
+    age    = substring(type, 9, 12)) %>.%
   select(., -type) ->
   whol
 head(whol)
@@ -419,7 +419,7 @@ Si la fonction ne génère plus d'erreur, comme ici, c'est bon. On a donc bien u
 dbRemoveTable(con, "who")
 dbWriteTable(con, "who", whol1995)
 # nouvel objet data model
-who_dm <- dm_from_con(con, learn_keys = FALSE) %>.%
+dm_from_con(con, learn_keys = FALSE) %>.%
   dm_set_colors(., red = who, darkgreen = pop) %>.% # Couleurs (optionel)
   dm_add_pk(., pop, c(country, year)) %>.% # Clé primaire pop
   dm_add_pk(., who, c(country, year, method, sex, age)) %>.% # Clé primaire who
