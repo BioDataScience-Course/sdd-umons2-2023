@@ -6,7 +6,7 @@ SciViews::R("explore", lang = "fr")
 
 ##### Objectifs {.unnumbered}
 
--   Se sensibiliser aux données ouvertes : quand et pourquoi rendre ses données ouvertes ? Comment le faire correctement (format, métadonnées, dictionnaire des données, licences, principe FAIR, DMP, ...)
+-   Se sensibiliser aux données ouvertes : quand et pourquoi rendre ses données ouvertes ? Comment le faire correctement (format, métadonnées, dictionnaire des données, licences, principe FAIR, DMP ...)
 
 -   Être capable de créer des cartes auto-adaptatives (SOM), de les interpréter et de les utiliser comme autre technique de classification.
 
@@ -20,7 +20,7 @@ L'*"Open Data"* ou données ouvertes est un phénomène en pleine expansion. Vou
 
 ### Gestion des données
 
-Lors de la préparation d'une expérience, vous devez réfléchir à un plan d'expérience. Vous avez donc défini des protocoles de votre ou de vos expérience, le nombre de répliquas... Vous devez cependant intégrer à votre réflexion un plan de gestion de vos données. Dans ce plan, vous aurez à définir comment l'acquisition, la description et le partage de vos données seront réalisés.
+Lors de la préparation d'une expérience, vous devez réfléchir à un plan d'expérience. Vous avez donc défini le protocole de votre ou de vos expériences, le nombre de réplicats... Vous devez cependant intégrer à votre réflexion un plan de gestion de vos données. Dans ce plan, vous aurez à définir comment l'acquisition, la description et le partage de vos données seront réalisés.
 
 #### Principe FAIR
 
@@ -28,7 +28,7 @@ Pour assurer une gestion cohérente des données, il faut respecter le plus poss
 
 | Acronyme en anglais | Acronyme en français | Description                                                                                        |
 |---------------------|----------------------|----------------------------------------------------------------------------------------------------|
-| *Findable*          | Facile à trouver     | Les données sont assiciées à un code unique et persistant pour les retrouver                       |
+| *Findable*          | Facile à trouver     | Les données sont associées à un code unique et persistant pour les retrouver                       |
 | *Accessible*        | Accessible           | Les données et les métadonnées sont récupérables par un humain ou une machine                      |
 | *Interoperable*     | Interopérable        | Les données et les métadonnées doivent respecter les standards internationaux                      |
 | *Reusable*          | Réutilisable         | Les données doivent être réutilisables grâce à des métadonnées riches et une licence le permettant |
@@ -37,19 +37,19 @@ Pour assurer une gestion cohérente des données, il faut respecter le plus poss
 
 Vos données et vos métadonnées doivent être faciles à trouver. C'est évidemment la base car on imagine que, si vous vous donnez la peine de les partager, c'est pour qu'elles soient réutilisées par d'autres. Vous devez donc fournir un identifiant **unique et permanent**. Il existe de nombreux identifiants comme ISBN, ISSN, DOI...
 
-Dans le cadre des travaux scientifiques, Le "Digital Object Identifier" (*DOI*) est la méthode standardisée conseillée. Vous avez déjà été confronté à des DOI. Par exemple, le DOI suivant <https://doi.org/10.1038/sdata.2016.18> fait référence à l'article *The FAIR Guiding Principles for scientific data management and stewardship*. Ce code est unique et persistant. Ce code va toujours renvoyer vers cet article de la revue Scientific Data. Imaginons que la revue Scientific Data disparaissent, le DOI sera toujours accessible, mais il pourrait bien pointer vers une autre URL si le site web de la revue venait à disparaître. Ainsi, la publication pourra être retrouvée facilement ailleurs sur Internet grâce à ce DOI.
+Dans le cadre des travaux scientifiques, Le "Digital Object Identifier" (*DOI*) est la méthode standardisée conseillée. Vous avez déjà été confronté à des DOI. Par exemple, le DOI suivant <https://doi.org/10.1038/sdata.2016.18> fait référence à l'article *The FAIR Guiding Principles for scientific data management and stewardship*. Ce code est unique et persistant. Ce code va toujours renvoyer vers cet article de la revue Scientific Data. Imaginons que cette revue disparaît, le DOI sera toujours accessible, mais il pourrait bien pointer vers une autre URL dans ce cas. Ainsi, la publication pourra être retrouvée facilement ailleurs sur Internet grâce à ce DOI.
 
 Le DOI ne couvre pas que les articles scientifiques, il est également utilisé pour les données. Par exemple, le DOI suivant <https://doi.org/10.5281/zenodo.3711592> fait référence aux données intitulées *Dataset: Number of diagnoses with coronavirus disease (COVID-19) in The Netherlands* publié sur Zenodo, un site spécialisé dans le partage de données ouvertes. Nous reviendrons dans les sections suivantes sur [Zenodo](https://zenodo.org).
 
 ##### Accessible (*Accessible*)
 
-Les données et les métadonnées que vous collectez doivent de plus en plus souvent être rendues disponibles. Certaines revues scientifiques requièrent la mise à disposition des données. Les recherches financées par des fonds publics (nationaux, européen...) requièrent également la mise à disposition des données. Dans certains cas, les données elles-même ne doivent pas forcément être disponibles pour tous (restrictions). Par contre, la plupart du temps, les métadonnées doivent l'être. Il est, de plus, important de préciser la procédure permettant d'obtenir les données ou les métadonnées dans les publications ou les rapports. Cela vous oblige à régler cette question, *avant* de publier.
+Les données et les métadonnées que vous collectez doivent de plus en plus souvent être rendues disponibles. Certaines revues scientifiques requièrent la mise à disposition des données. Les recherches financées par des fonds publics (nationaux, européen...) imposent également la mise à disposition des données. Dans certains cas, les données elles-mêmes ne doivent pas forcément être disponibles pour tous (restrictions). Par contre, la plupart du temps, les métadonnées doivent l'être. Il est, de plus, important de préciser la procédure permettant d'obtenir les données ou les métadonnées dans les publications ou les rapports. Cela vous oblige à régler cette question, *avant* de publier.
 
-Il parait presque logique et évident de mettre à disposition ses données afin d'en faire profiter la monde académique ou industriel dans son ensemble lorsque la recherche a été financée sur fonds publics[^10-open-data-som-1]. La recherche va progresser plus rapidement si les chercheurs collaborent. Un scientifique seul dans son laboratoire ne peut pas espérer progresser plus rapidement que 20 scientifiques qui collaborent, utilisent et réutilisent les données.
+Il parait presque logique et évident de mettre à disposition ses données pour en faire profiter le monde académique ou industriel dans son ensemble lorsque la recherche a été financée sur fonds publics[^10-open-data-som-1]. La recherche va progresser plus rapidement si les chercheurs collaborent. Un scientifique seul dans son laboratoire ne peut pas espérer progresser plus rapidement que dix scientifiques qui collaborent, utilisent et réutilisent les données.
 
-[^10-open-data-som-1]: Cette pratique n'est pourtant pas encore très courante. De plus, voyez toujours avec vos valorisateurs de la recherche et vos juristes ce qu'il est souhaitable de faire avant de divulguer quoi que ce soit. Certaines données peuvent faire l'objet d'une valorisation industrielle et vous pourriez aussi vous orienter vers un brevet. Dans ce cas, il ne faut **pas** divulguer les donnes tout de suite. Enfin, pour les données à caractère personnel, vous êtes contraint en Europe par le RGPD ([Règlement Général pour la Protection des Données](https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32016R0679&from=EN)) qui ne vous permet pas de faire n'importe quoi averc les données à caractère personnel.
+[^10-open-data-som-1]: Cette pratique n'est pourtant pas encore très courante. De plus, voyez toujours avec vos agents en valorisation de la recherche et vos juristes ce qu'il est souhaitable de faire avant de divulguer quoi que ce soit. Certaines données peuvent faire l'objet d'une valorisation industrielle et vous pourriez aussi vous orienter vers un brevet. Dans ce cas, il ne faut **pas** divulguer les données tout de suite. Enfin, pour les données à caractère personnel, vous êtes contraint en Europe par le RGPD ([Règlement Général pour la Protection des Données](https://eur-lex.europa.eu/legal-content/FR/TXT/HTML/?uri=CELEX:32016R0679&from=EN)) qui ne vous permet pas de faire n'importe quoi avec des données à caractère personnel.
 
-Il ne s'agit cependant pas de rendre ses données publiques de manière inconditionnelle. Vous pouvez légitimement souhaiter que l'origine des données soit explicitement citée, ou bien, étant issues d'une recherche sur fonds publics, vous pourriez considérer qu'il n'est pas acceptable que quelqu'un en fasse ensuite une utilisation commerciale. Vous devrez donc spécifier les droits d'utilisation de vos données. Vous devez donc associer une **licence** à vos données et métadonnées.
+Il ne s'agit cependant pas de rendre ses données publiques de manière inconditionnelle. Vous pouvez légitimement souhaiter que l'origine des données soit explicitement citée, ou bien, étant issues d'une recherche sur fonds publics, vous pourriez considérer qu'il n'est pas acceptable que quelqu'un en fasse ensuite une utilisation commerciale. Vous devrez donc spécifier les droits d'utilisation de vos données. Pour ce faire, vous allez associer une **licence** à vos données et métadonnées.
 
 Vous avez peut-être déjà entendu parler des licences [Creative Commons](https://creativecommons.org). Il est de plus en plus courant de voir apparaître ce genre d'information sur des sites web, avec des sigles comme [CC0](https://creativecommons.org/share-your-work/public-domain/cc0), [CC-by](https://creativecommons.org/licenses/by/4.0/), ou encore [CC-by-sa](https://creativecommons.org/licenses/by-sa/4.0/).
 
@@ -63,27 +63,22 @@ Vous êtes peut-être plus familier avec les logos ci-dessous :
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" alt="Licence Creative Commons" style="border-width:0"/></a>.
 
-**Que se cache-t-il derrière ces logos ? Nous allons détailler ensemble ces abréviations.** Nous pouvons résumer cela de manière simple en nous posant deux questions :
+**Que se cache-t-il derrière ces logos ? Nous allons détailler ensemble ces abréviations.** Nous pouvons résumer cela de manière simple en nous posant quatre questions :
 
--   Souhaitez-vous autoriser le partage des adaptations de votre œuvre ?
-    -   Oui
-    -   Non
-    -   Oui, sous condition de partage dans les mêmes conditions.
+-   Voulez-vous que l'œuvre vous soit attribuée ?
 -   Autorisez-vous les utilisations commerciales de votre œuvre ?
-    -   Oui
-    -   Non
+-   Acceptez-vous que d'autres transforment, adaptent ou élaborent sur base de votre œuvre ?
+-   Souhaitez-vous autoriser le partage des adaptations de votre œuvre sous la même licence ?
 
-Ces deux questions proviennent de l'outil mis à disposition sur le site [Creative Commons](https://creativecommons.org/choose) pour définir la licence la plus adaptée pour vous.
+Ces quatre questions proviennent de l'outil mis à disposition sur le site [Creative Commons](https://chooser-beta.creativecommons.org/) pour définir la licence la plus adaptée pour vous.
 
-Dans le cadre de données issues d'une recherche scientifique, vous devez tenir compte l'avis de vos supérieurs hiérarchiques, de votre institution et de la ou des institutions qui financent le travail. La bonne pratique est donc de discuter avec l'ensemble des acteurs pour décider de la bonne licence à employer, *le plus tôt possible, c'est-à-dire, déjà lors de l'élaboration du projet de recherche*.
+Dans le cadre de données issues d'une recherche scientifique, vous devez tenir compte l'avis de vos supérieurs hiérarchiques, de votre institution et de la ou des institutions qui financent le travail. La bonne pratique est donc de discuter avec l'ensemble des acteurs pour décider de la licence à employer, *le plus tôt possible, c'est-à-dire, déjà lors de l'élaboration du projet de recherche*.
 
-Repartons de notre jeu de données sur la COVID-19 : [Dataset: Number of diagnoses with coronavirus disease (COVID-19) in The Netherlands](https://doi.org/10.5281/zenodo.3711592). Nous pouvons voir que les auteurs ont décidé d'employer la licence
+Repartons de notre jeu de données sur le COVID-19 : [Dataset: Number of diagnoses with coronavirus disease (COVID-19) in The Netherlands](https://doi.org/10.5281/zenodo.3711592). Nous pouvons voir que les auteurs ont décidé d'employer la licence.
 
-<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img src="https://i.creativecommons.org/l/by/4.0/88x31.png" alt="Licence Creative Commons" style="border-width:0"/></a><br />Ce(tte) œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</a>.
+<a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img src="https://i.creativecommons.org/l/by/4.0/88x31.png" alt="Licence Creative Commons" style="border-width:0"/></a><br />Cette œuvre est mise à disposition selon les termes de la <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Licence Creative Commons Attribution 4.0 International</a>.
 
-Dans ce cas, vous pouvez donc réutiliser et adapter ces données, y compris à des fins commerciales à condition de citer expressément leur origine. Il suffit de veiller à citer les auteurs de l'œuvre originale et d'ailleurs, la citation à inclure vous est proposée sur le cite pour vous y aider. Comme citer ses sources est une pratique courante, et même obligatoire, en science ce type de licence est très peu contraignante.
-
-Il existe également des licences plus spécifiques aux bases de données, de la moins contraignante à la plus contraignante [PDDL](https://opendatacommons.org/licenses/pddl/) , [ODC-by](https://opendatacommons.org/licenses/by/) et [ODbL](https://opendatacommons.org/licenses/odbl/). Cette liste étant loin d'être exhaustive.
+Dans ce cas, vous pouvez donc réutiliser et adapter ces données, y compris à des fins commerciales à condition de citer expressément leur origine. Il suffit de veiller à citer les auteurs de l'œuvre originale et d'ailleurs, la citation à inclure vous est proposée sur le site pour vous y aider. Comme citer ses sources est une pratique courante, et même obligatoire, en science ce type de licence est très peu contraignante au-delà des bonnes pratiques déjà en cours. Il existe également des licences plus spécifiques aux bases de données, de la moins contraignante à la plus contraignante [PDDL](https://opendatacommons.org/licenses/pddl/), [ODC-by](https://opendatacommons.org/licenses/by/) et [ODbL](https://opendatacommons.org/licenses/odbl/). Cette liste étant loin d'être exhaustive.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -91,7 +86,7 @@ Il existe également des licences plus spécifiques aux bases de données, de la
 
 ##### Interopérable (*Interoperable*)
 
-Les données doivent être utilisables, compréhensibles et *combinables avec d'autres données*. Le choix du format des données est important dans la mesure où un standard ouvert et complètement documenté permet et permettra à l'avenir la lecture de ces données à partir d'un grand nombre de logiciels différents. Les formats fermés liés à des logiciels commerciaux restreignent l'utilisation car, d'une part, il faut posséder le logiciel (éventuellement payant) correspondant, et d'autre part, si le logiciel en question disparaît à l'avenir, le format pourrait ne plus être lisible du tout. À éviter à tout prix, donc.
+Les données doivent être utilisables, compréhensibles et *combinables avec d'autres données*. Le choix du format des données est important dans la mesure où un standard ouvert et complètement documenté permet et permettra à l'avenir la lecture de ces données à partir de différents logiciels. Les formats fermés liés à des logiciels commerciaux restreignent l'utilisation, car d'une part, il faut posséder le logiciel (éventuellement payant) correspondant, et d'autre part, si le logiciel en question disparaît, le format pourrait ne plus être lisible du tout. À éviter à tout prix, donc.
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -100,8 +95,6 @@ Les données doivent être utilisables, compréhensibles et *combinables avec d'
 ##### Réutilisable (*Reusable*)
 
 Il est indispensable de fournir des métadonnées complètes et suffisamment informatives pour comprendre ce que les données représentent, d'où elles proviennent et comment elles ont été collectées, afin que leur réutilisation soit conforme à ce qu'elles représentent. Une licence claire doit indiquer sous quelles conditions les données peuvent *légalement* être réutilisées, nous l'avons déjà vu. Contrairement à ce que dicte la logique, des données auxquelles aucune licence n'est associée ne sont pas facilement réutilisables, car sans bases légales explicites via la licence, l'interdiction prévaut généralement. Dans tous les cas, le droit d'auteur existe aussi pour vous protéger et éviter qu'autrui ne s'approprie votre œuvre.
-
-Vous avez certainement le sentiment que ces quatre principes se mélangent un peu. En effet, ils insistent avec des petites nuances sur des concepts particuliers. Mais ces quatre propriétés se combinent pour rendre vos données réellement "ouvertes".
 
 En Résumé :
 
@@ -126,27 +119,25 @@ Dans le cadre de vos futures recherches, un outil comme Zenodo est très intére
 
 #### DMP
 
-Des outils spécialisés ont été développés pour vous permettre de planifier correctement la gestion de vos données durant leur cycle de vie, tout en respectant les principes **FAIR**. Il s'agit des **plans de gestion des données** (ou *Data Management Plan*, **DMP**). L'Université de Mons dispose d'un [DMP](https://dmponline.be) qu'elle partage avec d'autres universités belges.
-
-Lorsque vous allez concevoir un projet de recherche, n'oubliez pas d'élaborer votre plan de gestion des données en même temps. Voici une check-list pour un plan de gestion des données efficaces <http://www.dcc.ac.uk/sites/default/files/documents/resource/DMP_Checklist_2013.pdf>
+Des outils spécialisés ont été développés pour vous permettre de planifier correctement la gestion de vos données durant leur cycle de vie, tout en respectant les principes **FAIR**. Il s'agit des **plans de gestion des données** (ou *Data Management Plan*, **DMP**). L'Université de Mons dispose d'un [DMP](https://dmponline.be) qu'elle partage avec d'autres universités belges. Lorsque vous allez concevoir un projet de recherche, n'oubliez pas d'élaborer votre plan de gestion des données en même temps. Voici une check-list pour un plan de gestion des données efficace <http://www.dcc.ac.uk/sites/default/files/documents/resource/DMP_Checklist_2013.pdf>.
 
 ### Utilisation de données ouvertes
 
-Il existe de nombreux sites qui distribuent des données ouvertes ("dataverses"). Nous avons déjà évoqué [Zenodo](https://zenodo.org). D'autres sites semblables sont également disponibles tels que [Dryad](https://datadryad.org), [FigShare](https://figshare.com) ou [Harvard Dataverse](https://dataverse.harvard.edu). D'autres sites sont plus spécialisés dans un certain type de données. La liste serait très longue, mais à titre d'illustration : [INSDC](https://www.insdc.org), un exemple de banque de données ADN, [OBIS](https://obis.org), un exemple de base de données sur le biodiversité (marine), ou [Copernicus](https://cds.climate.copernicus.eu) un exemple de base de données climatiques. Enfin, des portails liés à des institutions existent aussi comme le [Portail européen de données](https://www.europeandataportal.eu/fr) et le [Portail belge de données](https://data.gov.be/fr) ...
+Il existe de nombreux sites qui distribuent des données ouvertes (on parle de "dataverses"). Nous avons déjà évoqué [Zenodo](https://zenodo.org). D'autres sites semblables sont également disponibles tels que [Dryad](https://datadryad.org), [FigShare](https://figshare.com) ou [Harvard Dataverse](https://dataverse.harvard.edu). D'autres sites sont plus spécialisés dans un certain type de données. La liste complète serait très longue, mais à titre d'illustration : [INSDC](https://www.insdc.org) un exemple de banque de données ADN, [OBIS](https://obis.org) un exemple de base de données sur la biodiversité (marine), ou [Copernicus](https://cds.climate.copernicus.eu) un exemple de base de données climatiques. Enfin, des portails liés à des institutions existent aussi comme le [Portail européen de données](https://www.europeandataportal.eu/fr) et le [Portail belge de données](https://data.gov.be/fr) ...
 
-Afin de déterminer la *qualité* des données mises à disposition, voici une check-list très utile. Vous devez être capable de trouver facilement :
+Pour déterminer la *qualité* des données mises à disposition, voici une check-list très utile. Vous devez être capable de trouver facilement :
 
--   Contexte des données
--   Code unique et persistant des données
--   Licence des données
--   Format des données
--   Qualité des données
+-   Le contexte des données
+-   Le code unique et persistant qui pointe vers les données
+-   La licence sous laquelle les données sont distribuables
+-   Le format des données
+-   La qualité des données (ont-elles été qualifiées, c'est-à-dire, vérifiées ?)
 
-**À nouveau, vous vous rendez compte que nous revenons à notre principe FAIR expliqué plus haut.** Prenons notre exemple sur le [*Dataset: Number of diagnoses with coronavirus disease (COVID-19) in The Netherlands*](https://zenodo.org/record/4278891) et appliquons notre check-list.
+**À nouveau, vous vous rendez compte que nous revenons à notre principe FAIR expliqué plus haut.** Reprenons notre exemple sur le [*Dataset: Number of diagnoses with coronavirus disease (COVID-19) in The Netherlands*](https://zenodo.org/record/4278891) et appliquons notre check-list.
 
 -   Le contexte des données
 
-Une description des données est directement accessible. Les noms des auteurs sont spécifiés. La date de publication est indiquée et les données sont versionnées. Le 18 novembre 2020, la version était `v2020.11.17`. Les données sont également associées à un dépôt GitHub qui les traite : [J535D165/CoronaWatchNL](https://github.com/J535D165/CoronaWatchNL). Même si ce dépôt est archivé depuis avril 2021, il reste disponible en mars 2023.
+Une description des données est directement accessible. Les noms des auteurs sont spécifiés. La date de publication est indiquée et les données sont versionnées. Le 18 novembre 2020, la version était `v2020.11.17`. Les données sont également associées à un dépôt GitHub qui contient du code pour les représenter graphiquement : [J535D165/CoronaWatchNL](https://github.com/J535D165/CoronaWatchNL). Même si ce dépôt est archivé depuis avril 2021, il reste disponible (dernière vérification faite en mars 2024).
 
 -   Un code unique et persistant
 
@@ -156,15 +147,15 @@ Ces données ont un DOI : [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4
 
 Les données sont mises à disposition avec la licence [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/legalcode)
 
--   le format des données
+-   Le format des données
 
-Les données sont proposées sous le format `.csv`. Ce format est un standard très employé et [bien documenté](RFC%204180) (standard RFC 4180). À peu près tous les logiciels existants qui traitent de données sont capables de lire ce format. Il n'est **pas** propriétaire. Il est donc à la fois interopérable et réutilisable facilement.
+Les données sont distribuées au format CSV. Ce format est un standard très employé et [bien documenté](https://www.ietf.org/rfc/rfc4180.txt) (standard RFC 4180). À peu près tous les logiciels existants qui traitent des données sont capables de lire ce format. Il n'est **pas** propriétaire. Il est donc à la fois interopérable et réutilisable facilement.
 
 -   La qualité des données
 
-Ce dernier critère est le plus difficile à déterminer. Une première chose à vérifier concerne les métadonnées. Est-ce que chaque variable est bien documentée ? Si nous fouillons à ce niveau, nous constaterons que les auteurs peuvent encore améliorer les choses à ce niveau. Toutefois, le nom des variables dans le tableau principal reste tout à fait compréhensible. Il n'y a pas d'information concernant la **qualification** de la données (la qualification des données indique si elles ont été simplement encodées, ou si elles ont été *vérifiées* ensuite, ainsi que le niveau de cette vérification).
+Ce dernier critère est le plus difficile à déterminer. Une première chose à vérifier concerne les métadonnées. Est-ce que chaque variable est bien documentée ? Si nous fouillons à ce niveau, nous constaterons que les auteurs peuvent encore améliorer les choses à ce niveau. Toutefois, le nom des variables dans le tableau principal reste tout à fait compréhensible. Il n'y a pas d'information concernant la **qualification** des données (la qualification des données indique si elles ont été simplement encodées, ou si elles ont été *vérifiées* ensuite, ainsi que le niveau de cette vérification).
 
-Comme vous venez de le voir Zenodo, de par la façon dont il présente les jeux de données ouverts sur son site, permet de remplir très simplement cette check-list. Il aide donc les auteurs de données ouvertes à rendre leurs œuvres accessibles tout en respectant au maximum les principes **FAIR**
+Comme vous venez de le constater, Zenodo, de par la façon dont il présente les jeux de données ouverts sur son site, permet de remplir très simplement cette check-list. Il aide donc les auteurs de données ouvertes à rendre leurs œuvres accessibles tout en respectant au maximum les principes **FAIR**.
 
 ##### Pour en savoir plus {.unnumbered}
 
@@ -182,17 +173,17 @@ Comme vous venez de le voir Zenodo, de par la façon dont il présente les jeux 
 
 -   Article scientifique sur le FAIR plan : [The FAIR Guiding Principles for scientific data management and stewardship](https://www.nature.com/articles/sdata201618)
 
--   L'outil institutionnel de l'Université de Mons afin de réaliser un plan de gestion de données est disponible [DMPonline.be](https://dmponline.be)
+-   L'outil institutionnel de l'Université de Mons pour réaliser un plan de gestion de données est disponible [DMPonline.be](https://dmponline.be)
 
 ## Cartes auto-adaptatives (SOM)
 
-Pour clore ce cours, nous allons étudier une nouvelle technique multivariée qui n'est pas très couramment employée en biologie, mais qui mérite pourtant que l'on s'y intéresse. Il s'agit d'une approche radicalement différente de l'ACP, AFC, ou encore MDS, qui reste plus générale car non linéaire. C'est la méthode des **cartes auto-adaptatives**, ou encore, **cartes de Kohonen** du nom de son auteur.En anglais, nous parlerons de *"self-organizing map"*, d'où son acronyme **SOM** qui est fréquemment utilisé, même en français. Cette technique va encore une fois représenter les individus sur une carte. Cette fois-ci, la carte contient un certain nombre de cellules qui forment une grille rectangulaire, ou mieux, une disposition en nid d'abeille (nous verrons plus loin pourquoi cette disposition particulière est intéressante). Comme à l'habitude, nous allons faire en sorte que des individus qui se ressemblent soient proches sur la carte, et des individus différents soient éloignés. La division de la carte en différentes cellules permet, en plus, de regrouper les individus. Ceci permet une classification comme pour la CAH ou les k-moyennes, en bonus à la visualisation de la carte. Les SOM apparaissent donc comme une technique hybride entre **ordination** (représentation sur des cartes) et **classification** (regroupement des individus).
+Pour clore ce cours, nous allons étudier une nouvelle technique multivariée qui n'est pas très couramment employée en biologie, mais qui mérite pourtant que l'on s'y intéresse. Il s'agit d'une approche radicalement différente de l'ACP, AFC, ou encore MDS, qui reste plus générale, car non linéaire. C'est la méthode des **cartes auto-adaptatives**, ou encore, **cartes de Kohonen** du nom de son auteur. En anglais, nous parlerons de *"self-organizing map"*, d'où son acronyme **SOM** qui est fréquemment utilisé, même en français. Cette technique va encore une fois représenter les individus sur une carte. Cette fois-ci, la carte contient un certain nombre de cellules qui forment une grille rectangulaire, ou mieux, une disposition en nid d'abeille (nous verrons plus loin pourquoi cette disposition particulière est intéressante). Comme à l'habitude, nous allons faire en sorte que des individus qui se ressemblent soient proches sur la carte, et des individus différents soient éloignés. La division de la carte en différentes cellules permet, en plus, de regrouper les individus. La méthode réalise également une classification comme pour la CAH ou les k-moyennes, en bonus à la visualisation de la carte. Les SOM apparaissent donc comme une technique hybride entre **ordination** (représentation sur des cartes) et **classification** (regroupement des individus).
 
 ##### À vous de jouer ! {.unnumbered}
 
 `r h5p(98, height = 270, toc = "Choix des méthodes")`
 
-La théorie et les calculs derrière les SOM sont très complexes. Elles font appel aux **réseaux de neurones adaptatifs** et leur fonctionnement est inspiré de celui du cerveau humain. Tout comme notre cerveau, les SOM vont utiliser l'information en entrée pour aller assigner une zone de traitement de l'information (pour notre cerveau) ou une cellule dans la carte (pour les SOM). Étant donné la complexité du calcul, les développements mathématiques n'ont pas leur place dans ce cours. Ce qui importe, c'est de comprendre le concept et d'être ensuite capable d'utiliser les SOM à bon escient. Uniquement pour ceux d'entre vous qui désirent comprendre les détails du calcul, vous pouvez lire [ici](https://towardsdatascience.com/kohonen-self-organizing-maps-a29040d688da) ou visionner la vidéo suivante **(facultative et en anglais)** :
+La théorie et les calculs derrière les SOM sont complexes. Elles font appel aux **réseaux de neurones adaptatifs** et leur fonctionnement est inspiré de celui du cerveau humain. Tout comme notre cerveau, les SOM vont utiliser l'information en entrée pour aller assigner une zone de traitement de l'information (pour notre cerveau) ou une cellule dans la carte (pour les SOM). Étant donné la complexité du calcul, les développements mathématiques n'ont pas leur place dans ce cours. Ce qui importe, c'est de comprendre le concept et d'être ensuite capable d'utiliser les SOM à bon escient. Pour ceux d'entre vous qui désirent quand même comprendre les détails du calcul, vous pouvez lire [ici](https://towardsdatascience.com/kohonen-self-organizing-maps-a29040d688da) ou visionner la vidéo suivante **(facultative et en anglais)** :
 
 ```{r, echo=FALSE}
 vembedr::embed_youtube("0qtvb_Nx2tA", width = 770, height = 433, query = "end=266")
@@ -215,7 +206,7 @@ zoo <- read("zooplankton", package = "data.io")
 zoo
 ```
 
-Les 19 premières colonnes représentent des mesures réalisées sur notre plancton et la vingtième est la classe. Nous nous débarrasserons de la colonne classe et transformons les données numériques en **matrice** après avoir standardisé les données (étapes *obligatoires* avant une SOM) pour stocker le résultat dans `zoo_mat`.
+Les 19 premières colonnes représentent des mesures réalisées sur notre plancton et la vingtième est la classe. Nous nous débarrasserons de la colonne classe et transformons les données numériques en **matrice** après les avoir standardisées (étapes *obligatoires* avant une SOM) pour stocker le résultat dans `zoo_mat`.
 
 ```{r}
 zoo %>.%
@@ -227,13 +218,10 @@ zoo %>.%
 
 Avant de pouvoir réaliser notre analyse, nous devons décider d'avance la topologie de la carte, c'est-à-dire, l'arrangement des cellules ainsi que le nombre de lignes et de colonnes. Le nombre de cellules totales choisies dépend à la fois du niveau de détails souhaité, et du nombre d'individus dans votre jeu de données (il faut naturellement plus de données que de cellules, disons, au moins 5 à 10 fois plus). Pour l'instant, considérons les deux topologies les plus fréquentes : la **grille rectangulaire** et la **grille hexagonale**. Plus le nombre de cellules est important, plus la carte sera détaillée, mais plus il nous faudra de données pour la calculer et la "peupler". Considérons par exemple une grille 7 par 7 qui contient donc 49 cellules au total. Sachant que nous avons plus de 1200 particules de plancton mesurées dans `zoo`, le niveau de détail choisi n'est pas trop ambitieux.
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
 `r h5p(231, height = 270, toc = "Nombre de cellules")`
--->
-```
+
 La grille rectangulaire est celle qui vous vient probablement immédiatement à l'esprit. Il s'agit d'arranger les cellules en lignes horizontales et colonnes verticales. La fonction `somgrid()` du package {kohonen} permet de créer une telle grille.
 
 ```{r}
@@ -269,14 +257,11 @@ hex_grid_7_7 %>.%
 
 Ici, nous n'avons que six voisins directs, mais trois directions dans lesquelles les gradients peuvent varier : en horizontal, en diagonale vers la gauche et en diagonale vers la droite. Cela offre plus de possibilités pour l'agencement des individus. Nous voyons aussi plus de nuances dans les distances (il y a plus de couleurs différentes) pour une grille de même taille 7 par 7 que dans le cas de la grille rectangulaire. **Nous utiliserons donc préférentiellement la grille hexagonale pour nos SOM.**
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
 `r h5p(232, height = 270, toc = "Topologie de la carte")`
--->
-```
-Effectuons maintenant le calcul de notre SOM à l'aide de la fonction `som()` du package {kohonen}. Comme l'analyse fait intervenir le générateur pseudo-aléatoire, nous pouvons utiliser de manière optionnelle `set.seed()` avec un nombre choisi au hasard (et toujours différent à chaque utilisation) pour que cette analyse particulière-là soit reproductible. Sinon, à chaque exécution, nous obtiendrons un résultat légèrement différent.
+
+Effectuons maintenant le calcul de notre SOM à l'aide de la fonction `som()` du package {kohonen}. Comme l'analyse fait intervenir le générateur pseudo-aléatoire, nous pouvons utiliser de manière optionnelle `set.seed()` avec un nombre choisi au hasard (et toujours différent à chaque utilisation) pour que cette analyse particulière là soit reproductible. Sinon, à chaque exécution, nous obtiendrons un résultat légèrement différent.
 
 ```{r}
 set.seed(8657)
@@ -298,7 +283,7 @@ zoo_som <- som(zoo_mat, grid = somgrid(7, 7, topo = "hexagonal"), rlen = 200)
 plot(zoo_som, type = "changes")
 ```
 
-Vous serez sans doute surpris de constater que la diminution de la courbe se fait plus lentement maintenant. En fait, `som()` va adapter son taux d'apprentissage en fonction du nombre d'itérations qu'on lui donne et va alors "peaufiner le travail" d'autant plus. Cette fois-ci, la stabilisation ce fait à partir de l'itération 160 environ. Au final, la valeur n'est pas plus basse pour autant. Dans un tel cas, nous pouvons conclure que nous avons probablement abouti à une solution utilisable.
+Vous serez sans doute surpris de constater que la diminution de la courbe se fait plus lentement maintenant. En fait, `som()` va adapter son taux d'apprentissage en fonction du nombre d'itérations qu'on lui donne et va alors "peaufiner le travail" d'autant plus. Cette fois-ci, la stabilisation se fait à partir de l'itération 160 environ. Au final, la valeur n'est pas plus basse pour autant. Dans un tel cas, nous pouvons conclure que nous avons probablement abouti à une solution utilisable.
 
 Le second graphique que nous pouvons réaliser consiste à placer les individus dans la carte, en utilisant éventuellement une couleur différente en fonction d'une caractéristique de ces individus (ici, leur `class`e). Ce graphique est obtenu avec `type = "mapping"`. Si vous ne voulez pas représenter la grille hexagonale à l'aide de cercles, vous pouvez spécifier `shape = "straight"`. Nous avons 17 classes de zooplancton et il est difficile de représenter plus de 10-12 couleurs distinctes, mais [ce site](https://sashat.me/2017/01/11/list-of-20-simple-distinct-colors/) propose une palette de 20 couleurs distinctes. Nous en utiliserons les 17 premières...
 
@@ -309,7 +294,7 @@ colors17 <- c("#e6194B", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4",
 plot(zoo_som, type = "mapping", shape = "straight", col = colors17[zoo$class])
 ```
 
-Nous n'avons pas ajouté de légende qui indique à quelle classe correspond quelle couleur. Ce que nous voulons voir, c'est si les cellules arrivent à séparer les classes. Nous voyons que la séparation est imparfaite, mais des tendances apparaissent avec certaines couleurs qui se retrouvent plutôt dans une région de la carte.
+Nous n'avons pas ajouté de légende qui indique à quelle classe correspond chaque couleur. Ce que nous voulons voir, c'est si les cellules arrivent à séparer les classes. Nous voyons que la séparation est imparfaite, mais des tendances apparaissent avec certaines couleurs qui se retrouvent plutôt dans une région de la carte.
 
 Nous voyons donc ici que, malgré que l'information contenue dans `class` n'ait pas été utilisées. Les différents individus de zooplancton ne se répartissent pas au hasard en fonction de ce critère. Nous pouvons également observer les cellules qui contiennent plus ou moins d'individus, mais si l'objectif est de visionner *uniquement* le remplissage des cellules, le graphique avec `type = "counts"` est plus adapté.
 
@@ -344,16 +329,16 @@ plot(zoo_som, type = "codes", codeRendering = "segments")
 
 Ce graphique est riche en informations. Nous voyons que :
 
--   les très grands individus (`ecd` le diamètre circulaire équivalent, `area` la surface de la particule, `perimeter` son périmètre, etc., sont des mesures de *taille*), soit les segments verts sont en haut à gauche de la carte et les petits sont à droite,
+-   les très grands individus (`ecd` le diamètre circulaire équivalent, `area` la surface de la particule, `perimeter` son périmètre, etc., sont des mesures de *taille*), soit les segments verts, sont en haut à gauche de la carte et les petits sont à droite,
 -   les individus opaques (variables `mean` niveau de gris moyen, `mode` niveau de gris le plus fréquent, `max` niveau de gris le plus foncé, etc.[^10-open-data-som-3]), soit des segments dans les tons jaunes sont en haut à droite. Les organismes plus transparents sont en bas à gauche,
 -   au-delà de ces deux principaux critères qui se dégagent prioritairement, les aspects de forme (segments rose-rouge) se retrouvent exprimés moins nettement le long de gradients. La `circularity` mesure la silhouette plus ou moins arrondie des particules (sa valeur est d'autant plus élevée que la forme se rapproche d'un cercle). Les organismes circulaires se retrouvent dans le haut de la carte. L'`elongation` et l'`aspect` mesurent l'allongement de la particule et se retrouvent plutôt exprimés positivement dans le bas de la carte.
 
 [^10-open-data-som-3]: Attention : la variable `transparency`, contrairement à ce que son nom pourrait suggérer n'est pas une mesure de la transparence de l'objet, mais de l'aspect plus ou moins régulier et lisse de sa silhouette.
 
-Nous pouvons donc **orienter** notre carte SOM en indiquant l'information relative aux variables. Lorsque le nombre de variables est élevé ou relativement élevé comme ici, cela devient néanmoins difficile à lire. Il est aussi possible de colorer les cartes en fonction d'une et une seule variable pour en faciliter la lecture à l'aide de `type = "property"`. Voici quelques exemples (notez la façon de diviser une page graphique en lignes et colonnes à l'aide de `par(mfrow = ))` en graphiques R de base, ensuite une boucle `for` réalise les six graphiques l'un après l'autre) :
+Nous pouvons donc **orienter** notre carte SOM en indiquant l'information relative aux variables. Lorsque le nombre de variables est élevé ou relativement élevé comme ici, cela devient néanmoins difficile à lire. Il est aussi possible de colorer les cartes en fonction d'une et une seule variable pour en faciliter la lecture à l'aide de `type = "property"`. Voici quelques exemples (notez la façon de diviser une page graphique en lignes et colonnes à l'aide de `par(mfrow = )` en graphiques R de base, ensuite une boucle `for` réalise les six graphiques l'un après l'autre) :
 
 ```{r}
-par(mfrow = c(2, 3))
+par(mfrow = c(2, 3)) # Graphiques sur 2 lignes et 3 colonnes
 for (var in c("size", "mode", "range", "aspect", "elongation", "circularity"))
   plot(zoo_som, type = "property", property = zoo_som$codes[[1]][, var],
     main = var, palette.name = viridis::inferno)
@@ -361,19 +346,16 @@ for (var in c("size", "mode", "range", "aspect", "elongation", "circularity"))
 
 Nous pouvons plus facilement inspecter les zones d'influence de différentes variables ciblées. Ici, `size` est une mesure de la taille des particules, `mode` est le niveau d'opacité (niveau de gris) le plus fréquent, `range` est la variation d'opacité (un `range` important indique que la particule a des parties très transparentes et d'autres très opaques), `aspect` est le rapport longueur/largeur, `elongation` est une indication de la complexité du périmètre de la particule, et `circularity` est sa forme plus ou moins circulaire. Pour une explication détaillée des 19 variables, faites `?zooplankton`.
 
-```{=html}
-<!-- H5P en cours de validation
 ##### À vous de jouer ! {.unnumbered}
 
 `r h5p(233, height = 270, toc = "Graphique des SOM")`
--->
-```
+
 #### Regroupements
 
-Lorsque nous avons réalisé une CAH sur le jeu de données `zooplankton`, nous étions obligés de choisir deux variables parmi les 19 pour visualiser le regroupement sur un graphique nuage de points. C'est peu, et cela ne permet pas d'avoir une vision synthétique sur l'ensemble de l'information. Les méthodes d'ordination permettent de visualiser plus d'information sur un petit nombre de dimensions grâce aux techniques de réduction des dimensions qu'elles implémentent. Les cartes SOM offrent encore un niveau supplémentaire de raffinement. Nous pouvons considérer que chaque cellule est un premier résumé des données et nous pouvons effectuer ensuite une CAH sur ces cellules afin de dégager un regroupement et le visualiser sur la carte SOM. L'intérêt est que l'on réduit un jeu de données potentiellement très volumineux à un nombre plus restreint de cellules (ici 7x7 = 49), ce qui est plus "digeste" pour la CAH. Voici comment cela fonctionne (notez que `dissimilarity()` attend un **data frame** alors que `som()` travaille avec des objets **matrix**, donc une conversion s'impose ici) :
+Lorsque nous avons réalisé une CAH sur le jeu de données `zooplankton`, nous étions obligés de choisir deux variables parmi les 19 pour visualiser le regroupement sur un graphique nuage de points. C'est peu, et cela ne permet pas d'avoir une vision synthétique sur l'ensemble de l'information. Les méthodes d'ordination permettent de visualiser plus d'information sur un petit nombre de dimensions grâce aux techniques de réduction des dimensions qu'elles implémentent. Les cartes SOM offrent encore un niveau supplémentaire de raffinement. Nous pouvons considérer que chaque cellule est un premier résumé des données et nous pouvons effectuer ensuite une CAH sur ces cellules afin de dégager un regroupement et le visualiser sur la carte SOM. L'intérêt est que l'on réduit un jeu de données potentiellement très volumineux à un nombre plus restreint de cellules (ici 7x7 = 49), ce qui est plus "digeste" pour la CAH. Voici comment cela fonctionne (notez que `dissimilarity()` attend un **data.frame** alors que `som()` travaille avec des objets **matrix**, donc une conversion s'impose ici) :
 
 ```{r}
-SciViews::R("explore")
+SciViews::R("explore", lang = "fr")
 # Distance euclidienne entre cellules
 zoo_som_dist <- dissimilarity(as.data.frame(zoo_som$codes[[1]]),
   method = "euclidean")
@@ -414,15 +396,17 @@ Grâce à la topographie des variables que nous avons réalisée plus haut, nous
 -   le groupe bleu est constitué des particules moyennes à grandes ayant une forme complexe (variable `elongation` élevée),
 -   les groupes vert clair et rose en haut à gauche reprennent les toutes grandes particules, avec la cellule unique en rose qui reprend les plus grosses.
 
-Nous n'avons fait qu'effleurer les nombreuses possibilités des cartes auto-adaptatives SOM... Il est, par exemple, possible d'aller mapper de nouveaux individus dans cette carte (données supplémentaires), ou même de faire une classification sur base d'exemples (classification supervisée), des techniques que nous aborderons au cours de Science des Données Biologiques III. Nous espérons que cela vous donnera l'envie et la curiosité de tester cette méthode sur vos données et d'explorer plus avant ses nombreuses possibilités.
+Nous n'avons fait qu'effleurer les nombreuses possibilités des cartes auto-adaptatives SOM... Il est, par exemple, possible d'aller mapper de nouveaux individus dans cette carte (données supplémentaires), ou même de faire une classification sur base d'exemples (classification supervisée), des techniques que nous aborderons au cours de Science des Données biologiques III. Nous espérons que cela vous donnera l'envie et la curiosité de tester cette méthode sur vos données et d'explorer plus avant ses nombreuses possibilités.
 
 ##### Pour en savoir plus {.unnumbered}
 
 -   Une [explication très détaillée en français](https://meritis.fr/ia/cartes-topologiques-de-kohonen/) accompagnée de la résolution d'un exemple fictif dans R.
 
+-   Une [autre explication](https://www.polarmicrobes.org/tutorial-self-organizing-maps-in-r/), mais en anglais avec exemple dans R.
+
 <!-- Ressource plus disponible?!   Une [autre explication détaillée en français](http://eric.univ-lyon2.fr/~ricco/tanagra/fichiers/fr_Tanagra_Kohonen_SOM_R.pdf) avec exemple dans R. -->
 
--   Si vous êtes aventureux, vous pouvez vous lancer dans la réimplémentation des graphiques du package {kohonen} en {chart} ou {ggplot2}. Voici [un bon point de départ](http://blog.schochastics.net/post/soms-and-ggplot/) (en anglais).
+<!-- Ressource plus disponible?!    -   Si vous êtes aventureux, vous pouvez vous lancer dans la réimplémentation des graphiques du package {kohonen} en {chart} ou {ggplot2}. Voici [un bon point de départ](http://blog.schochastics.net/post/soms-and-ggplot/) (en anglais). -->
 
 ##### À vous de jouer ! {.unnumbered}
 
@@ -435,7 +419,7 @@ if (exists("assignment2"))
     course.ids = c(
       'S-BIOG-061' = !"B10Ga_{YY}M_open_data"),
     course.urls = c(
-      'S-BIOG-061' = "https://classroom.github.com/a/..."),
+      'S-BIOG-061' = "https://classroom.github.com/a/cMinM8Sx"),
     course.starts = c(
       'S-BIOG-061' = !"{W[32]+1} 10:00:00"),
     course.ends = c(
