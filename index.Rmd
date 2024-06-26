@@ -130,7 +130,7 @@ Chaque type d'exercice est associé à un outil présenté dans la matériel pé
 
 ![](images/sdd2_00/apprendre2.png)
 
-Toutes vos réponses sont collectées et utilisées afin de construire la note finale. Il n'est donc plus nécessaire de passer une examen classique en session d'examen. Tous ces exercices permettent de déterminer si vous maîtrisez les acquis d'apprentissage de ce cours. Cependant, vous aurez des **interrogrations** classiques régulières sur la matière vue jusque là.
+Toutes vos réponses sont collectées et utilisées afin de construire la note finale. Il n'est donc plus nécessaire de passer une examen classique en session d'examen. Tous ces exercices permettent de déterminer si vous maîtrisez les acquis d'apprentissage de ce cours. Cependant, vous aurez des **interrogations** classiques régulières sur la matière vue jusque là.
 
 Un rapport de progression dans les exercices est mis à votre disposition à la fin de chaque module. En outre, un rapport de progression global est accessible depuis Moodle.
 
